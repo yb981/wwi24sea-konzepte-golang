@@ -2,15 +2,16 @@ package main
 
 import "fmt"
 
-type Stack []float64
+type Stack[T any] []T
 
-func (s *Stack) Push(input float64) {
+func (s *Stack[T]) Push(input T) {
 	*s = append(*s, input)
 }
 
-func (s *Stack) Pop() float64 {
+func (s *Stack[T]) Pop() T {
 	if len(*s) == 0 {
-		return 0
+		var zero T
+		return zero
 	}
 
 	lastValue := (*s)[len(*s)-1]
@@ -18,7 +19,7 @@ func (s *Stack) Pop() float64 {
 	return lastValue
 }
 
-func (s *Stack) Print() {
+func (s *Stack[T]) Print() {
 	for _, v := range *s {
 		fmt.Print(v, " ")
 	}

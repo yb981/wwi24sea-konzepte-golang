@@ -11,15 +11,17 @@ import (
 
 func main() {
 
-	stack := Stack{}
+	stack := Stack[float64]{}
 	latex := LaTeXOutput{}
+	history := Stack[string]{}
+	history.Push("@")
 
 	printWelcomeMessage()
 
 	for {
 		stack.Print()
 
-		input := getInput()
+		input := getInputByScan()
 
 		checkInput(input, &stack, &latex)
 	}
@@ -51,8 +53,7 @@ func printWelcomeMessage() {
 	fmt.Println("Please enter your command:")
 }
 
-
-func getInput() string {
+func getInputByReader() string {
 		reader := bufio.NewReader(os.Stdin)
 		
 		input, err := reader.ReadString('\n')
@@ -64,7 +65,17 @@ func getInput() string {
 		return input
 }
 
-func checkInput(input string, stack *Stack, latex *LaTeXOutput) {
+func getInputByScan() string {
+	var input string
+	_, err := fmt.Scan(&input)
+	if err != nil {
+		fmt.Println("Eingabefehler")
+	}
+	input = strings.TrimSpace(input)
+	return input
+}
+
+func checkInput(input string, stack *Stack[float64], latex *LaTeXOutput) {
 
 	// commands
 	if input == "exit" {
