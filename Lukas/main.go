@@ -85,6 +85,9 @@ func checkInput(input string, numberStack *Stack[float64], latex *LaTeXOutput, h
 		numberStack.Print()
 		return
 	} else if input == "latex" {
+		latex.Expression = history.Top()
+		fmt.Println(history.Top())
+		fmt.Println(latex.Expression)
 		fmt.Println(latex.formatToLatex(latex.Expression))
 		return
 	} else if input == "help" {
@@ -184,14 +187,9 @@ func checkInput(input string, numberStack *Stack[float64], latex *LaTeXOutput, h
 	// numbers
 	number, err := strconv.ParseFloat(input, 64)
 	if  err != nil {
-		
+		// TODO
 	} else {
 		numberStack.Push(number)
 		history.Push(input)
 	}
-
-	// add to history
-	
-	//latex.Expression = latex.Expression + " " +input
-	//fmt.Println("current latexExp ", latex.Expression)
 }
