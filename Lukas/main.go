@@ -11,19 +11,18 @@ import (
 
 func main() {
 
-	stack := Stack[float64]{}
+	numberStack := Stack[float64]{}
 	latex := LaTeXOutput{}
 	history := Stack[string]{}
-	history.Push("@")
 
 	printWelcomeMessage()
 
 	for {
-		stack.Print()
+		numberStack.Print()
 
 		input := getInputByScan()
 
-		checkInput(input, &stack, &latex)
+		checkInput(input, &numberStack, &latex, &history)
 	}
 }
 
@@ -75,7 +74,7 @@ func getInputByScan() string {
 	return input
 }
 
-func checkInput(input string, stack *Stack[float64], latex *LaTeXOutput) {
+func checkInput(input string, numberStack *Stack[float64], latex *LaTeXOutput, history *Stack[string]) {
 
 	// commands
 	if input == "exit" {
@@ -83,7 +82,7 @@ func checkInput(input string, stack *Stack[float64], latex *LaTeXOutput) {
 		os.Exit(0)
 	} else if input == "list" {
 		fmt.Println("printing input")
-		stack.Print()
+		numberStack.Print()
 		return
 	} else if input == "latex" {
 		fmt.Println(latex.formatToLatex(latex.Expression))
@@ -96,50 +95,89 @@ func checkInput(input string, stack *Stack[float64], latex *LaTeXOutput) {
 	// operators
 	switch input {
 	case "+": 
-		result := stack.Pop() + stack.Pop()
-		stack.Push(result)
+		result := numberStack.Pop() + numberStack.Pop()
+		term2 := history.Pop()
+		term1 := history.Pop()
+		termNew := "(" + term1 + "+" +term2+")"
+		history.Push(termNew)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "-": 
-		secondOp := stack.Pop()
-		firstOp := stack.Pop()
+		secondOp := numberStack.Pop()
+		firstOp := numberStack.Pop()
+		term2 := history.Pop()
+		term1 := history.Pop()
+		termNew := "(" + term1 + "-" +term2+")"
+		history.Push(termNew)
 		result := firstOp - secondOp
-		stack.Push(result)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "*": 
-		result := stack.Pop() * stack.Pop()
-		stack.Push(result)
+		result := numberStack.Pop() * numberStack.Pop()
+		term2 := history.Pop()
+		term1 := history.Pop()
+		termNew := "(" + term1 + "*" +term2+")"
+		history.Push(termNew)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "/": 
-		secondOp := stack.Pop()
-		firstOp := stack.Pop()
+		secondOp := numberStack.Pop()
+		firstOp := numberStack.Pop()
+		term2 := history.Pop()
+		term1 := history.Pop()
+		termNew := "(" + term1 + "/" +term2+")"
+		history.Push(termNew)
 		result := firstOp / secondOp
-		stack.Push(result)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "abs":
-		result := math.Abs(stack.Pop())
-		stack.Push(result)
+		result := math.Abs(numberStack.Pop())
+		term1 := history.Pop()
+		termNew := "abs(" + term1 +")"
+		history.Push(termNew)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "sqrt":
-		result := math.Sqrt(stack.Pop())
-		stack.Push(result)
+		result := math.Sqrt(numberStack.Pop())
+		term1 := history.Pop()
+		termNew := "sqrt(" + term1 +")"
+		history.Push(termNew)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "log":
-		result := math.Log(stack.Pop())
-		stack.Push(result)
+		result := math.Log(numberStack.Pop())
+		term1 := history.Pop()
+		termNew := "log(" + term1 +")"
+		history.Push(termNew)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "^":
-		exponent := stack.Pop()
-		base := stack.Pop()
+		exponent := numberStack.Pop()
+		base := numberStack.Pop()
 		result := math.Pow(base,exponent)
-		stack.Push(result)
+		term2 := history.Pop()
+		term1 := history.Pop()
+		termNew := "(" + term1 + "^" +term2+")"
+		history.Push(termNew)
+		fmt.Println("current calculation: " + termNew + " = ", result)
+		numberStack.Push(result)
 	case "++":
-		n := len(*stack)
+		n := len(*numberStack)
 		result := 0.0
+		// TODO history
 		for i := 0; i < n; i++ {
-			result += stack.Pop()
+			result += numberStack.Pop()
 		}
-		stack.Push(result)
+		numberStack.Push(result)
 	case "**":
-		n := len(*stack)
+		n := len(*numberStack)
 		result := 1.0
+		// TODO history
 		for i := 0; i < n; i++ {
-			result *= stack.Pop()
+			result *= numberStack.Pop()
 		}
 		if n > 0 {
-			stack.Push(result)
+			numberStack.Push(result)
 		}
 	}
 
@@ -148,10 +186,12 @@ func checkInput(input string, stack *Stack[float64], latex *LaTeXOutput) {
 	if  err != nil {
 		
 	} else {
-		stack.Push(number)
+		numberStack.Push(number)
+		history.Push(input)
 	}
 
 	// add to history
-	latex.Expression = latex.Expression + " " +input
+	
+	//latex.Expression = latex.Expression + " " +input
 	//fmt.Println("current latexExp ", latex.Expression)
 }
