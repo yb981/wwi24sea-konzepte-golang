@@ -58,6 +58,11 @@ func (c *calculator) checkInput(input string) {
 }
 
 func (c *calculator) performBinaryOperation(op string) {
+	if len(c.numberStack) < 2 {
+		fmt.Println("Error: Need at least 2 numbers on the stack.")
+		return
+	}
+
 	term2 := c.history.Pop()
 	term1 := c.history.Pop()
 	var result float64
@@ -88,6 +93,11 @@ func (c *calculator) performBinaryOperation(op string) {
 }
 
 func (c *calculator) performUnaryOperation(op string) {
+	if len(c.numberStack) < 1 {
+		fmt.Println("Error: Need at least 1 number on the stack.")
+		return
+	}
+
 	term1 := c.history.Pop()
 	var result float64
 
@@ -116,6 +126,11 @@ func (c *calculator) performUnaryOperation(op string) {
 }
 
 func (c *calculator) performSumOperation() {
+	if len(c.numberStack) < 2 {
+		fmt.Println("Error: Need at least 2 numbers on the stack.")
+		return
+	}
+
 	n := len(c.numberStack)
 	result := 0.0
 	
@@ -127,6 +142,11 @@ func (c *calculator) performSumOperation() {
 }
 
 func (c *calculator) performProductOperation() {
+	if len(c.numberStack) < 2 {
+		fmt.Println("Error: Need at least 2 numbers on the stack.")
+		return
+	}
+	
 	n := len(c.numberStack)
 	result := 1.0
 	
@@ -146,6 +166,7 @@ func (c *calculator) handleNumberInput(input string) {
 		c.history.Push(input)
 	} else {
 		// Fehlerbehandlung
+		fmt.Println("Error: Wrong Input")
 	}
 }
 
