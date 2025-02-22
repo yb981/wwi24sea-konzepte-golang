@@ -18,7 +18,7 @@ import (
 type calculator struct {
 	numberStack Stack[float64]
 	history     Stack[string]
-	latex       LaTeXOutput
+	latex       LaTeXConverter
 }
 
 func (c *calculator) checkInput(input string) {
@@ -32,10 +32,8 @@ func (c *calculator) checkInput(input string) {
 		c.numberStack.Print()
 		return
 	case "latex":
-		c.latex.Expression = c.history.Top()
 		fmt.Println(c.history.Top())
-		fmt.Println(c.latex.Expression)
-		fmt.Println(c.latex.formatToLatex(c.latex.Expression))
+		fmt.Println(c.latex.convertToLatex(c.history.Top()))
 		return
 	case "help":
 		c.printWelcomeMessage()
