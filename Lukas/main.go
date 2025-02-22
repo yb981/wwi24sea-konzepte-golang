@@ -20,7 +20,7 @@ func main() {
 	for {
 		numberStack.Print()
 
-		input := getInputByScan()
+		input := getInput()
 
 		checkInput(input, &numberStack, &latex, &history)
 	}
@@ -64,13 +64,12 @@ func getInputByReader() string {
 		return input
 }
 
-func getInputByScan() string {
+func getInput() string {
 	var input string
 	_, err := fmt.Scan(&input)
 	if err != nil {
 		fmt.Println("Eingabefehler")
 	}
-	input = strings.TrimSpace(input)
 	return input
 }
 

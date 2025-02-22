@@ -28,7 +28,10 @@ func (s *Stack[T]) Top() T {
 }
 
 func (s *Stack[T]) Print() {
-	for _, v := range *s {
-		fmt.Print(v, " ")
+	for _, value := range *s {
+		fmt.Print(value, " ")
 	}
 }
+
+
+
