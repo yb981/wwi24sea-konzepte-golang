@@ -133,12 +133,30 @@ func (c *calculator) performSumOperation() {
 
 	n := len(c.numberStack)
 	result := 0.0
-	
-	for i := 0; i < n; i++ {
-		result += c.numberStack.Pop()
+
+	tempSlice := make([]float64, n)
+
+	for i := n-1; i >= 0; i-- {
+		tempSlice[i] = c.numberStack.Pop()
 	}
+	
+	historyOutput := "("
+
+	for i := 0; i < n; i++ {
+		current := tempSlice[i]
+		result += current
+		historyOutput += fmt.Sprintf("%v", current)
+
+		if i != n-1 {
+			historyOutput += "+"
+		}
+	}
+
+	historyOutput += ")"
+
 	c.numberStack.Push(result)
-	fmt.Printf("current calculation: sum = %v\n", result)
+	c.history.Push(historyOutput)
+	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
 
 func (c *calculator) performProductOperation() {
@@ -146,17 +164,32 @@ func (c *calculator) performProductOperation() {
 		fmt.Println("Error: Need at least 2 numbers on the stack.")
 		return
 	}
-	
+
 	n := len(c.numberStack)
 	result := 1.0
 	
+	tempSlice := make([]float64, n)
+
+	for i := n-1; i >= 0; i-- {
+		tempSlice[i] = c.numberStack.Pop()
+	}
+	
+	historyOutput := "("
+
 	for i := 0; i < n; i++ {
-		result *= c.numberStack.Pop()
+		current := tempSlice[i]
+		result += current
+		historyOutput += fmt.Sprintf("%v", current)
+
+		if i != n-1 {
+			historyOutput += "*"
+		}
 	}
-	if n > 0 {
-		c.numberStack.Push(result)
-		fmt.Printf("current calculation: product = %v\n", result)
-	}
+
+	historyOutput += ")"
+	c.history.Push(historyOutput)
+	c.numberStack.Push(result)
+	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
 
 func (c *calculator) handleNumberInput(input string) {

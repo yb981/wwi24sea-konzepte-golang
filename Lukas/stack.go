@@ -40,6 +40,3 @@ func (s *Stack[T]) Print() {
 		fmt.Print(value, " ")
 	}
 }
-
-
-
