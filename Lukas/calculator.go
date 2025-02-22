@@ -22,7 +22,7 @@ type calculator struct {
 }
 
 func (c *calculator) checkInput(input string) {
-	// commands
+	// Commands
 	switch input {
 	case "exit":
 		fmt.Println("\nQuitting Application. See you soon!")
@@ -42,11 +42,11 @@ func (c *calculator) checkInput(input string) {
 		return
 	}
 
-	// operations handling
+	// Operations handling
 	switch input {
 	case "+", "-", "*", "/", "^":
 		c.performBinaryOperation(input)
-	case "abs", "sqrt", "log":
+	case "abs", "sqrt", "log", "!":
 		c.performUnaryOperation(input)
 	case "++":
 		c.performSumOperation()
@@ -101,6 +101,15 @@ func (c *calculator) performUnaryOperation(op string) {
 	case "log":
 		result = math.Log(c.numberStack.Pop())
 		c.history.Push(fmt.Sprintf("log(%s)", term1))
+	case "!":
+		current := c.numberStack.Pop()
+		if current < 0 || current != math.Floor(current) { // Check for non-negative integer
+			fmt.Println("Error: Factorial is not defined for negative numbers or non-integers.")
+			c.numberStack.Push(current) // Push number back on stack
+			return
+		}
+		result = c.factorial(current)
+		c.history.Push(fmt.Sprintf("%d!", int(current))) // Store the factorial expression
 	}
 	fmt.Printf("current calculation: %s = %v\n", c.history.Top(), result)
 	c.numberStack.Push(result)
@@ -109,7 +118,7 @@ func (c *calculator) performUnaryOperation(op string) {
 func (c *calculator) performSumOperation() {
 	n := len(c.numberStack)
 	result := 0.0
-	// Eine Kopie des Stacks erstellen, damit wir zur Berechnung nicht die Werte verlieren.
+	
 	for i := 0; i < n; i++ {
 		result += c.numberStack.Pop()
 	}
@@ -120,7 +129,7 @@ func (c *calculator) performSumOperation() {
 func (c *calculator) performProductOperation() {
 	n := len(c.numberStack)
 	result := 1.0
-	// Eine Kopie des Stacks erstellen, damit wir zur Berechnung nicht die Werte verlieren.
+	
 	for i := 0; i < n; i++ {
 		result *= c.numberStack.Pop()
 	}
@@ -138,6 +147,18 @@ func (c *calculator) handleNumberInput(input string) {
 	} else {
 		// Fehlerbehandlung
 	}
+}
+
+// Helper function to compute factorial of a non-negative integer
+func (c calculator) factorial(n float64) float64 {
+	if n == 0 {
+		return 1 // 0! is 1
+	}
+	var result float64 = 1
+	for i := 1; i <= int(n); i++ {
+		result *= float64(i)
+	}
+	return result
 }
 
 func (c calculator) printWelcomeMessage() {
