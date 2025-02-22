@@ -1,3 +1,9 @@
+// main.go
+// Main function to start the calculator programm.
+//
+// Author: Lukas Gröning
+// Date: 22.02.2025
+
 package main
 
 import (

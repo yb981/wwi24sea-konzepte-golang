@@ -1,3 +1,11 @@
+// stack.go
+// Package stack implements a basic stack data structure.
+//
+// Author: Lukas Gröning
+// Date: 22.02.2025
+//
+// This file contains methods for stack operations.
+
 package main
 
 import "fmt"

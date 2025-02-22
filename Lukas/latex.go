@@ -1,3 +1,9 @@
+// latex.go
+// Functionality to parse strings into latex
+//
+// Author: Lukas Gröning
+// Date: 22.02.2025
+
 package main
 
 import (

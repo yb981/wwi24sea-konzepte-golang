@@ -1,3 +1,11 @@
+// calculator.go
+// RPN Calculator
+//
+// Author: Lukas Gröning
+// Date: 22.02.2025
+//
+// RPN Calculator with basic operations.
+
 package main
 
 import (
