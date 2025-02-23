@@ -24,3 +24,32 @@ func TestPush(t *testing.T) {
 		}
 	}
 }
+
+func TestPop(t *testing.T) {
+	var tests = []struct {
+		input    float64
+		expected float64
+	}{
+		{-15, -15},
+		{2, 2},
+		{14.02, 14.02},
+		{0, 0},
+		{99999.999, 99999.999},
+	}
+	testStack := Stack[float64]{}
+	for _, input := range tests {
+		testStack.Push(input.input)
+	}
+
+	for index, _ := range testStack {
+		input := testStack.Pop()
+		if input != tests[len(tests)-(index+1)].input && input != tests[len(tests)-index].expected {
+			t.Errorf("Got %v but expected %v", input, tests[len(tests)-index].expected)
+		}
+	}
+
+	input := testStack.Pop()
+	if input != 0 {
+		t.Errorf("Expected for empty Stack %v but got %v", 0, input)
+	}
+}
