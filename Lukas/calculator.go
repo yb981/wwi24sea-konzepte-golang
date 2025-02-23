@@ -129,9 +129,11 @@ func (c *calculator) performSumOperation() {
 	result := 0.0
 
 	tempSlice := make([]float64, n)
+	tempSliceHistory := make([]string, n)
 
 	for i := n-1; i >= 0; i-- {
 		tempSlice[i] = c.numberStack.Pop()
+		tempSliceHistory[i] = c.history.Pop()
 	}
 	
 	historyOutput := "("
@@ -139,10 +141,10 @@ func (c *calculator) performSumOperation() {
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
 		result += current
-		historyOutput += fmt.Sprintf("%v", current)
+		historyOutput += fmt.Sprintf("%v", tempSliceHistory[i])
 
 		if i != n-1 {
-			historyOutput += "+"
+			historyOutput += " + "
 		}
 	}
 
@@ -163,9 +165,11 @@ func (c *calculator) performProductOperation() {
 	result := 1.0
 	
 	tempSlice := make([]float64, n)
+	tempSliceHistory := make([]string, n)
 
 	for i := n-1; i >= 0; i-- {
 		tempSlice[i] = c.numberStack.Pop()
+		tempSliceHistory[i] = c.history.Pop()
 	}
 	
 	historyOutput := "("
@@ -173,10 +177,10 @@ func (c *calculator) performProductOperation() {
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
 		result *= current
-		historyOutput += fmt.Sprintf("%v", current)
+		historyOutput += fmt.Sprintf("%v", tempSliceHistory[i])
 
 		if i != n-1 {
-			historyOutput += "*"
+			historyOutput += " * "
 		}
 	}
 
