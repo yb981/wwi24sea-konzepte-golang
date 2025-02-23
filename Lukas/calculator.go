@@ -18,7 +18,8 @@ import (
 type calculator struct {
 	numberStack Stack[float64]
 	history     Stack[string]
-	latex       LaTeXConverter
+	latex     	Stack[string]
+	//latex       LaTeXConverter
 }
 
 func (c *calculator) checkInput(input string) {
@@ -33,7 +34,7 @@ func (c *calculator) checkInput(input string) {
 		return
 	case "latex":
 		fmt.Println(c.history.Top())
-		fmt.Println(c.latex.convertToLatex(c.history.Top()))
+		fmt.Println("\\["+c.latex.Top()+"]\\")
 		return
 	case "help":
 		c.printWelcomeMessage()
@@ -61,8 +62,12 @@ func (c *calculator) performBinaryOperation(op string) {
 		return
 	}
 
+	latex2 := c.latex.Pop()
+	latex1 := c.latex.Pop()
+
 	term2 := c.history.Pop()
 	term1 := c.history.Pop()
+
 	var result float64
 	secondOp := c.numberStack.Pop()
 	firstOp := c.numberStack.Pop()
@@ -70,14 +75,19 @@ func (c *calculator) performBinaryOperation(op string) {
 	switch op {
 	case "+":
 		result = firstOp + secondOp
+		c.latex.Push(fmt.Sprintf("{%s} + {%s}", latex1, latex2))
 	case "-":
 		result = firstOp - secondOp
+		c.latex.Push(fmt.Sprintf("{%s} - {%s}", latex1, latex2))
 	case "*":
 		result = firstOp * secondOp
+		c.latex.Push(fmt.Sprintf("{%s} \\cdot {%s}", latex1, latex2))
 	case "/":
 		result = firstOp / secondOp
+		c.latex.Push(fmt.Sprintf("\\frac{%s}{%s}", latex1, latex2))
 	case "^":
 		result = math.Pow(firstOp, secondOp)
+		c.latex.Push(fmt.Sprintf("{%s}^{%s}", latex1, latex2))
 	}
 
 	termNew := fmt.Sprintf("(%s %s %s)", term1, op, term2)
@@ -92,19 +102,22 @@ func (c *calculator) performUnaryOperation(op string) {
 		return
 	}
 
+	latex1 := c.latex.Pop()
 	term1 := c.history.Pop()
+
 	var result float64
 
 	switch op {
 	case "abs":
 		result = math.Abs(c.numberStack.Pop())
 		c.history.Push(fmt.Sprintf("abs(%s)", term1))
+		c.latex.Push(fmt.Sprintf("\\rvert{%s}", latex1))
 	case "sqrt":
 		result = math.Sqrt(c.numberStack.Pop())
-		c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
+		c.history.Push(fmt.Sprintf("\\sqrt{%s}", term1))
 	case "log":
 		result = math.Log(c.numberStack.Pop())
-		c.history.Push(fmt.Sprintf("log(%s)", term1))
+		c.history.Push(fmt.Sprintf("log{%s}", term1))
 	case "!":
 		current := c.numberStack.Pop()
 		if current < 0 || current != math.Floor(current) { // Check for non-negative integer
@@ -195,6 +208,7 @@ func (c *calculator) handleNumberInput(input string) {
 	if err == nil {
 		c.numberStack.Push(number)
 		c.history.Push(input)
+		c.latex.Push(input)
 	} else {
 		fmt.Println("Error: Wrong Input")
 	}
