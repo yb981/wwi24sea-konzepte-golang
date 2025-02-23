@@ -64,24 +64,20 @@ func (c *calculator) performBinaryOperation(op string) {
 	term2 := c.history.Pop()
 	term1 := c.history.Pop()
 	var result float64
+	secondOp := c.numberStack.Pop()
+	firstOp := c.numberStack.Pop()
 
 	switch op {
 	case "+":
-		result = c.numberStack.Pop() + c.numberStack.Pop()
+		result = firstOp + secondOp
 	case "-":
-		secondOp := c.numberStack.Pop()
-		firstOp := c.numberStack.Pop()
 		result = firstOp - secondOp
 	case "*":
-		result = c.numberStack.Pop() * c.numberStack.Pop()
+		result = firstOp * secondOp
 	case "/":
-		secondOp := c.numberStack.Pop()
-		firstOp := c.numberStack.Pop()
 		result = firstOp / secondOp
 	case "^":
-		exponent := c.numberStack.Pop()
-		base := c.numberStack.Pop()
-		result = math.Pow(base, exponent)
+		result = math.Pow(firstOp, secondOp)
 	}
 
 	termNew := fmt.Sprintf("(%s %s %s)", term1, op, term2)
@@ -196,7 +192,6 @@ func (c *calculator) handleNumberInput(input string) {
 		c.numberStack.Push(number)
 		c.history.Push(input)
 	} else {
-		// Fehlerbehandlung
 		fmt.Println("Error: Wrong Input")
 	}
 }
