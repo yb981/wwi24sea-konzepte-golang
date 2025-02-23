@@ -38,7 +38,7 @@ func TestPop(t *testing.T) {
 	}
 	testStack := Stack[float64]{}
 	for _, input := range tests {
-		testStack.Push(input.input)
+		testStack = append(testStack, input.input)
 	}
 
 	for index, _ := range testStack {
@@ -51,5 +51,36 @@ func TestPop(t *testing.T) {
 	input := testStack.Pop()
 	if input != 0 {
 		t.Errorf("Expected for empty Stack %v but got %v", 0, input)
+	}
+}
+
+func TestTop(t *testing.T) {
+	var tests = []struct {
+		input    float64
+		expected float64
+	}{
+		{0, 0},
+		{1, 1},
+		{-1, -1},
+		{1.0123456789, 1.0123456789},
+	}
+
+	testStack := Stack[float64]{}
+	for _, input := range tests {
+		testStack = append(testStack, input.input)
+	}
+
+	for index, _ := range testStack {
+		input := testStack.Top()
+		testStack = testStack[:len(testStack)-1]
+
+		if input != tests[len(tests)-(index+1)].input && input != tests[len(tests)-index].expected {
+			t.Errorf("Got %v but expected %v", input, tests[len(tests)-index].expected)
+		}
+	}
+
+	input := testStack.Top()
+	if input != 0 {
+		t.Errorf("Got %v but expected ZERO", input)
 	}
 }
