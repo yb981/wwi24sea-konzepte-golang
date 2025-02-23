@@ -29,10 +29,10 @@ func TestStackOperations(t *testing.T) {
 func TestBinaryOperations(t *testing.T) {
 	calc := calculator{}
 
+	// Für diese Tests ist nur das Ergebnis wichtig, daher direkten Push in den numberStack
 	calc.numberStack.Push(4)
 	calc.numberStack.Push(2)
 	calc.performBinaryOperation("+")
-
 	if calc.numberStack.Pop() != 6 {
 		t.Error("4 + 2 sollte 6 sein")
 	}
@@ -40,7 +40,6 @@ func TestBinaryOperations(t *testing.T) {
 	calc.numberStack.Push(10)
 	calc.numberStack.Push(2)
 	calc.performBinaryOperation("/")
-
 	if calc.numberStack.Pop() != 5 {
 		t.Error("10 / 2 sollte 5 sein")
 	}
@@ -48,7 +47,6 @@ func TestBinaryOperations(t *testing.T) {
 	calc.numberStack.Push(3)
 	calc.numberStack.Push(3)
 	calc.performBinaryOperation("^")
-
 	if calc.numberStack.Pop() != 27 {
 		t.Error("3 ^ 3 sollte 27 sein")
 	}
@@ -75,11 +73,11 @@ func TestFactorial(t *testing.T) {
 func TestSumOperation(t *testing.T) {
 	calc := calculator{}
 
+	// Hier werden direkt Zahlen in den numberStack gepusht, da der History-String nicht relevant ist
 	calc.numberStack.Push(1)
 	calc.numberStack.Push(2)
 	calc.numberStack.Push(3)
 	calc.performSumOperation()
-
 	if calc.numberStack.Pop() != 6 {
 		t.Error("1 + 2 + 3 sollte 6 sein")
 	}
@@ -93,7 +91,6 @@ func TestProductOperation(t *testing.T) {
 	calc.numberStack.Push(3)
 	calc.numberStack.Push(4)
 	calc.performProductOperation()
-
 	if calc.numberStack.Pop() != 24 {
 		t.Error("2 * 3 * 4 sollte 24 sein")
 	}
@@ -103,7 +100,6 @@ func TestProductOperation(t *testing.T) {
 func TestHandleWrongInput(t *testing.T) {
 	calc := calculator{}
 	calc.handleNumberInput("abc")
-
 	if len(calc.numberStack) != 0 {
 		t.Error("Ungültige Eingabe sollte nicht auf den Stack gelangen")
 	}
@@ -117,7 +113,6 @@ func TestIntegration(t *testing.T) {
 	calc.handleNumberInput("2")
 	calc.handleNumberInput("3")
 	calc.checkInput("+")
-
 	if calc.numberStack.Pop() != 5 {
 		t.Error("2 + 3 sollte 5 sein")
 	}
@@ -125,8 +120,37 @@ func TestIntegration(t *testing.T) {
 	// 4 sqrt (Ergebnis sollte 2 sein)
 	calc.handleNumberInput("4")
 	calc.checkInput("sqrt")
-
 	if calc.numberStack.Pop() != 2 {
 		t.Error("sqrt(4) sollte 2 sein")
+	}
+}
+
+// Test für die korrekte Infix-Notation in der History
+func TestInfixNotationOutput(t *testing.T) {
+	calc := calculator{}
+
+	// Test für eine binäre Operation (Addition)
+	calc.handleNumberInput("3")
+	calc.handleNumberInput("5")
+	calc.performBinaryOperation("+")
+	expected := "(3 + 5)"
+	if calc.history.Top() != expected {
+		t.Errorf("Erwartete Infix-Notation: %s, aber erhalten: %s", expected, calc.history.Top())
+	}
+
+	// Test für eine komplexere Rechnung: ((3 + 5) * 2)
+	calc.handleNumberInput("2")
+	calc.performBinaryOperation("*")
+	expected = "((3 + 5) * 2)"
+	if calc.history.Top() != expected {
+		t.Errorf("Erwartete Infix-Notation: %s, aber erhalten: %s", expected, calc.history.Top())
+	}
+
+	// Test für Exponentiation: (((3 + 5) * 2) ^ 2)
+	calc.handleNumberInput("2")
+	calc.performBinaryOperation("^")
+	expected = "(((3 + 5) * 2) ^ 2)"
+	if calc.history.Top() != expected {
+		t.Errorf("Erwartete Infix-Notation: %s, aber erhalten: %s", expected, calc.history.Top())
 	}
 }
