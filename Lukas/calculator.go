@@ -172,7 +172,7 @@ func (c *calculator) performProductOperation() {
 
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
-		result += current
+		result *= current
 		historyOutput += fmt.Sprintf("%v", current)
 
 		if i != n-1 {
