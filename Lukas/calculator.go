@@ -18,7 +18,8 @@ import (
 type calculator struct {
 	numberStack Stack[float64]
 	history     Stack[string]
-	latex       LaTeXConverter
+	latex     	Stack[string]
+	//latex       LaTeXConverter
 }
 
 func (c *calculator) checkInput(input string) {
@@ -32,8 +33,7 @@ func (c *calculator) checkInput(input string) {
 		c.numberStack.Print()
 		return
 	case "latex":
-		fmt.Println(c.history.Top())
-		fmt.Println(c.latex.convertToLatex(c.history.Top()))
+		fmt.Println("\\["+c.latex.Top()+"]\\")
 		return
 	case "help":
 		c.printWelcomeMessage()
@@ -61,27 +61,32 @@ func (c *calculator) performBinaryOperation(op string) {
 		return
 	}
 
+	latex2 := c.latex.Pop()
+	latex1 := c.latex.Pop()
+
 	term2 := c.history.Pop()
 	term1 := c.history.Pop()
+
 	var result float64
+	secondOp := c.numberStack.Pop()
+	firstOp := c.numberStack.Pop()
 
 	switch op {
 	case "+":
-		result = c.numberStack.Pop() + c.numberStack.Pop()
+		result = firstOp + secondOp
+		c.latex.Push(fmt.Sprintf("({%s} + {%s})", latex1, latex2))
 	case "-":
-		secondOp := c.numberStack.Pop()
-		firstOp := c.numberStack.Pop()
 		result = firstOp - secondOp
+		c.latex.Push(fmt.Sprintf("({%s} - {%s})", latex1, latex2))
 	case "*":
-		result = c.numberStack.Pop() * c.numberStack.Pop()
+		result = firstOp * secondOp
+		c.latex.Push(fmt.Sprintf("({%s} \\cdot {%s})", latex1, latex2))
 	case "/":
-		secondOp := c.numberStack.Pop()
-		firstOp := c.numberStack.Pop()
 		result = firstOp / secondOp
+		c.latex.Push(fmt.Sprintf("\\frac{%s}{%s}", latex1, latex2))
 	case "^":
-		exponent := c.numberStack.Pop()
-		base := c.numberStack.Pop()
-		result = math.Pow(base, exponent)
+		result = math.Pow(firstOp, secondOp)
+		c.latex.Push(fmt.Sprintf("{%s}^{%s}", latex1, latex2))
 	}
 
 	termNew := fmt.Sprintf("(%s %s %s)", term1, op, term2)
@@ -96,19 +101,24 @@ func (c *calculator) performUnaryOperation(op string) {
 		return
 	}
 
+	latex1 := c.latex.Pop()
 	term1 := c.history.Pop()
+
 	var result float64
 
 	switch op {
 	case "abs":
 		result = math.Abs(c.numberStack.Pop())
 		c.history.Push(fmt.Sprintf("abs(%s)", term1))
+		c.latex.Push(fmt.Sprintf("\\rvert{%s}", latex1))
 	case "sqrt":
 		result = math.Sqrt(c.numberStack.Pop())
 		c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
+		c.latex.Push(fmt.Sprintf("\\sqrt{%s}", latex1))
 	case "log":
 		result = math.Log(c.numberStack.Pop())
 		c.history.Push(fmt.Sprintf("log(%s)", term1))
+		c.latex.Push(fmt.Sprintf("log{%s}", latex1))
 	case "!":
 		current := c.numberStack.Pop()
 		if current < 0 || current != math.Floor(current) { // Check for non-negative integer
@@ -117,7 +127,8 @@ func (c *calculator) performUnaryOperation(op string) {
 			return
 		}
 		result = c.factorial(current)
-		c.history.Push(fmt.Sprintf("%d!", int(current))) // Store the factorial expression
+		c.history.Push(fmt.Sprintf("%d!", int(current)))
+		c.latex.Push(fmt.Sprintf("%d!", int(current)))
 	}
 	fmt.Printf("current calculation: %s = %v\n", c.history.Top(), result)
 	c.numberStack.Push(result)
@@ -133,27 +144,36 @@ func (c *calculator) performSumOperation() {
 	result := 0.0
 
 	tempSlice := make([]float64, n)
+	tempSliceHistory := make([]string, n)
+	tempSliceLatex := make([]string, n)
 
 	for i := n-1; i >= 0; i-- {
 		tempSlice[i] = c.numberStack.Pop()
+		tempSliceHistory[i] = c.history.Pop()
+		tempSliceLatex[i] = c.latex.Pop()
 	}
 	
 	historyOutput := "("
+	latexOutput := "("
 
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
 		result += current
-		historyOutput += fmt.Sprintf("%v", current)
+		historyOutput += fmt.Sprintf("%v", tempSliceHistory[i])
+		latexOutput += fmt.Sprintf("%v", tempSliceLatex[i])
 
 		if i != n-1 {
-			historyOutput += "+"
+			historyOutput += " + "
+			latexOutput += " + "
 		}
 	}
 
 	historyOutput += ")"
+	latexOutput += ")"
 
 	c.numberStack.Push(result)
 	c.history.Push(historyOutput)
+	c.latex.Push(latexOutput)
 	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
 
@@ -167,25 +187,34 @@ func (c *calculator) performProductOperation() {
 	result := 1.0
 	
 	tempSlice := make([]float64, n)
+	tempSliceHistory := make([]string, n)
+	tempSliceLatex := make([]string, n)
 
 	for i := n-1; i >= 0; i-- {
 		tempSlice[i] = c.numberStack.Pop()
+		tempSliceHistory[i] = c.history.Pop()
+		tempSliceLatex[i] = c.latex.Pop()
 	}
 	
 	historyOutput := "("
+	latexOutput := "("
 
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
-		result += current
-		historyOutput += fmt.Sprintf("%v", current)
+		result *= current
+		historyOutput += tempSliceHistory[i]
+		latexOutput += (fmt.Sprintf("{%s}",tempSliceLatex[i]))
 
 		if i != n-1 {
-			historyOutput += "*"
+			historyOutput += " * "
+			latexOutput += " \\cdot "
 		}
 	}
 
 	historyOutput += ")"
+	latexOutput += ")"
 	c.history.Push(historyOutput)
+	c.latex.Push(latexOutput)
 	c.numberStack.Push(result)
 	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
@@ -195,8 +224,8 @@ func (c *calculator) handleNumberInput(input string) {
 	if err == nil {
 		c.numberStack.Push(number)
 		c.history.Push(input)
+		c.latex.Push(input)
 	} else {
-		// Fehlerbehandlung
 		fmt.Println("Error: Wrong Input")
 	}
 }
