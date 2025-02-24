@@ -113,10 +113,12 @@ func (c *calculator) performUnaryOperation(op string) {
 		c.latex.Push(fmt.Sprintf("\\rvert{%s}", latex1))
 	case "sqrt":
 		result = math.Sqrt(c.numberStack.Pop())
-		c.history.Push(fmt.Sprintf("\\sqrt{%s}", term1))
+		c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
+		c.latex.Push(fmt.Sprintf("\\sqrt{%s}", latex1))
 	case "log":
 		result = math.Log(c.numberStack.Pop())
-		c.history.Push(fmt.Sprintf("log{%s}", term1))
+		c.history.Push(fmt.Sprintf("log(%s)", term1))
+		c.latex.Push(fmt.Sprintf("log{%s}", latex1))
 	case "!":
 		current := c.numberStack.Pop()
 		if current < 0 || current != math.Floor(current) { // Check for non-negative integer
@@ -125,7 +127,8 @@ func (c *calculator) performUnaryOperation(op string) {
 			return
 		}
 		result = c.factorial(current)
-		c.history.Push(fmt.Sprintf("%d!", int(current))) // Store the factorial expression
+		c.history.Push(fmt.Sprintf("%d!", int(current)))
+		c.latex.Push(fmt.Sprintf("%d!", int(current)))
 	}
 	fmt.Printf("current calculation: %s = %v\n", c.history.Top(), result)
 	c.numberStack.Push(result)
