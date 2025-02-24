@@ -46,10 +46,8 @@ func (c *calculator) checkInput(input string) {
 		c.performBinaryOperation(input)
 	case "abs", "sqrt", "log", "!":
 		c.performUnaryOperation(input)
-	case "++":
-		c.performSumOperation()
-	case "**":
-		c.performProductOperation()
+	case "++", "**":
+		c.performMultiOperation(input)
 	default:
 		c.handleNumberInput(input)
 	}
@@ -134,14 +132,13 @@ func (c *calculator) performUnaryOperation(op string) {
 	c.numberStack.Push(result)
 }
 
-func (c *calculator) performSumOperation() {
+func (c *calculator) performMultiOperation(op string) {
 	if len(c.numberStack) < 2 {
 		fmt.Println("Error: Need at least 2 numbers on the stack.")
 		return
 	}
 
 	n := len(c.numberStack)
-	result := 0.0
 
 	tempSlice := make([]float64, n)
 	tempSliceHistory := make([]string, n)
@@ -156,66 +153,42 @@ func (c *calculator) performSumOperation() {
 	historyOutput := "("
 	latexOutput := "("
 
+	var result float64
+	if op == "++" {
+		result = 0.0
+	} else {
+		result = 1.0
+	}
+	
+
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
-		result += current
-		historyOutput += fmt.Sprintf("%v", tempSliceHistory[i])
-		latexOutput += fmt.Sprintf("%v", tempSliceLatex[i])
-
-		if i != n-1 {
-			historyOutput += " + "
-			latexOutput += " + "
+		if op == "++" {
+			result += current
+		} else {
+			result *= current
 		}
-	}
-
-	historyOutput += ")"
-	latexOutput += ")"
-
-	c.numberStack.Push(result)
-	c.history.Push(historyOutput)
-	c.latex.Push(latexOutput)
-	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
-}
-
-func (c *calculator) performProductOperation() {
-	if len(c.numberStack) < 2 {
-		fmt.Println("Error: Need at least 2 numbers on the stack.")
-		return
-	}
-
-	n := len(c.numberStack)
-	result := 1.0
-	
-	tempSlice := make([]float64, n)
-	tempSliceHistory := make([]string, n)
-	tempSliceLatex := make([]string, n)
-
-	for i := n-1; i >= 0; i-- {
-		tempSlice[i] = c.numberStack.Pop()
-		tempSliceHistory[i] = c.history.Pop()
-		tempSliceLatex[i] = c.latex.Pop()
-	}
-	
-	historyOutput := "("
-	latexOutput := "("
-
-	for i := 0; i < n; i++ {
-		current := tempSlice[i]
-		result *= current
+		
 		historyOutput += tempSliceHistory[i]
-		latexOutput += (fmt.Sprintf("{%s}",tempSliceLatex[i]))
+		latexOutput += tempSliceLatex[i]
 
 		if i != n-1 {
-			historyOutput += " * "
-			latexOutput += " \\cdot "
+			if op == "++" {
+				historyOutput += " + "
+				latexOutput += " + "
+			} else {
+				historyOutput += " * "
+				latexOutput += " \\cdot "	
+			}
 		}
 	}
 
 	historyOutput += ")"
 	latexOutput += ")"
+
+	c.numberStack.Push(result)
 	c.history.Push(historyOutput)
 	c.latex.Push(latexOutput)
-	c.numberStack.Push(result)
 	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
 
