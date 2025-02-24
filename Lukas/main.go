@@ -28,7 +28,7 @@ func getInput() string {
 	var input string
 	_, err := fmt.Scan(&input)
 	if err != nil {
-		fmt.Println("Eingabefehler")
+		fmt.Println(err.Error())
 	}
 	return input
 }

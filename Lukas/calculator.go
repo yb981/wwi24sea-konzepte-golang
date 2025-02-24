@@ -74,13 +74,13 @@ func (c *calculator) performBinaryOperation(op string) {
 	switch op {
 	case "+":
 		result = firstOp + secondOp
-		c.latex.Push(fmt.Sprintf("{%s} + {%s}", latex1, latex2))
+		c.latex.Push(fmt.Sprintf("({%s} + {%s})", latex1, latex2))
 	case "-":
 		result = firstOp - secondOp
-		c.latex.Push(fmt.Sprintf("{%s} - {%s}", latex1, latex2))
+		c.latex.Push(fmt.Sprintf("({%s} - {%s})", latex1, latex2))
 	case "*":
 		result = firstOp * secondOp
-		c.latex.Push(fmt.Sprintf("{%s} \\cdot {%s}", latex1, latex2))
+		c.latex.Push(fmt.Sprintf("({%s} \\cdot {%s})", latex1, latex2))
 	case "/":
 		result = firstOp / secondOp
 		c.latex.Push(fmt.Sprintf("\\frac{%s}{%s}", latex1, latex2))
@@ -142,28 +142,35 @@ func (c *calculator) performSumOperation() {
 
 	tempSlice := make([]float64, n)
 	tempSliceHistory := make([]string, n)
+	tempSliceLatex := make([]string, n)
 
 	for i := n-1; i >= 0; i-- {
 		tempSlice[i] = c.numberStack.Pop()
 		tempSliceHistory[i] = c.history.Pop()
+		tempSliceLatex[i] = c.latex.Pop()
 	}
 	
 	historyOutput := "("
+	latexOutput := "("
 
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
 		result += current
 		historyOutput += fmt.Sprintf("%v", tempSliceHistory[i])
+		latexOutput += fmt.Sprintf("%v", tempSliceLatex[i])
 
 		if i != n-1 {
 			historyOutput += " + "
+			latexOutput += " + "
 		}
 	}
 
 	historyOutput += ")"
+	latexOutput += ")"
 
 	c.numberStack.Push(result)
 	c.history.Push(historyOutput)
+	c.latex.Push(latexOutput)
 	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
 
@@ -178,26 +185,33 @@ func (c *calculator) performProductOperation() {
 	
 	tempSlice := make([]float64, n)
 	tempSliceHistory := make([]string, n)
+	tempSliceLatex := make([]string, n)
 
 	for i := n-1; i >= 0; i-- {
 		tempSlice[i] = c.numberStack.Pop()
 		tempSliceHistory[i] = c.history.Pop()
+		tempSliceLatex[i] = c.latex.Pop()
 	}
 	
 	historyOutput := "("
+	latexOutput := "("
 
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
 		result *= current
-		historyOutput += fmt.Sprintf("%v", tempSliceHistory[i])
+		historyOutput += tempSliceHistory[i]
+		latexOutput += (fmt.Sprintf("{%s}",tempSliceLatex[i]))
 
 		if i != n-1 {
 			historyOutput += " * "
+			latexOutput += " \\cdot "
 		}
 	}
 
 	historyOutput += ")"
+	latexOutput += ")"
 	c.history.Push(historyOutput)
+	c.latex.Push(latexOutput)
 	c.numberStack.Push(result)
 	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
