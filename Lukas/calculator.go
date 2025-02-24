@@ -108,7 +108,7 @@ func (c *calculator) performUnaryOperation(op string) {
 	case "abs":
 		result = math.Abs(c.numberStack.Pop())
 		c.history.Push(fmt.Sprintf("abs(%s)", term1))
-		c.latex.Push(fmt.Sprintf("\\rvert{%s}", latex1))
+		c.latex.Push(fmt.Sprintf("\\lvert{%s}\\rvert", latex1))
 	case "sqrt":
 		result = math.Sqrt(c.numberStack.Pop())
 		c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
