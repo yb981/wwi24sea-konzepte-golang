@@ -27,10 +27,6 @@ func (c *calculator) checkInput(input string) {
 	case "exit":
 		fmt.Println("\nQuitting Application. See you soon!")
 		os.Exit(0)
-	case "list":
-		fmt.Println("printing input")
-		c.numberStack.Print()
-		return
 	case "latex":
 		fmt.Println("\\["+c.latex.Top()+"\\]")
 		return
