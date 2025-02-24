@@ -19,7 +19,6 @@ type calculator struct {
 	numberStack Stack[float64]
 	history     Stack[string]
 	latex     	Stack[string]
-	//latex       LaTeXConverter
 }
 
 func (c *calculator) checkInput(input string) {
@@ -114,6 +113,8 @@ func (c *calculator) performUnaryOperation(op string) {
 		if current < 0 {
 			fmt.Println("Error: Square root is not defined for negative numbers.")
 			c.numberStack.Push(current) // Push number back on stack
+			c.history.Push(term1)
+			c.latex.Push(latex1)
 			return
 		}
 		result = math.Sqrt(current)
@@ -124,6 +125,8 @@ func (c *calculator) performUnaryOperation(op string) {
 		if current <= 0  {
 			fmt.Println("Error: Logarithm is not defined for zero or negative numbers.")
 			c.numberStack.Push(current) // Push number back on stack
+			c.history.Push(term1)
+			c.latex.Push(latex1)
 			return
 		}
 		result = math.Log(current)
@@ -134,6 +137,8 @@ func (c *calculator) performUnaryOperation(op string) {
 		if current < 0 || current != math.Floor(current) {
 			fmt.Println("Error: Factorial is not defined for negative numbers or non-integers.")
 			c.numberStack.Push(current) // Push number back on stack
+			c.history.Push(term1)
+			c.latex.Push(latex1)
 			return
 		}
 		result = c.factorial(current)
