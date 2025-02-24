@@ -8,6 +8,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 )
 
 func main() {
@@ -28,7 +29,8 @@ func getInput() string {
 	var input string
 	_, err := fmt.Scan(&input)
 	if err != nil {
-		fmt.Println("Eingabefehler")
+		fmt.Println("Error while reading input: ", err.Error())
+		os.Exit(1)
 	}
 	return input
 }
