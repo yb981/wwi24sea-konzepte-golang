@@ -110,16 +110,28 @@ func (c *calculator) performUnaryOperation(op string) {
 		c.history.Push(fmt.Sprintf("abs(%s)", term1))
 		c.latex.Push(fmt.Sprintf("\\lvert{%s}\\rvert", latex1))
 	case "sqrt":
-		result = math.Sqrt(c.numberStack.Pop())
+		current := c.numberStack.Pop()
+		if current < 0 {
+			fmt.Println("Error: Square root is not defined for negative numbers.")
+			c.numberStack.Push(current) // Push number back on stack
+			return
+		}
+		result = math.Sqrt(current)
 		c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
 		c.latex.Push(fmt.Sprintf("\\sqrt{%s}", latex1))
 	case "log":
-		result = math.Log(c.numberStack.Pop())
+		current := c.numberStack.Pop()
+		if current <= 0  {
+			fmt.Println("Error: Logarithm is not defined for zero or negative numbers.")
+			c.numberStack.Push(current) // Push number back on stack
+			return
+		}
+		result = math.Log(current)
 		c.history.Push(fmt.Sprintf("log(%s)", term1))
 		c.latex.Push(fmt.Sprintf("log{%s}", latex1))
 	case "!":
 		current := c.numberStack.Pop()
-		if current < 0 || current != math.Floor(current) { // Check for non-negative integer
+		if current < 0 || current != math.Floor(current) {
 			fmt.Println("Error: Factorial is not defined for negative numbers or non-integers.")
 			c.numberStack.Push(current) // Push number back on stack
 			return
@@ -160,7 +172,6 @@ func (c *calculator) performMultiOperation(op string) {
 		result = 1.0
 	}
 	
-
 	for i := 0; i < n; i++ {
 		current := tempSlice[i]
 		if op == "++" {
