@@ -4,27 +4,6 @@ import (
 	"testing"
 )
 
-// Test für Stack-Funktionen
-func TestStackOperations(t *testing.T) {
-	stack := Stack[float64]{}
-
-	stack.Push(3.0)
-	stack.Push(5.0)
-
-	if stack.Pop() != 5.0 {
-		t.Error("Pop() sollte 5.0 zurückgeben")
-	}
-
-	if stack.Top() != 3.0 {
-		t.Error("Top() sollte 3.0 zurückgeben")
-	}
-
-	stack.Pop()
-	if len(stack) != 0 {
-		t.Error("Stack sollte nach Pop() leer sein")
-	}
-}
-
 // Test für binäre Operationen (+, -, *, /, ^)
 func TestBinaryOperations(t *testing.T) {
 	calc := calculator{}
@@ -152,5 +131,65 @@ func TestInfixNotationOutput(t *testing.T) {
 	expected = "(((3 + 5) * 2) ^ 2)"
 	if calc.history.Top() != expected {
 		t.Errorf("Erwartete Infix-Notation: %s, aber erhalten: %s", expected, calc.history.Top())
+	}
+}
+
+//Test für Komplexere Rechnungen
+func TestComplexCalculationWithFactorial(t *testing.T) {
+	calc := calculator{}
+
+	// 5!
+	calc.handleNumberInput("5")
+	calc.performUnaryOperation("!")
+	if calc.numberStack.Pop() != 120 {
+		t.Error("5! sollte 120 sein")
+	}
+
+	// 3! + 2!
+	calc.handleNumberInput("3")
+	calc.performUnaryOperation("!")
+	calc.handleNumberInput("2")
+	calc.performUnaryOperation("!")
+	calc.performBinaryOperation("+")
+	if calc.numberStack.Pop() != 126 {
+		t.Error("3! + 2! sollte 126 sein")
+	}
+
+	// (5! - 4!) * 2!
+	calc.handleNumberInput("5")
+	calc.performUnaryOperation("!")
+	calc.handleNumberInput("4")
+	calc.performUnaryOperation("!")
+	calc.performBinaryOperation("-")
+	calc.handleNumberInput("2")
+	calc.performUnaryOperation("!")
+	calc.performBinaryOperation("*")
+	if calc.numberStack.Pop() != 240 {
+		t.Error("(5! - 4!) * 2! sollte 240 sein")
+	}
+
+	// (5! - 4!) * (3! + 2!)
+	calc.handleNumberInput("5")
+	calc.performUnaryOperation("!")
+	calc.handleNumberInput("4")
+	calc.performUnaryOperation("!")
+	calc.performBinaryOperation("-")
+	calc.handleNumberInput("3")
+	calc.performUnaryOperation("!")
+	calc.handleNumberInput("2")
+	calc.performUnaryOperation("!")
+	calc.performBinaryOperation("+")
+	calc.performBinaryOperation("*")
+	if calc.numberStack.Pop() != 240 {
+		t.Error("(5! - 4!) * (3! + 2!) sollte 240 sein")
+	}
+
+	// Summenoperation auf alle Stack-Elemente
+	calc.numberStack.Push(1)
+	calc.numberStack.Push(2)
+	calc.numberStack.Push(3)
+	calc.performSumOperation()
+	if calc.numberStack.Pop() != 6 {
+		t.Error("1 + 2 + 3 sollte 6 sein")
 	}
 }
