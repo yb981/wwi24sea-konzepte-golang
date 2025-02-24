@@ -33,7 +33,7 @@ func (c *calculator) checkInput(input string) {
 		c.numberStack.Print()
 		return
 	case "latex":
-		fmt.Println("\\["+c.latex.Top()+"]\\")
+		fmt.Println("\\["+c.latex.Top()+"\\]")
 		return
 	case "help":
 		c.printWelcomeMessage()
