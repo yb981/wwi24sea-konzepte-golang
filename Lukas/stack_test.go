@@ -43,11 +43,18 @@ func TestPop(t *testing.T) {
 
 	for index, _ := range testStack {
 		input := testStack.Pop()
+
+		if len(testStack) > 0 {
+			if testStack[len(testStack)-1] != tests[len(tests)-(index+2)].expected {
+				t.Errorf("Expected number in Stack %v but got %v", tests[len(tests)-index+2].expected, testStack[len(testStack)-1])
+			}
+		}
 		if input != tests[len(tests)-(index+1)].input && input != tests[len(tests)-index].expected {
 			t.Errorf("Got %v but expected %v", input, tests[len(tests)-index].expected)
 		}
 	}
 
+	//testStack ist leer
 	input := testStack.Pop()
 	if input != 0 {
 		t.Errorf("Expected for empty Stack %v but got %v", 0, input)
