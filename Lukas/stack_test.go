@@ -18,7 +18,7 @@ func TestPush(t *testing.T) {
 	testStack := Stack[float64]{}
 
 	for _, number := range tests {
-		testStack.Push(number.input)
+		testStack = append(testStack, number.input)
 		if testStack[len(testStack)-1] != number.expected {
 			t.Errorf("Expected %v on last position in Stack but got %v", number.expected, number.input)
 		}
@@ -42,15 +42,20 @@ func TestPop(t *testing.T) {
 	}
 
 	for index, _ := range testStack {
+		//ausgeworfener Typ wird rausgeschmissen
 		input := testStack.Pop()
 
+		//check if correctly updated
 		if len(testStack) > 0 {
+			// oberste Wert muss runtergenommen werden von Stack
+			// neuer oberster Wert				//nächster Wert der erwartet wird in Stack
 			if testStack[len(testStack)-1] != tests[len(tests)-(index+2)].expected {
 				t.Errorf("Expected number in Stack %v but got %v", tests[len(tests)-index+2].expected, testStack[len(testStack)-1])
 			}
 		}
-		if input != tests[len(tests)-(index+1)].input && input != tests[len(tests)-index].expected {
-			t.Errorf("Got %v but expected %v", input, tests[len(tests)-index].expected)
+		// ausgeworfener Wert != erwarteter Wert
+		if input != tests[len(tests)-(index+1)].expected {
+			t.Errorf("Got %v but expected %v", input, tests[len(tests)-(index+1)].expected)
 		}
 	}
 
@@ -81,7 +86,7 @@ func TestTop(t *testing.T) {
 		input := testStack.Top()
 		testStack = testStack[:len(testStack)-1]
 
-		if input != tests[len(tests)-(index+1)].input && input != tests[len(tests)-index].expected {
+		if input != tests[len(tests)-(index+1)].expected {
 			t.Errorf("Got %v but expected %v", input, tests[len(tests)-index].expected)
 		}
 	}
