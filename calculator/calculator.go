@@ -27,10 +27,6 @@ func (c *calculator) checkInput(input string) {
 	case "exit":
 		fmt.Println("\nQuitting Application. See you soon!")
 		os.Exit(0)
-	case "list":
-		fmt.Println("printing input")
-		c.numberStack.Print()
-		return
 	case "latex":
 		fmt.Println("\\["+c.latex.Top()+"\\]")
 		return
@@ -64,9 +60,10 @@ func (c *calculator) performBinaryOperation(op string) {
 	term2 := c.history.Pop()
 	term1 := c.history.Pop()
 
-	var result float64
 	secondOp := c.numberStack.Pop()
 	firstOp := c.numberStack.Pop()
+
+	var result float64
 
 	switch op {
 	case "+":
@@ -100,50 +97,42 @@ func (c *calculator) performUnaryOperation(op string) {
 
 	latex1 := c.latex.Pop()
 	term1 := c.history.Pop()
+	current := c.numberStack.Pop()
 
 	var result float64
 
 	switch op {
 	case "abs":
-		result = math.Abs(c.numberStack.Pop())
+		result = math.Abs(current)
 		c.history.Push(fmt.Sprintf("abs(%s)", term1))
 		c.latex.Push(fmt.Sprintf("\\lvert{%s}\\rvert", latex1))
 	case "sqrt":
-		current := c.numberStack.Pop()
 		if current < 0 {
-			fmt.Println("Error: Square root is not defined for negative numbers.")
-			c.numberStack.Push(current) // Push number back on stack
-			c.history.Push(term1)
-			c.latex.Push(latex1)
+			c.restoreState(term1,latex1,current)
+			fmt.Println("Error:", "Error: Square root is not defined for negative numbers.")
 			return
 		}
 		result = math.Sqrt(current)
 		c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
 		c.latex.Push(fmt.Sprintf("\\sqrt{%s}", latex1))
 	case "log":
-		current := c.numberStack.Pop()
 		if current <= 0  {
+			c.restoreState(term1,latex1,current)
 			fmt.Println("Error: Logarithm is not defined for zero or negative numbers.")
-			c.numberStack.Push(current) // Push number back on stack
-			c.history.Push(term1)
-			c.latex.Push(latex1)
 			return
 		}
 		result = math.Log(current)
 		c.history.Push(fmt.Sprintf("log(%s)", term1))
 		c.latex.Push(fmt.Sprintf("log{%s}", latex1))
 	case "!":
-		current := c.numberStack.Pop()
 		if current < 0 || current != math.Floor(current) {
+			c.restoreState(term1,latex1,current)
 			fmt.Println("Error: Factorial is not defined for negative numbers or non-integers.")
-			c.numberStack.Push(current) // Push number back on stack
-			c.history.Push(term1)
-			c.latex.Push(latex1)
 			return
 		}
 		result = c.factorial(current)
-		c.history.Push(fmt.Sprintf("%d!", int(current)))
-		c.latex.Push(fmt.Sprintf("%d!", int(current)))
+		c.history.Push(fmt.Sprintf("%s!", term1))
+		c.latex.Push(fmt.Sprintf("%s!", latex1))
 	}
 	fmt.Printf("current calculation: %s = %v\n", c.history.Top(), result)
 	c.numberStack.Push(result)
@@ -157,15 +146,7 @@ func (c *calculator) performMultiOperation(op string) {
 
 	n := len(c.numberStack)
 
-	tempSlice := make([]float64, n)
-	tempSliceHistory := make([]string, n)
-	tempSliceLatex := make([]string, n)
-
-	for i := n-1; i >= 0; i-- {
-		tempSlice[i] = c.numberStack.Pop()
-		tempSliceHistory[i] = c.history.Pop()
-		tempSliceLatex[i] = c.latex.Pop()
-	}
+	tempSlice, tempSliceHistory, tempSliceLatex := c.popAndReverse(n)
 	
 	historyOutput := "("
 	latexOutput := "("
@@ -229,6 +210,26 @@ func (c calculator) factorial(n float64) float64 {
 		result *= float64(i)
 	}
 	return result
+}
+
+func (c *calculator) restoreState(term1 string, latex1 string, currentNumber float64) {
+	c.numberStack.Push(currentNumber)
+	c.history.Push(term1)
+	c.latex.Push(latex1)
+}
+
+// Pops n Operands from the Stacks in reversed order
+func (c *calculator) popAndReverse(n int) ([]float64, []string, []string) {
+	tempSlice := make([]float64, n)
+	tempSliceHistory := make([]string, n)
+	tempSliceLatex := make([]string, n)
+
+	for i := n - 1; i >= 0; i-- {
+		tempSlice[i] = c.numberStack.Pop()
+		tempSliceHistory[i] = c.history.Pop()
+		tempSliceLatex[i] = c.latex.Pop()
+	}
+	return tempSlice, tempSliceHistory, tempSliceLatex
 }
 
 func (c calculator) printWelcomeMessage() {
