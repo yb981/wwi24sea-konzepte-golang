@@ -6,7 +6,7 @@
 //
 // This file contains methods for stack operations.
 
-package main
+package types
 
 import (
 	"errors"
