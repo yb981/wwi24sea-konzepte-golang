@@ -42,9 +42,8 @@ func (s Stack[T]) Peek() (T, error) {
 		return s.items[len(s.items)-1], nil
 	}
 
-	err := errors.New("Stack is empty")
 	var zero T
-	return zero, err
+	return zero, errors.New("Stack is empty")
 }
 
 func (s Stack[T]) Size() int {
