@@ -6,6 +6,7 @@ import (
 
 type LinkedList[T comparable] struct {
 	head *Node[T]
+	size int 
 }
 
 // get the node at position pos
@@ -34,6 +35,7 @@ func (list *LinkedList[T]) getValue(pos int) T {
 func (list *LinkedList[T]) add(datas ...T) {
 	for _, data := range datas {
 		list.addBack(data)
+		list.size++
 	}
 }
 
@@ -47,6 +49,7 @@ func (list *LinkedList[T]) insert(position int, data T) {
 	}
 	newNode := &Node[T]{data: data, next: current.next}
 	current.next = newNode
+	list.size ++
 }
 
 // removes the element elem from the list
@@ -56,6 +59,7 @@ func (list *LinkedList[T]) remove(elem T) {
 		current = current.next
 	}
 	current.next = current.next.next
+	list.size--
 }
 
 // removes the element at position pos from the list
@@ -63,6 +67,7 @@ func (list *LinkedList[T]) removeAt(pos int) {
 	current := list.getNode(pos - 1)
 	newNext := list.getNode(pos + 1)
 	current.next = newNext
+	list.size --
 }
 
 // repleaces the element at position pos with new element with value val
@@ -77,8 +82,8 @@ func (list *LinkedList[T]) replace(pos int, val T) {
 
 // adds a new element at the front of the list
 func (list *LinkedList[T]) addFront(data T) {
-	newNode := &Node[T]{data: data, next: list.head}
-	list.head = newNode
+	list.head = &Node[T]{data: data, next: list.head}
+	list.size ++
 }
 
 // adds a new element at the end of the list
@@ -88,6 +93,7 @@ func (list *LinkedList[T]) addBack(data T) {
 
 	if list.head == nil {
 		list.head = newNode
+		list.size ++
 		return
 	}
 
@@ -96,6 +102,7 @@ func (list *LinkedList[T]) addBack(data T) {
 		current = current.next
 	}
 	current.next = newNode
+	list.size ++
 }
 
 // prints all elements on the console
@@ -108,14 +115,8 @@ func (list *LinkedList[T]) print() {
 }
 
 // get the current size of the list
-func (list *LinkedList[T]) size() int {
-	current := list.head
-	size := 0
-	for current != nil {
-		size++
-		current = current.next
-	}
-	return size
+func (list *LinkedList[T]) getSize() int {
+	return list.size
 }
 
 // is true if the list is empty
