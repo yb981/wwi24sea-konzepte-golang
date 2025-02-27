@@ -1,11 +1,13 @@
 package main
 
 import(
-	"fmt"
+	//"fmt"
 )
 
 func main(){
 	mylist := new(LinkedList)
-	mylist.addFront(10)
-	fmt.Println(mylist.print())
+	mylist.addBack(10)
+	mylist.addBack(29)
+	mylist.addBack(222)
+	mylist.print()
 }
