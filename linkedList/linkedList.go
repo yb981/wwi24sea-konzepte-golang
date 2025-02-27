@@ -49,20 +49,34 @@ func (list *LinkedList[T]) insert(position int, data T) {
 	current.next = newNode
 }
 
-// removes the element elem from the list 
-func (list* LinkedList[T]) remove(elem T) {
+// removes the element elem from the list
+func (list *LinkedList[T]) remove(elem T) {
 	current := list.head
-	for current.next.data != elem{
+	for current.next.data != elem {
 		current = current.next
 	}
 	current.next = current.next.next
 }
 
-// removes the element at position pos from the list 
-func (list* LinkedList[T]) removeAt(pos int){
-	current := list.getNode(pos-1)
-	newNext := list.getNode(pos+1)
+// removes the element at position pos from the list
+func (list *LinkedList[T]) removeAt(pos int) {
+	current := list.getNode(pos - 1)
+	newNext := list.getNode(pos + 1)
 	current.next = newNext
+}
+
+// repleaces the element at position pos with new element with value val
+func (list *LinkedList[T]) replace(pos int, val T) {
+
+	if pos == 0{
+		toRemove := list.head
+		newNode := &Node[T]{data : val, next: toRemove.next}
+		list.head = newNode
+		return
+	}
+	prev := list.getNode(pos - 1)
+	newNode := &Node[T]{data: val, next: prev.next.next}
+	prev.next = newNode
 }
 
 // adds a new element at the front of the list
