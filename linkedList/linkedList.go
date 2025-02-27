@@ -65,3 +65,13 @@ func (list *LinkedList[T]) insert(position int, data T) {
 	newNode := &Node[T]{data: data, next: current.next}
 	current.next = newNode
 }
+
+func (list *LinkedList[T]) get(pos int) T {
+	current := list.head
+	currentPosition := 0
+	for currentPosition < pos {
+		current = current.next
+		currentPosition++
+	}
+	return current.data
+}

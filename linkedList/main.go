@@ -10,6 +10,7 @@ func main() {
 	mylist.addBack(13)
 	mylist.addBack(14)
 	mylist.insert(2, 888)
+	fmt.Println("Element at index 2:", mylist.get(2))
 	fmt.Println("Länge der Liste", mylist.size())
 	fmt.Println("Liste ist leer", mylist.isEmpty())
 	fmt.Println("Länge der voll", mylist.isFull())
