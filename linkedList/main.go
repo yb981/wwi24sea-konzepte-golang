@@ -23,7 +23,11 @@ func main() {
 	fmt.Println("Removing Element at position 1")
 	mylist.removeAt(1)
 
-	fmt.Println("Replacing Element at position 0 with value 100")
-	mylist.replace(0, 100)
+	fmt.Println("Inserting 999 at position 0")
+	mylist.insert(0, 999)
+
+	fmt.Println("Replacing Element at position 1 with value 100")
+	mylist.replace(1, 100)
+
 	mylist.print()
 }

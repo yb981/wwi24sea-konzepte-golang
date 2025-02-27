@@ -39,16 +39,16 @@ func (list *LinkedList[T]) add(datas ...T) {
 }
 
 // insert an element at a position
-func (list *LinkedList[T]) insert(position int, data T) {
-	current := list.head
-	currentPosition := 0
-	for currentPosition < position-1 {
-		current = current.next
-		currentPosition++
+func (list *LinkedList[T]) insert(pos int, data T) {
+	if pos == 0 {
+		newNode := &Node[T]{data: data, next: list.head}
+		list.head = newNode
+		list.length++
+		return
 	}
-	newNode := &Node[T]{data: data, next: current.next}
-	current.next = newNode
-	list.length++
+	next := list.getNode(pos + 1)
+	prev := list.getNode(pos - 1)
+	prev.next = &Node[T]{data: data, next: next}
 }
 
 // removes the element elem from the list
