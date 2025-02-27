@@ -14,10 +14,10 @@ func (list *LinkedList[T]) addFront(data T) {
 }
 
 func (list *LinkedList[T]) addBack(data T) {
-	
+
 	newNode := &Node[T]{data: data, next: nil}
 
-	if list.head == nil{
+	if list.head == nil {
 		list.head = newNode
 		return
 	}
@@ -35,4 +35,33 @@ func (list *LinkedList[T]) print() {
 		fmt.Println(current.data)
 		current = current.next
 	}
+}
+
+func (list *LinkedList[T]) isEmpty() bool {
+	return list.head == nil
+}
+
+func (list *LinkedList[T]) isFull() bool {
+	return list.head != nil
+}
+
+func (list *LinkedList[T]) size() int {
+	current := list.head
+	size := 0
+	for current != nil {
+		size++
+		current = current.next
+	}
+	return size
+}
+
+func (list *LinkedList[T]) insert(position int, data T) {
+	current := list.head
+	currentPosition := 0
+	for currentPosition < position-1 {
+		current = current.next
+		currentPosition++
+	}
+	newNode := &Node[T]{data: data, next: current.next}
+	current.next = newNode
 }
