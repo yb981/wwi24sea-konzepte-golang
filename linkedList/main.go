@@ -11,6 +11,6 @@ func main() {
 	fmt.Println("Länge der Liste", mylist.size())
 	fmt.Println("Liste ist leer", mylist.isEmpty())
 	fmt.Println("Länge der voll", mylist.isFull())
-	mylist.removeAt(2)
+	mylist.remove(14)
 	mylist.print()
 }

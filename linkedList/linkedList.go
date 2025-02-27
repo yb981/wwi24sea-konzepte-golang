@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"reflect"
 )
 
 type LinkedList[T comparable] struct {
@@ -53,9 +52,10 @@ func (list *LinkedList[T]) insert(position int, data T) {
 // removes the element elem from the list 
 func (list* LinkedList[T]) remove(elem T) {
 	current := list.head
-	for current.data != elem{
+	for current.next.data != elem{
 		current = current.next
 	}
+	current.next = current.next.next
 }
 
 // removes the element at position pos from the list 
