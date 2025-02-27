@@ -1,7 +1,6 @@
 package main
 
-type Node struct{
-	next* Node
-	data int
+type Node[T any] struct{
+	next* Node[T]
+	data T
 }
-
