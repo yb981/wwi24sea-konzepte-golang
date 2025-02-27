@@ -69,14 +69,10 @@ func (list *LinkedList[T]) removeAt(pos int) {
 func (list *LinkedList[T]) replace(pos int, val T) {
 
 	if pos == 0{
-		toRemove := list.head
-		newNode := &Node[T]{data : val, next: toRemove.next}
-		list.head = newNode
+		list.head.data = val
 		return
 	}
-	prev := list.getNode(pos - 1)
-	newNode := &Node[T]{data: val, next: prev.next.next}
-	prev.next = newNode
+	list.getNode(pos).data = val
 }
 
 // adds a new element at the front of the list
