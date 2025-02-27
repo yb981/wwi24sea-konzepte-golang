@@ -9,7 +9,7 @@ type LinkedList[T comparable] struct {
 	length int
 }
 
-// get the node at position pos
+// get the node at position pos | helping function to iterate over the list
 func (list *LinkedList[T]) getNode(pos int) *Node[T] {
 	current := list.head
 	currentPosition := 0
@@ -22,19 +22,13 @@ func (list *LinkedList[T]) getNode(pos int) *Node[T] {
 
 // get the element at position pos
 func (list *LinkedList[T]) getValue(pos int) T {
-	current := list.head
-	currentPosition := 0
-	for currentPosition < pos {
-		current = current.next
-		currentPosition++
-	}
-	return current.data
+	return list.getNode(pos).data
 }
 
 // add one or multiple elements to the list
 func (list *LinkedList[T]) add(datas ...T) {
 	for _, data := range datas {
-		list.addBack(data)
+		list.append(data)
 	}
 }
 
@@ -46,9 +40,8 @@ func (list *LinkedList[T]) insert(pos int, data T) {
 		list.length++
 		return
 	}
-	next := list.getNode(pos + 1)
-	prev := list.getNode(pos - 1)
-	prev.next = &Node[T]{data: data, next: next}
+	// the node with position - 1 next pointer is set to a new node which contains data and the node after the chosen  position as next
+	list.getNode(pos -1).next = &Node[T]{data: data, next: list.getNode(pos + 1)}
 }
 
 // removes the element elem from the list
@@ -86,21 +79,16 @@ func (list *LinkedList[T]) addFront(data T) {
 }
 
 // adds a new element at the end of the list
-func (list *LinkedList[T]) addBack(data T) {
-
-	newNode := &Node[T]{data: data, next: nil}
+func (list *LinkedList[T]) append(data T) {
 
 	if list.head == nil {
-		list.head = newNode
+		list.head = &Node[T]{data : data, next : nil}
 		list.length++
 		return
 	}
 
-	current := list.head
-	for current.next != nil {
-		current = current.next
-	}
-	current.next = newNode
+	// füge eine Node hinzu setze 
+	list.getNode(list.length -1).next = &Node[T]{data : data, next:nil}
 	list.length++
 }
 
