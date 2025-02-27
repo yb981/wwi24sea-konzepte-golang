@@ -27,9 +27,8 @@ func (s *Stack[T]) Push(input T) {
 
 func (s *Stack[T]) Pop() (T, error) {
 	if len(s.items) == 0 {
-		err := errors.New("Can't pop from empty stack")
 		var zero T
-		return zero, err
+		return zero, errors.New("can't pop from empty stack")
 	}
 
 	lastValue := s.items[len(s.items)-1]

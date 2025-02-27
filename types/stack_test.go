@@ -101,3 +101,66 @@ func TestTop(t *testing.T) {
 		t.Errorf("Got %v but expected ZERO", input)
 	}
 }
+
+func TestSize(t *testing.T) {
+	var tests = []struct {
+		input 		[]string
+		expected 	int
+	}{
+		{[]string{"1","2","3"},3},
+		{[]string{"1","2","3","r"},4},
+	}
+
+	for _, test := range tests {
+		testStack := NewStack[string]()
+		for _, values := range test.input {
+			testStack.Push(values)
+		}
+
+		if size := testStack.Size(); size != test.expected {
+			t.Errorf("Size is %v, but expected %v", size, test.expected)
+		}
+	}
+}
+
+func TestIsEmpty(t *testing.T) {
+	var tests = []struct {
+		input 		[]string
+		expected 	bool
+	}{
+		{[]string{"1","2","3"},false},
+		{[]string{},true},
+	}
+
+	for _, test := range tests {
+		testStack := NewStack[string]()
+		for _, values := range test.input {
+			testStack.Push(values)
+		}
+
+		if isEmpty := testStack.IsEmpty(); isEmpty != test.expected {
+			t.Errorf("Stack is %v, but expected %v", isEmpty, test.expected)
+		}
+	}
+}
+
+func TestIsFull(t *testing.T) {
+	var tests = []struct {
+		input 		[]int
+		expected 	bool
+	}{
+		{[]int{1,2,3},true},
+		{[]int{},false},
+	}
+
+	for _, test := range tests {
+		testStack := NewStack[int]() // Type has to be static, can not be decided dynamically
+		for _, values := range test.input {
+			testStack.Push(values)
+		}
+
+		if isFull := testStack.IsFull(); isFull != test.expected {
+			t.Errorf("Stack is %v, but expected %v", isFull, test.expected)
+		}
+	}
+}
