@@ -75,3 +75,9 @@ func (list *LinkedList[T]) get(pos int) T {
 	}
 	return current.data
 }
+
+func (list* LinkedList[T]) add(datas ... T){
+	for _, data := range datas {
+        list.addBack(data)
+    }
+}

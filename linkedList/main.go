@@ -6,10 +6,7 @@ import (
 
 func main() {
 	mylist := new(LinkedList[int])
-	mylist.addBack(12)
-	mylist.addBack(13)
-	mylist.addBack(14)
-	mylist.insert(2, 888)
+	mylist.add(10, 11, 12, 13, 14, 15)
 	fmt.Println("Element at index 2:", mylist.get(2))
 	fmt.Println("Länge der Liste", mylist.size())
 	fmt.Println("Liste ist leer", mylist.isEmpty())
