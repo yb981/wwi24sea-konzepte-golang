@@ -1,8 +1,13 @@
-package datastructure
+package datastructures
 
 import (
 	"fmt"
 )
+
+type Node[T any] struct {
+	next *Node[T]
+	data T
+}
 
 type LinkedList[T comparable] struct {
 	head   *Node[T]
@@ -41,7 +46,7 @@ func (list *LinkedList[T]) Insert(pos int, data T) {
 		return
 	}
 	// the node with position - 1 next pointer is set to a new node which contains data and the node after the chosen  position as next
-	list.GetNode(pos -1).next = &Node[T]{data: data, next: list.GetNode(pos + 1)}
+	list.GetNode(pos - 1).next = &Node[T]{data: data, next: list.GetNode(pos + 1)}
 }
 
 // removes the element elem from the list
@@ -56,7 +61,7 @@ func (list *LinkedList[T]) Remove(elem T) {
 
 // removes the element at position pos from the list
 func (list *LinkedList[T]) RemoveAt(pos int) {
-	if pos == 0{
+	if pos == 0 {
 		list.head = list.head.next
 	}
 	current := list.GetNode(pos - 1)
@@ -85,13 +90,13 @@ func (list *LinkedList[T]) AddFront(data T) {
 func (list *LinkedList[T]) Append(data T) {
 
 	if list.head == nil {
-		list.head = &Node[T]{data : data, next : nil}
+		list.head = &Node[T]{data: data, next: nil}
 		list.length++
 		return
 	}
 
-	// füge eine Node hinzu setze 
-	list.GetNode(list.length -1).next = &Node[T]{data : data, next:nil}
+	// füge eine Node hinzu setze
+	list.GetNode(list.length - 1).next = &Node[T]{data: data, next: nil}
 	list.length++
 }
 

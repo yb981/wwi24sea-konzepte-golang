@@ -1,12 +1,12 @@
 package main
 
 import (
-	"datastructures/datastructure"
+	"ProgrammierkonzepteTask2/datastructures"
 	"fmt"
 )
 
 func main() {
-	mylist := new(datastructure.LinkedList[int])
+	mylist := new(datastructures.LinkedList[int])
 	fmt.Println("Add the Values 10, 11, 12, 13, 14, 15")
 	mylist.Add(10, 11, 12, 13, 14, 15)
 
@@ -33,7 +33,7 @@ func main() {
 	mylist.Print()
 
 	fmt.Println("----------------------------------------")
-	mystack := new(datastructure.Stack[int])
+	mystack := new(datastructures.Stack[int])
 	mystack.Push(10)
 	mystack.Push(11)
 	mystack.Push(12)

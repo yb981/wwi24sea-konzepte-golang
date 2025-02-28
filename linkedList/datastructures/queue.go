@@ -1,5 +1,4 @@
-package datastructure
-
+package datastructures
 
 type Queue[T comparable] struct {
 	list LinkedList[T]
