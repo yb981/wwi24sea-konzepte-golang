@@ -40,13 +40,12 @@ func (list *LinkedList[T]) Add(datas ...T) {
 // insert an element at a position
 func (list *LinkedList[T]) Insert(pos int, data T) {
 	if pos == 0 {
-		newNode := &Node[T]{data: data, next: list.head}
-		list.head = newNode
-		list.length++
+		list.Prepend(data)
 		return
 	}
 	// the node with position - 1 next pointer is set to a new node which contains data and the node after the chosen  position as next
 	list.getNode(pos - 1).next = &Node[T]{data: data, next: list.getNode(pos + 1)}
+	list.length++
 }
 
 // removes the element elem from the list
@@ -64,9 +63,7 @@ func (list *LinkedList[T]) RemoveAt(pos int) {
 	if pos == 0 {
 		list.head = list.head.next
 	}
-	current := list.getNode(pos - 1)
-	newNext := list.getNode(pos + 1)
-	current.next = newNext
+	list.getNode(pos - 1).next = list.getNode(pos + 1)
 	list.length--
 }
 
