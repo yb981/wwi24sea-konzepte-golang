@@ -56,6 +56,9 @@ func (list *LinkedList[T]) remove(elem T) {
 
 // removes the element at position pos from the list
 func (list *LinkedList[T]) removeAt(pos int) {
+	if pos == 0{
+		list.head = list.head.next
+	}
 	current := list.getNode(pos - 1)
 	newNext := list.getNode(pos + 1)
 	current.next = newNext

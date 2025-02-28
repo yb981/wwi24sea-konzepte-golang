@@ -30,4 +30,13 @@ func main() {
 	mylist.replace(1, 100)
 
 	mylist.print()
+
+	fmt.Println("----------------------------------------")
+	mystack := new(Stack[int])
+	mystack.push(10)
+	mystack.push(11)
+	mystack.push(12)
+	mystack.pop()
+	mystack.pop()
+	fmt.Println("Top Element: ", mystack.peek())
 }
