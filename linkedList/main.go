@@ -42,4 +42,13 @@ func main() {
 	mystack.Pop()
 	mystack.Pop()
 	fmt.Println("Top Element: ", mystack.Peek())
+
+	fmt.Println("----------------------------------------")
+	myqueue := new(datastructures.Queue[int])
+	myqueue.Enqueue(10)
+	myqueue.Enqueue(11)
+	myqueue.Enqueue(12)
+	fmt.Println("Pop first element should be 10", myqueue.Dequeue())
+	fmt.Println(myqueue.Dequeue())
+	fmt.Println(myqueue.Dequeue())
 }
