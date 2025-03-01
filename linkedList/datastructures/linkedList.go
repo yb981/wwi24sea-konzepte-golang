@@ -15,7 +15,7 @@ type LinkedList[T comparable] struct {
 }
 
 // get the node at position pos | helping function to iterate over the list
-func (list *LinkedList[T]) GetNode(pos int) *Node[T] {
+func (list *LinkedList[T]) getNode(pos int) *Node[T] {
 	current := list.head
 	currentPosition := 0
 	for currentPosition < pos {
@@ -26,8 +26,8 @@ func (list *LinkedList[T]) GetNode(pos int) *Node[T] {
 }
 
 // get the element at position pos
-func (list *LinkedList[T]) GetValue(pos int) T {
-	return list.GetNode(pos).data
+func (list *LinkedList[T]) Get(pos int) T {
+	return list.getNode(pos).data
 }
 
 // add one or multiple elements to the list
@@ -40,13 +40,12 @@ func (list *LinkedList[T]) Add(datas ...T) {
 // insert an element at a position
 func (list *LinkedList[T]) Insert(pos int, data T) {
 	if pos == 0 {
-		newNode := &Node[T]{data: data, next: list.head}
-		list.head = newNode
-		list.length++
+		list.Prepend(data)
 		return
 	}
 	// the node with position - 1 next pointer is set to a new node which contains data and the node after the chosen  position as next
-	list.GetNode(pos - 1).next = &Node[T]{data: data, next: list.GetNode(pos + 1)}
+	list.getNode(pos - 1).next = &Node[T]{data: data, next: list.getNode(pos + 1)}
+	list.length++
 }
 
 // removes the element elem from the list
@@ -64,9 +63,7 @@ func (list *LinkedList[T]) RemoveAt(pos int) {
 	if pos == 0 {
 		list.head = list.head.next
 	}
-	current := list.GetNode(pos - 1)
-	newNext := list.GetNode(pos + 1)
-	current.next = newNext
+	list.getNode(pos - 1).next = list.getNode(pos + 1)
 	list.length--
 }
 
@@ -77,11 +74,11 @@ func (list *LinkedList[T]) Replace(pos int, val T) {
 		list.head.data = val
 		return
 	}
-	list.GetNode(pos).data = val
+	list.getNode(pos).data = val
 }
 
 // adds a new element at the front of the list
-func (list *LinkedList[T]) AddFront(data T) {
+func (list *LinkedList[T]) Prepend(data T) {
 	list.head = &Node[T]{data: data, next: list.head}
 	list.length++
 }
@@ -96,7 +93,7 @@ func (list *LinkedList[T]) Append(data T) {
 	}
 
 	// füge eine Node hinzu setze
-	list.GetNode(list.length - 1).next = &Node[T]{data: data, next: nil}
+	list.getNode(list.length - 1).next = &Node[T]{data: data, next: nil}
 	list.length++
 }
 

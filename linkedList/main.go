@@ -12,7 +12,7 @@ func main() {
 	mylist.Print()
 	fmt.Println("----------------------------------------")
 
-	fmt.Println("Element at index 2:", mylist.GetValue(2))
+	fmt.Println("Element at index 2:", mylist.Get(2))
 
 	fmt.Println("Länge der Liste", mylist.Size())
 

@@ -5,5 +5,5 @@ type Queue[T comparable] struct {
 }
 
 func (queue *Queue[T]) Enqueue(data T) {
-	queue.list.AddFront(data)
+	queue.list.Prepend(data)
 }
