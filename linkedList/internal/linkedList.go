@@ -26,7 +26,7 @@ func (list *LinkedList[T]) getNode(pos int) *Node[T] {
 }
 
 // get the element at position pos
-func (list *LinkedList[T]) GetValue(pos int) T {
+func (list *LinkedList[T]) Get(pos int) T {
 	return list.getNode(pos).data
 }
 

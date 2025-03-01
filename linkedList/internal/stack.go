@@ -9,13 +9,13 @@ func (stack *Stack[T]) Push(data T) {
 }
 
 func (stack *Stack[T]) Pop() T {
-	output := stack.list.GetValue(0)
+	output := stack.list.Get(0)
 	stack.list.RemoveAt(0)
 	return output
 }
 
 func (stack *Stack[T]) Peek() T {
-	return stack.list.GetValue(0)
+	return stack.list.Get(0)
 }
 
 func (stack *Stack[T]) IsEmpty() bool {

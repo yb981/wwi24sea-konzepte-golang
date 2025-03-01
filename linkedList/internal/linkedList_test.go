@@ -19,11 +19,11 @@ func TestAddAndAppend(t *testing.T) {
 	if list.Size() != 4 {
 		t.Errorf("Expected list size 4, got %d", list.Size())
 	}
-	if list.GetValue(0) != 1 {
-		t.Errorf("Expected first element 1, got %d", list.GetValue(0))
+	if list.Get(0) != 1 {
+		t.Errorf("Expected first element 1, got %d", list.Get(0))
 	}
-	if list.GetValue(3) != 4 {
-		t.Errorf("Expected last element 4, got %d", list.GetValue(3))
+	if list.Get(3) != 4 {
+		t.Errorf("Expected last element 4, got %d", list.Get(3))
 	}
 }
 
@@ -31,8 +31,8 @@ func TestInsert(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Add(1, 2, 3)
 	list.Insert(2, 99)
-	if list.GetValue(2) != 99 {
-		t.Errorf("Expected inserted element 99 at position 2, got %d", list.GetValue(2))
+	if list.Get(2) != 99 {
+		t.Errorf("Expected inserted element 99 at position 2, got %d", list.Get(2))
 	}
 }
 
@@ -58,15 +58,15 @@ func TestReplace(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Add(1, 2, 3)
 	list.Replace(1, 42)
-	if list.GetValue(1) != 42 {
-		t.Errorf("Expected replaced value 42 at position 1, got %d", list.GetValue(1))
+	if list.Get(1) != 42 {
+		t.Errorf("Expected replaced value 42 at position 1, got %d", list.Get(1))
 	}
 }
 
 func TestAddFront(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Prepend(0)
-	if list.GetValue(0) != 0 {
-		t.Errorf("Expected first element 0 after AddFront, got %d", list.GetValue(0))
+	if list.Get(0) != 0 {
+		t.Errorf("Expected first element 0 after AddFront, got %d", list.Get(0))
 	}
 }

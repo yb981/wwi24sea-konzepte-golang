@@ -9,6 +9,8 @@ func main() {
 	mylist := new(datastructures.LinkedList[int])
 	fmt.Println("Add the Values 10, 11, 12, 13, 14, 15")
 	mylist.Add(10, 11, 12, 13, 14, 15)
+	mylist.Print()
+	fmt.Println("----------------------------------------")
 
 	fmt.Println("Element at index 2:", mylist.GetValue(2))
 
