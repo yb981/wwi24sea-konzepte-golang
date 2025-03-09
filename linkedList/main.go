@@ -41,14 +41,24 @@ func main() {
 	mystack.Push(12)
 	mystack.Pop()
 	mystack.Pop()
-	fmt.Println("Top Element: ", mystack.Peek())
+	value, err := mystack.Peek()
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+			fmt.Println("Top Element: ", value)
+	}
 
 	fmt.Println("----------------------------------------")
 	myqueue := new(datastructures.Queue[int])
 	myqueue.Enqueue(10)
 	myqueue.Enqueue(11)
 	myqueue.Enqueue(12)
-	fmt.Println("Pop first element should be 10", myqueue.Dequeue())
+	value, err = myqueue.Dequeue()
+	if err != nil {
+			fmt.Println("Error:", err)
+	} else {
+			fmt.Println("Pop first element should be 10:", value)
+	}
 	fmt.Println(myqueue.Dequeue())
 	fmt.Println(myqueue.Dequeue())
 }

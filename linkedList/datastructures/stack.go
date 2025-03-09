@@ -1,21 +1,35 @@
 package datastructures
 
+import "errors"
+
 type Stack[T comparable] struct {
 	list LinkedList[T]
+}
+
+func NewStack[T comparable]() *Stack[T] {
+	return &Stack[T]{list: LinkedList[T]{}}
 }
 
 func (stack *Stack[T]) Push(data T) {
 	stack.list.Prepend(data)
 }
 
-func (stack *Stack[T]) Pop() T {
+func (stack *Stack[T]) Pop() (T, error) {
+	if stack.list.Size() == 0 {
+		var zero T
+		return zero, errors.New("stack is empty")
+	}
 	output := stack.list.Get(0)
 	stack.list.RemoveAt(0)
-	return output
+	return output, nil
 }
 
-func (stack *Stack[T]) Peek() T {
-	return stack.list.Get(0)
+func (stack *Stack[T]) Peek() (T, error) {
+	if stack.list.Size() == 0 {
+		var zero T
+		return zero, errors.New("stack is empty")
+	}
+	return stack.list.Get(0), nil
 }
 
 func (stack *Stack[T]) IsEmpty() bool {
