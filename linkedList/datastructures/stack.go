@@ -6,10 +6,6 @@ type Stack[T comparable] struct {
 	list LinkedList[T]
 }
 
-func NewStack[T comparable]() *Stack[T] {
-	return &Stack[T]{list: LinkedList[T]{}}
-}
-
 func (stack *Stack[T]) Push(data T) {
 	stack.list.Prepend(data)
 }

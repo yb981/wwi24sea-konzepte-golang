@@ -62,8 +62,9 @@ func (list *LinkedList[T]) Remove(elem T) {
 func (list *LinkedList[T]) RemoveAt(pos int) {
 	if pos == 0 {
 		list.head = list.head.next
+	} else {
+		list.getNode(pos - 1).next = list.getNode(pos + 1)
 	}
-	list.getNode(pos - 1).next = list.getNode(pos + 1)
 	list.length--
 }
 

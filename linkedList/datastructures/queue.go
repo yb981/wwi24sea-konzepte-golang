@@ -18,7 +18,7 @@ func (queue *Queue[T]) Dequeue() (T, error) {
 		return zero, errors.New("queue is empty")
 	}
 	output := queue.list.Get(0)
-	queue.list.head = queue.list.head.next
+	queue.list.RemoveAt(0)
 	return output, nil
 }
 
