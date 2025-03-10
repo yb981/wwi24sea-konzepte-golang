@@ -42,6 +42,12 @@ func TestInsert(t *testing.T) {
 	if val != 99 {
 		t.Errorf("Expected inserted element 99 at position 2, got %d", val)
 	}
+
+	// testing out of bounds
+	err := list.Insert(5, 99)
+	if err == nil {
+		t.Errorf("Expected error")
+	}
 }
 
 func TestRemove(t *testing.T) {
@@ -57,12 +63,18 @@ func TestRemove(t *testing.T) {
 	if list.Size() != 2 {
 		t.Errorf("Expected list size 2 after removal, got %d", list.Size())
 	}
+
+	// Remove head element
+	list.Remove(1)
+	if list.Size() != 1 {
+		t.Errorf("Expected list size 2 after removal, got %d", list.Size())
+	}	
 }
 
 func TestRemoveAt(t *testing.T) {
 	list := LinkedList[int]{}
 
-	// Test empty list
+	// test empty list
 	err := list.RemoveAt(0)
 	if err == nil {
 		t.Errorf("Expected error")
@@ -74,6 +86,7 @@ func TestRemoveAt(t *testing.T) {
 		t.Errorf("Expected list size 2 after RemoveAt, got %d", list.Size())
 	}
 
+	// testing out of bounds
 	err = list.RemoveAt(5)
 	if err == nil {
 		t.Errorf("Expected error")
@@ -86,6 +99,13 @@ func TestReplace(t *testing.T) {
 	list.Replace(1, 42)
 	val , _ := list.Get(1)
 	if val != 42 {
+		t.Errorf("Expected replaced value 42 at position 1, got %d", val)
+	}
+
+	// Replace head element
+	list.Replace(0, 50)
+	val , _ = list.Get(0)
+	if val != 50 {
 		t.Errorf("Expected replaced value 42 at position 1, got %d", val)
 	}
 }

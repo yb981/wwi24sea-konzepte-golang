@@ -82,7 +82,7 @@ func (list *LinkedList[T]) RemoveAt(pos int) error {
 	if list.Size() == 0 {
 		return errors.New("list is empty")
 	} else if pos < 0 || pos > list.Size() {
-		return errors.New("index not inside list")
+		return errors.New("index out of bounds")
 	}
 
 	if pos == 0 {
