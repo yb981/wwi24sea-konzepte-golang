@@ -8,7 +8,11 @@ func (stack *Stack[T]) Push(data T) {
 	stack.list.Prepend(data)
 }
 
-//push all fehlt
+func (stack *Stack[T]) PushAll(datas ...T) {
+	for _, data := range datas {
+		stack.list.Prepend(data)
+	}
+}
 
 func (stack *Stack[T]) Pop() T {
 	output := stack.list.Get(0)
