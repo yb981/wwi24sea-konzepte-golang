@@ -78,6 +78,11 @@ func TestRemove(t *testing.T) {
 	if list.Size() != 1 {
 		t.Errorf("Expected list size 1 after removal, got %d", list.Size())
 	}	
+
+	err = list.Remove(8)
+	if err == nil {
+		t.Errorf("Expected error")
+	}	
 }
 
 func TestRemoveAt(t *testing.T) {
@@ -190,7 +195,6 @@ func TestLinkedListEquals(t *testing.T) {
 		second   []int
 		expected bool
 	}{
-		{[]int{}, nil, false},
 		{[]int{}, []int{}, true},
 		{[]int{1}, []int{1}, true},
 		{[]int{1, 2}, []int{1, 2, 3}, false},
@@ -211,5 +215,12 @@ func TestLinkedListEquals(t *testing.T) {
 		if result != test.expected {
 			t.Errorf("Equals(%v, %v) got %v, want %v", test.first, test.second, result, test.expected)
 		}
+	}
+
+	// test for nil list
+	list := LinkedList[int]{}
+	result := list.Equals(nil)
+	if  result {
+		t.Errorf("Equals(%v, %v) got %v, want %v", list, nil, result, false)
 	}
 }

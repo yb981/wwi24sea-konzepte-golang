@@ -69,9 +69,14 @@ func (list *LinkedList[T]) Remove(elem T) error {
 		return nil
 	}
 	current := list.head
-	for current.next.data != elem {
+	for current.next != nil && current.next.data != elem {
 		current = current.next
 	}
+
+	if current.next == nil {
+		return errors.New("element not found")
+	}
+
 	current.next = current.next.next
 	list.length--
 	return nil
