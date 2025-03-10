@@ -39,3 +39,7 @@ func (stack *Stack[T]) Size() int {
 func (stack *Stack[T]) ToString() string {
 	return stack.list.ToString()
 }
+
+func (stack *Stack[T]) Equals(compare *Stack[T]) bool {
+	return stack.list.Equals(&compare.list)
+}

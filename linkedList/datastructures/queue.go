@@ -35,3 +35,7 @@ func (queue * Queue[T]) IsFull() bool{
 func (queue* Queue[T]) ToString() string{
 	return queue.list.ToString()
 }
+
+func (queue* Queue[T]) Equals(compare* Queue[T]) bool{
+	return queue.list.Equals(&compare.list)
+}
