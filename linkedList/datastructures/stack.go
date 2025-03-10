@@ -8,6 +8,8 @@ func (stack *Stack[T]) Push(data T) {
 	stack.list.Prepend(data)
 }
 
+//push all fehlt
+
 func (stack *Stack[T]) Pop() T {
 	output := stack.list.Get(0)
 	stack.list.RemoveAt(0)
@@ -28,4 +30,8 @@ func (stack *Stack[T]) IsFull() bool {
 
 func (stack *Stack[T]) Size() int {
 	return stack.list.Size()
+}
+
+func (stack *Stack[T]) ToString() string {
+	return stack.list.ToString()
 }

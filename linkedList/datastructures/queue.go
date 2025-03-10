@@ -16,6 +16,10 @@ func (queue * Queue[T]) Dequeue() T{
 	return output
 }
 
+func (queue* Queue[T]) Size() int{
+	return queue.list.Size()
+}
+
 func (queue * Queue[T]) Peek() T{
 	return queue.list.Get(0)
 }
@@ -26,4 +30,8 @@ func (queue * Queue[T]) IsEmpty() bool{
 
 func (queue * Queue[T]) IsFull() bool{
 	return queue.list.IsFull()
+}
+
+func (queue* Queue[T]) ToString() string{
+	return queue.list.ToString()
 }

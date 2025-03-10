@@ -32,7 +32,7 @@ func main() {
 	fmt.Println("Replacing Element at position 1 with value 100")
 	mylist.Replace(1, 100)
 
-	mylist.Print()
+	fmt.Println("To String Methode: ", mylist.ToString())
 
 	fmt.Println("----------------------------------------")
 	mystack := new(datastructures.Stack[int])

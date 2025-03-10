@@ -120,3 +120,17 @@ func (list *LinkedList[T]) IsEmpty() bool {
 func (list *LinkedList[T]) IsFull() bool {
 	return list.head != nil
 }
+
+func (list *LinkedList[T]) ToString() string {
+	stringifiedList := "["
+	current := list.head
+	for current != nil {
+		stringifiedList += fmt.Sprintf("%v", current.data)
+		if current.next != nil {
+			stringifiedList += ", "
+		}
+		current = current.next
+	}
+	stringifiedList += "]"
+	return stringifiedList
+}
