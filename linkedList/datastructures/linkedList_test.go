@@ -159,3 +159,57 @@ func TestPrint(t *testing.T) {
 		t.Errorf("Expected output: %v, Actual output: %v", expectedOutput, actualOutput)
 	}
 }
+
+// test for the ToString method
+func TestLinkedListToString(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected string
+	}{
+		{[]int{}, "[]"},
+		{[]int{1}, "[1]"},
+		{[]int{1, 2, 3}, "[1, 2, 3]"},
+	}
+
+	for _, test := range tests {
+		list := LinkedList[int]{}
+		for _, item := range test.input {
+			list.Append(item)
+		}
+		result := list.ToString()
+		if result != test.expected {
+			t.Errorf("got %s, want %s", result, test.expected)
+		}
+	}
+}
+
+// test for the Equals method
+func TestLinkedListEquals(t *testing.T) {
+	tests := []struct {
+		first    []int
+		second   []int
+		expected bool
+	}{
+		{[]int{}, nil, false},
+		{[]int{}, []int{}, true},
+		{[]int{1}, []int{1}, true},
+		{[]int{1, 2}, []int{1, 2, 3}, false},
+		{[]int{1, 2, 3}, []int{1, 2, 3}, true},
+		{[]int{1, 2, 3}, []int{4, 5, 6}, false},
+	}
+
+	for _, test := range tests {
+		list1 := LinkedList[int]{}
+		for _, item := range test.first {
+			list1.Append(item)
+		}
+		list2 := LinkedList[int]{}
+		for _, item := range test.second {
+			list2.Append(item)
+		}
+		result := list1.Equals(&list2)
+		if result != test.expected {
+			t.Errorf("Equals(%v, %v) got %v, want %v", test.first, test.second, result, test.expected)
+		}
+	}
+}
