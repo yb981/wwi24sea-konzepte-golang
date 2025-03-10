@@ -34,6 +34,12 @@ func main() {
 
 	fmt.Println("To String Methode: ", mylist.ToString())
 
+	comparable1 := new(datastructures.LinkedList[int])
+	comparable2 := new(datastructures.LinkedList[int])
+	comparable1.Add(1, 2, 3, 4)
+	comparable2.Add(1, 2, 3, 4, 5)
+	fmt.Println("Die Listen sind gleich: ", comparable1.Equals(comparable2))
+
 	fmt.Println("----------------------------------------")
 	mystack := new(datastructures.Stack[int])
 	mystack.Push(10)
