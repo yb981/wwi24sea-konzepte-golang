@@ -44,7 +44,7 @@ func (list *LinkedList[T]) Add(datas ...T) {
 
 // insert an element at a position
 func (list *LinkedList[T]) Insert(pos int, data T) error {
-	if pos < 0 || pos > list.length {
+	if pos < 0 || pos >= list.length {
 		return errors.New("index out of bounds")
 	}
 	if pos == 0 {

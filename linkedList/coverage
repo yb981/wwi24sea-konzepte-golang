@@ -8,7 +8,7 @@ ProgrammierkonzepteTask2/datastructures/linkedList.go:35.2,35.36 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:39.44,40.29 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:40.29,42.3 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:46.58,47.34 1 1
-ProgrammierkonzepteTask2/datastructures/linkedList.go:47.34,49.3 1 0
+ProgrammierkonzepteTask2/datastructures/linkedList.go:47.34,49.3 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:50.2,50.14 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:50.14,53.3 2 0
 ProgrammierkonzepteTask2/datastructures/linkedList.go:55.2,57.12 3 1
@@ -34,8 +34,8 @@ ProgrammierkonzepteTask2/datastructures/linkedList.go:107.44,110.2 2 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:113.43,115.22 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:115.22,119.3 3 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:122.2,123.15 2 1
-ProgrammierkonzepteTask2/datastructures/linkedList.go:127.36,129.21 2 0
-ProgrammierkonzepteTask2/datastructures/linkedList.go:129.21,132.3 2 0
+ProgrammierkonzepteTask2/datastructures/linkedList.go:127.36,129.21 2 1
+ProgrammierkonzepteTask2/datastructures/linkedList.go:129.21,132.3 2 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:136.39,138.2 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:141.43,143.2 1 1
 ProgrammierkonzepteTask2/datastructures/linkedList.go:146.42,148.2 1 1

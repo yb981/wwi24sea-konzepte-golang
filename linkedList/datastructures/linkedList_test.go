@@ -45,8 +45,15 @@ func TestInsert(t *testing.T) {
 		t.Errorf("Expected inserted element 99 at position 2, got %d", val)
 	}
 
+	// insert infront
+	list.Insert(0, 88)
+	val, _ = list.Get(0)
+	if val != 88 {
+		t.Errorf("Expected inserted element 88 at position 0, got %d", val)
+	}	
+
 	// testing out of bounds
-	err := list.Insert(5, 99)
+	err := list.Insert(5, 100)
 	if err == nil {
 		t.Errorf("Expected error")
 	}
@@ -61,7 +68,7 @@ func TestRemove(t *testing.T) {
 	}
 
 	list.Add(1, 2, 3)
-	list.Remove(2)
+	list.Remove(3)
 	if list.Size() != 2 {
 		t.Errorf("Expected list size 2 after removal, got %d", list.Size())
 	}
@@ -69,7 +76,7 @@ func TestRemove(t *testing.T) {
 	// Remove head element
 	list.Remove(1)
 	if list.Size() != 1 {
-		t.Errorf("Expected list size 2 after removal, got %d", list.Size())
+		t.Errorf("Expected list size 1 after removal, got %d", list.Size())
 	}	
 }
 
@@ -86,6 +93,12 @@ func TestRemoveAt(t *testing.T) {
 	list.RemoveAt(1)
 	if list.Size() != 2 {
 		t.Errorf("Expected list size 2 after RemoveAt, got %d", list.Size())
+	}
+
+	// test head element
+	list.RemoveAt(0)
+	if list.Size() != 1 {
+		t.Errorf("Expected list size 1 after RemoveAt, got %d", list.Size())
 	}
 
 	// testing out of bounds
