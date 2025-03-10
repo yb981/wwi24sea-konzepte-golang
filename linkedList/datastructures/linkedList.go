@@ -50,6 +50,11 @@ func (list *LinkedList[T]) Insert(pos int, data T) {
 
 // removes the element elem from the list
 func (list *LinkedList[T]) Remove(elem T) {
+	if list.head.data == elem {
+		list.head = list.head.next
+		list.length--
+		return
+	}
 	current := list.head
 	for current.next.data != elem {
 		current = current.next
