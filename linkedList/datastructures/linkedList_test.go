@@ -1,6 +1,8 @@
 package datastructures
 
 import (
+	"bytes"
+	"os"
 	"testing"
 )
 
@@ -116,5 +118,31 @@ func TestAddFront(t *testing.T) {
 	val , _ := list.Get(0)
 	if val!= 0 {
 		t.Errorf("Expected first element 0 after AddFront, got %d", val)
+	}
+}
+
+func TestPrint(t *testing.T) {
+	list := LinkedList[int]{}
+	list.Add(1, 2, 3)
+
+	// Redirect the stdout
+	oldStdout := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	list.Print()
+
+	// Capture the output
+	w.Close()
+	var buf bytes.Buffer
+	buf.ReadFrom(r)
+	os.Stdout = oldStdout
+
+	// Verify the output
+	expectedOutput := "1\n2\n3\n"
+	actualOutput := buf.String()
+
+	if actualOutput != expectedOutput {
+		t.Errorf("Expected output: %v, Actual output: %v", expectedOutput, actualOutput)
 	}
 }
