@@ -1,6 +1,7 @@
 package datastructures
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -26,8 +27,12 @@ func (list *LinkedList[T]) getNode(pos int) *Node[T] {
 }
 
 // get the element at position pos
-func (list *LinkedList[T]) Get(pos int) T {
-	return list.getNode(pos).data
+func (list *LinkedList[T]) Get(pos int) (T, error) {
+	if pos < 0 || pos >= list.length {
+		var zero T
+		return zero, errors.New("index out of bounds")
+	}
+	return list.getNode(pos).data, nil
 }
 
 // add one or multiple elements to the list
@@ -38,22 +43,30 @@ func (list *LinkedList[T]) Add(datas ...T) {
 }
 
 // insert an element at a position
-func (list *LinkedList[T]) Insert(pos int, data T) {
+func (list *LinkedList[T]) Insert(pos int, data T) error {
+	if pos < 0 || pos > list.length {
+		return errors.New("index out of bounds")
+	}
 	if pos == 0 {
 		list.Prepend(data)
-		return
+		return nil
 	}
 	// the node with position - 1 next pointer is set to a new node which contains data and the node after the chosen  position as next
 	list.getNode(pos - 1).next = &Node[T]{data: data, next: list.getNode(pos + 1)}
 	list.length++
+	return nil
 }
 
 // removes the element elem from the list
-func (list *LinkedList[T]) Remove(elem T) {
+func (list *LinkedList[T]) Remove(elem T) error {
+	if list.Size() == 0 {
+		return errors.New("list is empty")
+	}
+	// reset head, if head is the first element
 	if list.head.data == elem {
 		list.head = list.head.next
 		list.length--
-		return
+		return nil
 	}
 	current := list.head
 	for current.next.data != elem {
@@ -61,21 +74,26 @@ func (list *LinkedList[T]) Remove(elem T) {
 	}
 	current.next = current.next.next
 	list.length--
+	return nil
 }
 
 // removes the element at position pos from the list
-func (list *LinkedList[T]) RemoveAt(pos int) {
+func (list *LinkedList[T]) RemoveAt(pos int) error {
+	if list.head == nil {
+		return errors.New("list is empty")
+	}
+
 	if pos == 0 {
 		list.head = list.head.next
 	} else {
 		list.getNode(pos - 1).next = list.getNode(pos + 1)
 	}
 	list.length--
+	return nil
 }
 
 // repleaces the element at position pos with new element with value val
 func (list *LinkedList[T]) Replace(pos int, val T) {
-
 	if pos == 0 {
 		list.head.data = val
 		return

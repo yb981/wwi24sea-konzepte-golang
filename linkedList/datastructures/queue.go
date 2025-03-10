@@ -17,7 +17,7 @@ func (queue *Queue[T]) Dequeue() (T, error) {
 		var zero T
 		return zero, errors.New("queue is empty")
 	}
-	output := queue.list.Get(0)
+	output, _ := queue.list.Get(0)
 	queue.list.RemoveAt(0)
 	return output, nil
 }
@@ -27,7 +27,8 @@ func (queue *Queue[T]) Peek() (T, error) {
 		var zero T
 		return zero, errors.New("queue is empty")
 	}
-	return queue.list.Get(0), nil
+	output, _ := queue.list.Get(0)
+	return output, nil
 }
 
 func (queue *Queue[T]) IsEmpty() bool {

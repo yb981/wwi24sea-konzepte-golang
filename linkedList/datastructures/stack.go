@@ -15,7 +15,7 @@ func (stack *Stack[T]) Pop() (T, error) {
 		var zero T
 		return zero, errors.New("stack is empty")
 	}
-	output := stack.list.Get(0)
+	output, _ := stack.list.Get(0)
 	stack.list.RemoveAt(0)
 	return output, nil
 }
@@ -25,7 +25,8 @@ func (stack *Stack[T]) Peek() (T, error) {
 		var zero T
 		return zero, errors.New("stack is empty")
 	}
-	return stack.list.Get(0), nil
+	output, _ := stack.list.Get(0)
+	return output, nil
 }
 
 func (stack *Stack[T]) IsEmpty() bool {

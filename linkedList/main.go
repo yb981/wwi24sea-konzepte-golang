@@ -11,9 +11,13 @@ func main() {
 	mylist.Add(10, 11, 12, 13, 14, 15)
 	mylist.Print()
 	fmt.Println("----------------------------------------")
-
-	fmt.Println("Element at index 2:", mylist.Get(2))
-
+	val, err := mylist.Get(2)
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Println("Element at index 2:", val)
+	}
+	
 	fmt.Println("Länge der Liste", mylist.Size())
 
 	fmt.Println("Liste ist leer", mylist.IsEmpty())
