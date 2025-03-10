@@ -31,10 +31,22 @@ func (queue *Queue[T]) Peek() (T, error) {
 	return output, nil
 }
 
+func (queue* Queue[T]) Size() int{
+	return queue.list.Size()
+}
+
 func (queue *Queue[T]) IsEmpty() bool {
 	return queue.list.IsEmpty()
 }
 
 func (queue *Queue[T]) IsFull() bool {
 	return queue.list.IsFull()
+}
+
+func (queue* Queue[T]) ToString() string{
+	return queue.list.ToString()
+}
+
+func (queue* Queue[T]) Equals(compare* Queue[T]) bool{
+	return queue.list.Equals(&compare.list)
 }

@@ -146,3 +146,35 @@ func (list *LinkedList[T]) IsEmpty() bool {
 func (list *LinkedList[T]) IsFull() bool {
 	return list.head != nil
 }
+
+func (list *LinkedList[T]) ToString() string {
+	stringifiedList := "["
+	current := list.head
+	for current != nil {
+		stringifiedList += fmt.Sprintf("%v", current.data)
+		if current.next != nil {
+			stringifiedList += ", "
+		}
+		current = current.next
+	}
+	stringifiedList += "]"
+	return stringifiedList
+}
+
+func (list *LinkedList[T]) Equals(secondList *LinkedList[T]) bool {
+    if list == nil || secondList == nil {
+        return list == secondList
+    }
+    
+    firstNode := list.head
+    secondNode := secondList.head
+    
+    for firstNode != nil && secondNode != nil {
+        if firstNode.data != secondNode.data {
+            return false
+        }
+        firstNode = firstNode.next
+        secondNode = secondNode.next
+    }
+    return firstNode == nil && secondNode == nil
+}

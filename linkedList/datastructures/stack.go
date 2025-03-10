@@ -10,6 +10,12 @@ func (stack *Stack[T]) Push(data T) {
 	stack.list.Prepend(data)
 }
 
+func (stack *Stack[T]) PushAll(datas ...T) {
+	for _, data := range datas {
+		stack.list.Prepend(data)
+	}
+}
+
 func (stack *Stack[T]) Pop() (T, error) {
 	if stack.list.Size() == 0 {
 		var zero T
@@ -39,4 +45,12 @@ func (stack *Stack[T]) IsFull() bool {
 
 func (stack *Stack[T]) Size() int {
 	return stack.list.Size()
+}
+
+func (stack *Stack[T]) ToString() string {
+	return stack.list.ToString()
+}
+
+func (stack *Stack[T]) Equals(compare *Stack[T]) bool {
+	return stack.list.Equals(&compare.list)
 }
