@@ -27,6 +27,11 @@ func TestAddAndAppend(t *testing.T) {
 	if val != 4 {
 		t.Errorf("Expected last element 4, got %d", val)
 	}
+
+	_, err := list.Get(5)
+	if err == nil {
+		t.Errorf("Expected error")
+	}
 }
 
 func TestInsert(t *testing.T) {
@@ -41,6 +46,12 @@ func TestInsert(t *testing.T) {
 
 func TestRemove(t *testing.T) {
 	list := LinkedList[int]{}
+
+	err := list.Remove(5)
+	if err == nil {
+		t.Errorf("Expected error")
+	}
+
 	list.Add(1, 2, 3)
 	list.Remove(2)
 	if list.Size() != 2 {
@@ -50,10 +61,22 @@ func TestRemove(t *testing.T) {
 
 func TestRemoveAt(t *testing.T) {
 	list := LinkedList[int]{}
+
+	// Test empty list
+	err := list.RemoveAt(0)
+	if err == nil {
+		t.Errorf("Expected error")
+	}
+
 	list.Add(1, 2, 3)
 	list.RemoveAt(1)
 	if list.Size() != 2 {
 		t.Errorf("Expected list size 2 after RemoveAt, got %d", list.Size())
+	}
+
+	err = list.RemoveAt(5)
+	if err == nil {
+		t.Errorf("Expected error")
 	}
 }
 

@@ -79,8 +79,10 @@ func (list *LinkedList[T]) Remove(elem T) error {
 
 // removes the element at position pos from the list
 func (list *LinkedList[T]) RemoveAt(pos int) error {
-	if list.head == nil {
+	if list.Size() == 0 {
 		return errors.New("list is empty")
+	} else if pos < 0 || pos > list.Size() {
+		return errors.New("index not inside list")
 	}
 
 	if pos == 0 {
