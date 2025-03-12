@@ -68,6 +68,12 @@ func TestStack_Peek(t *testing.T) {
 		t.Errorf("Expected Peek value to be 10, got %v", value)
 	}
 
+	// stack is not supposed to change size when using peek
+	stack.Peek()
+	if stack.Size() != 1 {
+		t.Errorf("Expected Peek not to change stack size, got %v", stack.Size())
+	}
+
 	stack.Pop() // Remove the only element
 
 	_, err = stack.Peek()

@@ -60,10 +60,10 @@ ProgrammierkonzepteTask2/datastructures/queue.go:20.2,22.20 3 1
 ProgrammierkonzepteTask2/datastructures/queue.go:25.42,26.26 1 1
 ProgrammierkonzepteTask2/datastructures/queue.go:26.26,29.3 2 1
 ProgrammierkonzepteTask2/datastructures/queue.go:30.2,31.20 2 1
-ProgrammierkonzepteTask2/datastructures/queue.go:34.34,36.2 1 0
+ProgrammierkonzepteTask2/datastructures/queue.go:34.34,36.2 1 1
 ProgrammierkonzepteTask2/datastructures/queue.go:38.39,40.2 1 1
 ProgrammierkonzepteTask2/datastructures/queue.go:42.38,44.2 1 1
-ProgrammierkonzepteTask2/datastructures/queue.go:46.41,48.2 1 0
+ProgrammierkonzepteTask2/datastructures/queue.go:46.41,48.2 1 1
 ProgrammierkonzepteTask2/datastructures/queue.go:50.54,52.2 1 1
 ProgrammierkonzepteTask2/datastructures/stack.go:9.37,11.2 1 1
 ProgrammierkonzepteTask2/datastructures/stack.go:13.44,14.29 1 1
@@ -77,5 +77,5 @@ ProgrammierkonzepteTask2/datastructures/stack.go:34.2,35.20 2 1
 ProgrammierkonzepteTask2/datastructures/stack.go:38.39,40.2 1 1
 ProgrammierkonzepteTask2/datastructures/stack.go:42.38,44.2 1 1
 ProgrammierkonzepteTask2/datastructures/stack.go:46.35,48.2 1 1
-ProgrammierkonzepteTask2/datastructures/stack.go:50.42,52.2 1 0
+ProgrammierkonzepteTask2/datastructures/stack.go:50.42,52.2 1 1
 ProgrammierkonzepteTask2/datastructures/stack.go:54.55,56.2 1 1
