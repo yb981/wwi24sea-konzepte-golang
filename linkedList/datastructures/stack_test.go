@@ -4,22 +4,6 @@ import (
 	"testing"
 )
 
-func TestStack_Push(t *testing.T) {
-	stack := Stack[int]{}
-	stack.Push(10)
-	stack.Push(20)
-	stack.Push(30)
-
-	if stack.Size() != 3 {
-		t.Errorf("Expected stack size to be 3, got %v", stack.Size())
-	}
-
-	value, err := stack.Peek()
-	if err != nil || value != 30 {
-		t.Errorf("Expected Peek value to be 30, got %v", value)
-	}
-}
-
 func TestStackPushAll(t *testing.T) {
 	stack1 := Stack[int]{}
 	stack1.PushAll(1, 2, 3)
@@ -32,7 +16,102 @@ func TestStackPushAll(t *testing.T) {
 	}
 }
 
-func TestStack_Pop(t *testing.T) {
+func TestPush(t *testing.T) {
+	var tests = []struct {
+		input    float64
+		expected float64
+	}{
+		{2, 2},
+		{-1, -1},
+		{20.9, 20.9},
+		{-13.01, -13.01},
+	}
+
+	stack1 := Stack[float64]{}
+
+	for _, number := range tests {
+		stack1.Push(number.input)
+		if actual, err := stack1.Peek(); err != nil {
+			t.Errorf("Expected %v, but got Error %v instead", number.expected, err)
+		} else if actual != number.expected {
+			t.Errorf("Expected %v on last position in Stack but got %v", number.expected, number.input)
+		}
+	}
+
+	stack2 := Stack[int]{}
+	stack2.Push(10)
+	stack2.Push(20)
+	stack2.Push(30)
+
+	if stack2.Size() != 3 {
+		t.Errorf("Expected stack size to be 3, got %v", stack2.Size())
+	}
+}
+
+func TestSize(t *testing.T) {
+	var tests = []struct {
+		input 		[]string
+		expected 	int
+	}{
+		{[]string{"1","2","3"},3},
+		{[]string{"1","2","3","r"},4},
+	}
+
+	for _, test := range tests {
+		testStack := Stack[string]{}
+		for _, values := range test.input {
+			testStack.Push(values)
+		}
+
+		if size := testStack.Size(); size != test.expected {
+			t.Errorf("Size is %v, but expected %v", size, test.expected)
+		}
+	}
+}
+
+func StackTestIsEmpty(t *testing.T) {
+	var tests = []struct {
+		input 		[]string
+		expected 	bool
+	}{
+		{[]string{"1","2","3"},false},
+		{[]string{},true},
+	}
+
+	for _, test := range tests {
+		testStack := Stack[string]{}
+		for _, values := range test.input {
+			testStack.Push(values)
+		}
+
+		if isEmpty := testStack.IsEmpty(); isEmpty != test.expected {
+			t.Errorf("Stack is %v, but expected %v", isEmpty, test.expected)
+		}
+	}
+}
+
+func TestIsFull(t *testing.T) {
+	var tests = []struct {
+		input 		[]int
+		expected 	bool
+	}{
+		{[]int{1,2,3},true},
+		{[]int{},false},
+	}
+
+	for _, test := range tests {
+		testStack := Stack[int]{} // Type has to be static, can not be decided dynamically
+		for _, values := range test.input {
+			testStack.Push(values)
+		}
+
+		if isFull := testStack.IsFull(); isFull != test.expected {
+			t.Errorf("Stack is %v, but expected %v", isFull, test.expected)
+		}
+	}
+}
+
+func TestStackPop(t *testing.T) {
 	stack := Stack[int]{}
 	stack.Push(10)
 	stack.Push(20)
@@ -59,7 +138,7 @@ func TestStack_Pop(t *testing.T) {
 	}
 }
 
-func TestStack_Peek(t *testing.T) {
+func TestStackPeek(t *testing.T) {
 	stack := Stack[int]{}
 	stack.Push(10)
 
