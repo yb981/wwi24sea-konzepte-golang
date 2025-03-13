@@ -36,16 +36,12 @@ func (list *LinkedList[T]) Filter(operation func(T) bool) LinkedList[T] {
 	return *newList
 }
 
-func (queue *Queue[T]) Filter(operation func(T) bool) Queue[T] {
-	newQueue := &Queue[T]{}
-	newQueue.list = queue.list.Filter(operation)
-	return *newQueue
+func (queue *Queue[T]) Filter(operation func(T) bool) *Queue[T] {
+	return &Queue[T]{list: queue.list.Filter(operation)}
 }
 
-func (stack *Stack[T]) Filter(operation func(T) bool) Stack[T] {
-	newStack := &Stack[T]{}
-	newStack.list = stack.list.Filter(operation)
-	return *newStack
+func (stack *Stack[T]) Filter(operation func(T) bool) *Stack[T] {
+	return &Stack[T]{list: stack.list.Filter(operation)}
 }
 
 //------------------------------------------------------------------------------------------
@@ -57,23 +53,18 @@ func (list *LinkedList[T]) Map(operation func(T) T) LinkedList[T] {
 	current := list.head
 	newList := &LinkedList[T]{}
 	for current != nil {
-		element := operation(current.data)
-		newList.Append(element)
+		newList.Append(operation((current.data)))
 		current = current.next
 	}
 	return *newList
 }
 
-func (queue *Queue[T]) Map(operation func(T) T) Queue[T] {
-	newQueue := &Queue[T]{}
-	newQueue.list = queue.list.Map(operation)
-	return *newQueue
+func (queue *Queue[T]) Map(operation func(T) T) *Queue[T] {
+	return &Queue[T]{list: queue.list.Map(operation)}
 }
 
-func (stack *Stack[T]) Map(operation func(T) T) Stack[T] {
-	newStack := &Stack[T]{}
-	newStack.list = stack.list.Map(operation)
-	return *newStack
+func (stack *Stack[T]) Map(operation func(T) T) *Stack[T] {
+	return &Stack[T]{list: stack.list.Map(operation)}
 }
 
 //------------------------------------------------------------------------------------------
