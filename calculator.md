@@ -1,7 +1,7 @@
 # RPN Calculator
 
 =========================================
-        Welcome to the RPN Calculator   
+Welcome to the RPN Calculator  
 =========================================
 
 ## Overview
@@ -22,7 +22,7 @@ The RPN Calculator supports the following operations:
 - **Factorial (`!`)**: Computes the factorial of the top integer on the stack.
 - **Absolute Value (`abs`)**: Computes the absolute value of the top number on the stack.
 - **Sum All Numbers (`++`)**: Sums all numbers currently on the stack.
-- **Multiply All Numbers (`**`)**: Multiplies all numbers currently on the stack.
+- **Multiply All Numbers (`**`)\*\*: Multiplies all numbers currently on the stack.
 
 ## Available Commands
 
@@ -36,6 +36,7 @@ The RPN Calculator supports the following operations:
 
 To run the RPN Calculator, ensure you have Go installed on your machine. You can download Go from [golang.org](https://golang.org/dl/).
 
-### Installation
+### Run
 
-1. **Clone the repository**:
+1. **Clone the repository**
+2. **run in ./caclulator/**: go run .
