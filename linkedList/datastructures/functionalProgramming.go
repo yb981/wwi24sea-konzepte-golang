@@ -36,7 +36,7 @@ func (list *LinkedList[T]) Filter(operation func(T) bool) LinkedList[T] {
 	return *newList
 }
 
-func (queue *Queue[T]) Flter(operation func(T) bool) Queue[T] {
+func (queue *Queue[T]) Filter(operation func(T) bool) Queue[T] {
 	newQueue := &Queue[T]{}
 	newQueue.list = queue.list.Filter(operation)
 	return *newQueue
