@@ -10,6 +10,7 @@ func doubleValue[T any](value int) int {
 	return value
 }
 
+
 func isOdd[T any](value int) bool {
 	return value%2 != 0
 }
@@ -21,6 +22,9 @@ func main() {
 
 	doubleValueList := mylist.Map(doubleValue[int])
 	fmt.Println("List with doubled Value: ", doubleValueList.ToString())
+
+	newList := datastructures.Map[int, int](*mylist, doubleValue[int])
+	fmt.Println(newList.ToString())
 
 	oddList := mylist.Filter(isOdd[int])
 	fmt.Println("List with odd Value: ", oddList.ToString())

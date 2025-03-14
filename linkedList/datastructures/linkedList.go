@@ -167,19 +167,19 @@ func (list *LinkedList[T]) ToString() string {
 }
 
 func (list *LinkedList[T]) Equals(secondList *LinkedList[T]) bool {
-    if list == nil || secondList == nil {
-        return list == secondList
-    }
-    
-    firstNode := list.head
-    secondNode := secondList.head
-    
-    for firstNode != nil && secondNode != nil {
-        if firstNode.data != secondNode.data {
-            return false
-        }
-        firstNode = firstNode.next
-        secondNode = secondNode.next
-    }
-    return firstNode == nil && secondNode == nil
+	if list == nil || secondList == nil {
+		return list == secondList
+	}
+
+	firstNode := list.head
+	secondNode := secondList.head
+
+	for firstNode != nil && secondNode != nil {
+		if firstNode.data != secondNode.data {
+			return false
+		}
+		firstNode = firstNode.next
+		secondNode = secondNode.next
+	}
+	return firstNode == nil && secondNode == nil
 }
