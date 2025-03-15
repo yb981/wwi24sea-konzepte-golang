@@ -10,9 +10,12 @@ func doubleValue[T any](value int) int {
 	return value
 }
 
-
 func isOdd[T any](value int) bool {
 	return value%2 != 0
+}
+
+func Add(first int, second int) int {
+	return first + second
 }
 
 func main() {
@@ -40,4 +43,14 @@ func main() {
 
 	oddQueue := myQueue.Filter(isOdd[int])
 	fmt.Println("List with odd Value: ", oddQueue.ToString())
+
+	//reduce operation on int list
+	reduceList := new(datastructures.LinkedList[int])
+	//reduceList.Add(1, 2, 3, 4, 5, 6, 7)
+	result, error := reduceList.Reduce(Add)
+	if error == nil {
+		fmt.Println("Result of Reduce Operation: ", result)
+	} else {
+		fmt.Println(error)
+	}
 }

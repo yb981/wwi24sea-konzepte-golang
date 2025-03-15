@@ -1,5 +1,9 @@
 package datastructures
 
+import (
+	"errors"
+)
+
 // -----------------------------------------------------------------------------------------
 // For Each Method
 // -----------------------------------------------------------------------------------------
@@ -78,4 +82,34 @@ func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) Li
 		current = current.next
 	}
 	return *newList
+}
+
+func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
+	if list.head == nil {
+		var zero T
+		return zero, errors.New("Reduce Function not allowed on empty List")
+	}
+	current := list.head
+	result := current.data
+
+	for current.next != nil {
+		current = current.next
+		result = operation(result, current.data)
+	}
+	return result, nil
+}
+
+func Reduce[T comparable, U comparable](list LinkedList[T], operation func(T, T) U) (U, error) {
+	if list.head == nil {
+		var zero U
+		return zero, errors.New("Reduce Function not allowed on empty List")
+	}
+	current := list.head
+	result := current.data
+
+	for current.next != nil {
+		current = current.next
+		result = operation(result, current.data)
+	}
+	return result, nil
 }
