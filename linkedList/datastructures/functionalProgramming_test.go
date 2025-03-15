@@ -78,6 +78,7 @@ func TestFilter(t *testing.T) {
 		{[]int{50, -2, 20}, []int{50, -2, 20}},
 	}
 
+	// test for linked list
 	for _, test := range tests {
 		var testList LinkedList[int]
 		for _, v := range test.input {
@@ -91,6 +92,40 @@ func TestFilter(t *testing.T) {
 		}
 		if !testList.Equals(&resultList) {
 			t.Errorf("Expected %v, but got %v", resultList.ToString(), testList.ToString())
+		}
+	}
+
+	// test for queue
+	for _, test := range tests {
+		var testQueue Queue[int]
+		for _, v := range test.input {
+			testQueue.Enqueue(v)
+		}
+		testQueue = *testQueue.Filter(isEvenFunc)
+
+		var resultList Queue[int]
+		for _, v := range test.expected {
+			resultList.Enqueue(v)
+		}
+		if !testQueue.Equals(&resultList) {
+			t.Errorf("Expected %v, but got %v", resultList.ToString(), testQueue.ToString())
+		}
+	}
+
+	// test for stack
+	for _, test := range tests {
+		var testStack Stack[int]
+		for _, v := range test.input {
+			testStack.Push(v)
+		}
+		testStack = *testStack.Filter(isEvenFunc)
+
+		var resultStack Stack[int]
+		for _, v := range test.expected {
+			resultStack.Push(v)
+		}
+		if !testStack.Equals(&resultStack) {
+			t.Errorf("Expected %v, but got %v", resultStack.ToString(), testStack.ToString())
 		}
 	}
 }
