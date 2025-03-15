@@ -5,47 +5,77 @@ import (
 )
 
 func TestForEach(t *testing.T) {
-	testfunc := func (a int) {
-		a = a + 2
+
+	expected := []int{1, 2, 3} //slice, den wir erwarten (slice= array mit flexibler größe)
+
+	// Test für LinkedList
+	ll := LinkedList[int]{} //neue linkedlist(ll) wird erstellt
+	ll.Add(1, 2, 3)
+
+	result := []int{}            //leeres slice
+	ll.ForEach(func(value int) { //mit foreach packen wir jedes element aus ll in slice
+		result = append(result, value) //
+	})
+
+	if len(result) != len(expected) { //Go kann nicht result (als slice) == expected vergleichen, daher vergleichen wir erst die Länge
+		t.Errorf("LinkedList ForEach failed. Length mismatch. Expected %v, got %v", len(expected), len(result))
 	}
 
-	tests := []struct {
-		input 		[]int
-		expected 	[]int
-	}{
-		{[]int{1,2,3}, []int{3,4,5} },
-		{[]int{-3,-2, -1}, []int{-1,0,1} },
+	for i := range expected { //für i wird jedes element verglichen
+		if result[i] != expected[i] {
+			t.Errorf("LinkedList ForEach failed. Expected %v, got %v", expected[i], result[i])
+		}
 	}
 
-	for _, test := range tests {
-		var testList LinkedList[int]
-		for _, v := range test.input {
-			testList.Append(v)
-		}
-		testList.ForEach(testfunc)
+	// Test für Queue
+	queue := &Queue[int]{list: ll}
 
-		var resultList LinkedList[int]
-		for _, v := range test.expected {
-			resultList.Append(v)
+	result = []int{}
+	queue.ForEach(func(value int) {
+		result = append(result, value)
+	})
+
+	if len(result) != len(expected) {
+		t.Errorf("Queue ForEach failed. Length mismatch. Expected %v, got %v", len(expected), len(result))
+	}
+
+	for i := range expected {
+		if result[i] != expected[i] {
+			t.Errorf("Queue ForEach failed. Expected %v, got %v", expected[i], result[i])
 		}
-		if !testList.Equals(&resultList) {
-			t.Errorf("Expected %v, but got %v", resultList.ToString(), testList.ToString())
+	}
+
+	// Test für Stack
+	stack := &Stack[int]{list: ll}
+
+	result = []int{}
+	stack.ForEach(func(value int) {
+		result = append(result, value)
+	})
+
+	if len(result) != len(expected) {
+		t.Errorf("Stack ForEach failed. Length mismatch. Expected %v, got %v", len(expected), len(result))
+	}
+
+	for i := range expected {
+		if result[i] != expected[i] {
+			t.Errorf("Stack ForEach failed at index %d. Expected %v, got %v", i, expected[i], result[i])
 		}
 	}
 }
 
 func TestFilter(t *testing.T) {
-	isEvenFunc := func (a int) bool {
-		return a % 2 == 0
+	isEvenFunc := func(a int) bool {
+		return a%2 == 0
 	}
 
 	tests := []struct {
-		input 		[]int
-		expected 	[]int
+		input    []int
+		expected []int
 	}{
-		{[]int{1,2,3}, []int{2} },
-		{[]int{-3,-2, -1}, []int{-2} },
-		{[]int{50,-2, 20}, []int{50, -2, 20} },
+		{[]int{1, 2, 3}, []int{2}},
+		{[]int{-3, -2, -1}, []int{-2}},
+		{[]int{50, -2, 20}, []int{50, -2, 20}},
 	}
 
 	for _, test := range tests {
