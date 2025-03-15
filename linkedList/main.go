@@ -14,8 +14,8 @@ func isOdd[T any](value int) bool {
 	return value%2 != 0
 }
 
-func Add(first int, second int) int {
-	return first + second
+func Add(first int, second int) string {
+	return string(first + second)
 }
 
 func main() {
@@ -26,10 +26,7 @@ func main() {
 	doubleValueList := mylist.Map(doubleValue[int])
 	fmt.Println("List with doubled Value: ", doubleValueList.ToString())
 
-	newList := datastructures.Map[int, int](*mylist, doubleValue[int])
-	fmt.Println(newList.ToString())
-
-	oddList := mylist.Filter(isOdd[int])
+	oddList := mylist.LazyFilter(isOdd[int])
 	fmt.Println("List with odd Value: ", oddList.ToString())
 
 	myQueue := new(datastructures.Queue[int])
@@ -46,11 +43,7 @@ func main() {
 
 	//reduce operation on int list
 	reduceList := new(datastructures.LinkedList[int])
-	//reduceList.Add(1, 2, 3, 4, 5, 6, 7)
-	result, error := reduceList.Reduce(Add)
-	if error == nil {
-		fmt.Println("Result of Reduce Operation: ", result)
-	} else {
-		fmt.Println(error)
-	}
+	reduceList.Add(1, 2, 3, 4, 5, 6, 7)
+	result, _ := datastructures.Reduce[int, string](*reduceList, Add)
+	fmt.Println("REduce FUnktion: ", result)
 }

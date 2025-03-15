@@ -40,6 +40,24 @@ func (list *LinkedList[T]) Filter(operation func(T) bool) LinkedList[T] {
 	return *newList
 }
 
+func(list *LinkedList[T]) LazyFilter(operation func(T) bool) LinkedList[T]{
+    current := list.head
+	newList := &LinkedList[T]{}
+
+    operationClosure := func(data T) bool{
+        return operation(data)
+    }
+
+	for current != nil {
+		if operationClosure(current.data) {
+			newList.Append(current.data)
+		}
+		current = current.next
+	}
+	return *newList
+}
+
+
 func (queue *Queue[T]) Filter(operation func(T) bool) *Queue[T] {
 	return &Queue[T]{list: queue.list.Filter(operation)}
 }
@@ -99,13 +117,15 @@ func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
 	return result, nil
 }
 
-func Reduce[T comparable, U comparable](list LinkedList[T], operation func(T, T) U) (U, error) {
+
+func Reduce[T comparable, U comparable](list LinkedList[T], operation func(any, any) U) (U, error) {
 	if list.head == nil {
 		var zero U
 		return zero, errors.New("Reduce Function not allowed on empty List")
 	}
 	current := list.head
-	result := current.data
+    var initial U
+    result := operation(initial, current.data)
 
 	for current.next != nil {
 		current = current.next
