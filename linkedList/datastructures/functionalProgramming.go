@@ -129,7 +129,7 @@ func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) Li
 	return *newList
 }
 
-func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
+func (list *LinkedList[T]) Reduce(operation func(T, T) T) (any, error) {
 	if list.head == nil {
 		var zero T
 		return zero, errors.New("Reduce Function not allowed on empty List")
@@ -144,7 +144,7 @@ func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
 	return result, nil
 }
 
-func Reduce[T comparable, U comparable](list LinkedList[T], operation func(any, any) U) (U, error) {
+func Reduce[U comparable, T comparable](list LinkedList[T], operation func(U, T) U) (U, error) {
 	if list.head == nil {
 		var zero U
 		return zero, errors.New("Reduce Function not allowed on empty List")
