@@ -59,17 +59,17 @@ func main() {
 	mappedList := myListForMapping.MapVariant(
 		func(x int) any { return x * 2 },
 		datastructures.LinkedListType,
-	).(datastructures.LinkedList[any])
+	).(*datastructures.LinkedList[any])
 
 	mappedQueue := myListForMapping.MapVariant(
 		func(x int) any { return x * 2 },
 		datastructures.QueueType,
-	).(datastructures.Queue[any])
+	).(*datastructures.Queue[any])
 
 	mappedStack := myListForMapping.MapVariant(
 		func(x int) any { return x * 2 },
 		datastructures.StackType,
-	).(datastructures.Stack[any])
+	).(*datastructures.Stack[any])
 
 	fmt.Println(mappedList.ToString())
 	fmt.Println(mappedQueue.ToString())

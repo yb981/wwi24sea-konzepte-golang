@@ -1,5 +1,9 @@
 package datastructures
 
+type Collection[T any] interface {
+	ToString() string
+}
+
 type CollectionType int
 
 const (
@@ -8,7 +12,7 @@ const (
 	StackType
 )
 
-func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType CollectionType) any {
+func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType CollectionType) Collection[any] {
 	current := list.head
 
 	switch collectionType {
@@ -18,7 +22,7 @@ func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType Coll
 			newList.Append(operation(current.data))
 			current = current.next
 		}
-		return newList
+		return &newList
 
 	case QueueType:
 		newQueue := Queue[any]{}
@@ -26,7 +30,7 @@ func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType Coll
 			newQueue.Enqueue(operation(current.data))
 			current = current.next
 		}
-		return newQueue
+		return &newQueue
 
 	case StackType:
 		newStack := Stack[any]{}
@@ -34,7 +38,7 @@ func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType Coll
 			newStack.Push(operation(current.data))
 			current = current.next
 		}
-		return newStack
+		return &newStack
 
 	default:
 		println("Type not found")
