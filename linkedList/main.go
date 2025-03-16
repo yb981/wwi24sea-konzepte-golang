@@ -18,7 +18,7 @@ func Add(first int, second int) int {
 	return first + second
 }
 
-func stringify(first string, second int) string{
+func stringify(first string, second int) string {
 	return first + fmt.Sprintf("%v", second)
 }
 
@@ -54,11 +54,18 @@ func main() {
 	reduceList := new(datastructures.LinkedList[int])
 	reduceList.Add(1, 2, 3, 4, 5, 6, 7)
 	/*
-	resultnew, _ := datastructures.Reduce[int, int](*reduceList, Add)
-	fmt.Println("REduce FUnktion: ", resultnew)
+		resultnew, _ := datastructures.Reduce[int, int](*reduceList, Add)
+		fmt.Println("REduce FUnktion: ", resultnew)
 	*/
 	ergebnis, _ := reduceList.Reduce(Add)
 	fmt.Println("Reduce ergebnis:", ergebnis)
+
+	reduceQueue := &datastructures.Queue[int]{}
+	reduceQueue.Enqueue(1)
+	reduceQueue.Enqueue(2)
+	reduceQueue.Enqueue(3)
+	value, _ := reduceQueue.Reduce(Add)
+	fmt.Println("REduzierte Queue: ", value)
 
 	myListForMapping := new(datastructures.LinkedList[int])
 	fmt.Println("Add the Values 0, 1, 2, 3, 4, 5, 6")
