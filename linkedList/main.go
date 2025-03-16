@@ -18,6 +18,11 @@ func Add(first int, second int) string {
 	return string(first + second)
 }
 
+func doubleValueVLukas(value int) int {
+	value = value * 2
+	return value
+}
+
 func main() {
 	mylist := new(datastructures.LinkedList[int])
 	fmt.Println("Add the Values 0, 1, 2, 3, 4, 5, 6")
@@ -44,6 +49,29 @@ func main() {
 	//reduce operation on int list
 	reduceList := new(datastructures.LinkedList[int])
 	reduceList.Add(1, 2, 3, 4, 5, 6, 7)
-	result, _ := datastructures.Reduce[int, string](*reduceList, Add)
-	fmt.Println("REduce FUnktion: ", result)
+	//result, _ := datastructures.Reduce[int, string](*reduceList, Add)
+	//fmt.Println("REduce FUnktion: ", result)
+
+	myListForMapping := new(datastructures.LinkedList[int])
+	fmt.Println("Add the Values 0, 1, 2, 3, 4, 5, 6")
+	myListForMapping.Add(0, 1, 2, 3, 4, 5, 6)
+
+	mappedList := myListForMapping.MapVariant(
+		func(x int) any { return x * 2 },
+		datastructures.LinkedListType,
+	).(datastructures.LinkedList[any])
+
+	mappedQueue := myListForMapping.MapVariant(
+		func(x int) any { return x * 2 },
+		datastructures.QueueType,
+	).(datastructures.Queue[any])
+
+	mappedStack := myListForMapping.MapVariant(
+		func(x int) any { return x * 2 },
+		datastructures.StackType,
+	).(datastructures.Stack[any])
+
+	fmt.Println(mappedList.ToString())
+	fmt.Println(mappedQueue.ToString())
+	fmt.Println(mappedStack.ToString())
 }
