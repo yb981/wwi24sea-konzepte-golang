@@ -84,7 +84,7 @@ func TestFilter(t *testing.T) {
 		for _, v := range test.input {
 			testList.Append(v)
 		}
-		testList = testList.Filter(isEvenFunc)
+		testList = *testList.Filter(isEvenFunc)
 
 		var resultList LinkedList[int]
 		for _, v := range test.expected {

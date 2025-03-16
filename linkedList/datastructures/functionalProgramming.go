@@ -35,7 +35,7 @@ func (stack *Stack[T]) ForEach(operation func(T)) {
 // -----------------------------------------------------------------------------------------
 // Filter Method
 // -----------------------------------------------------------------------------------------
-func (list *LinkedList[T]) Filter(operation func(T) bool) LinkedList[T] {
+func (list *LinkedList[T]) Filter(operation func(T) bool) *LinkedList[T] {
 	current := list.head
 	newList := &LinkedList[T]{}
 	for current != nil {
@@ -44,7 +44,7 @@ func (list *LinkedList[T]) Filter(operation func(T) bool) LinkedList[T] {
 		}
 		current = current.next
 	}
-	return *newList
+	return newList
 }
 
 func (list *LinkedList[T]) LazyFilter(operation func(T) bool) LazyFilterList[T] {
@@ -84,11 +84,11 @@ func (l LazyFilterList[T]) Execute() LinkedList[T] {
 }
 
 func (queue *Queue[T]) Filter(operation func(T) bool) *Queue[T] {
-	return &Queue[T]{list: queue.list.Filter(operation)}
+	return &Queue[T]{list: *queue.list.Filter(operation)}
 }
 
 func (stack *Stack[T]) Filter(operation func(T) bool) *Stack[T] {
-	return &Stack[T]{list: stack.list.Filter(operation)}
+	return &Stack[T]{list: *stack.list.Filter(operation)}
 }
 
 //------------------------------------------------------------------------------------------
@@ -114,6 +114,13 @@ func (queue *Queue[T]) Map(operation func(T) T) *Queue[T] {
 func (stack *Stack[T]) Map(operation func(T) T) *Stack[T] {
 	return &Stack[T]{list: *stack.list.Map(operation)}
 }
+
+
+//Lazy Map missing
+
+
+
+
 
 //------------------------------------------------------------------------------------------
 
