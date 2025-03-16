@@ -4,6 +4,15 @@ import (
 	"errors"
 )
 
+
+type FilterFunc[T any] func() bool
+
+type LazyFilterList[T comparable] struct {
+    data []T
+	operations []FilterFunc[T]
+}
+
+
 // -----------------------------------------------------------------------------------------
 // For Each Method
 // -----------------------------------------------------------------------------------------
@@ -40,23 +49,41 @@ func (list *LinkedList[T]) Filter(operation func(T) bool) LinkedList[T] {
 	return *newList
 }
 
-func(list *LinkedList[T]) LazyFilter(operation func(T) bool) LinkedList[T]{
-    current := list.head
-	newList := &LinkedList[T]{}
-
-    operationClosure := func(data T) bool{
-        return operation(data)
-    }
+func (list *LinkedList[T]) LazyFilter(operation func(T) bool) LazyFilterList[T] {
+	current := list.head
+	lazyOps := []FilterFunc[T]{}
+    var datalist []T
 
 	for current != nil {
-		if operationClosure(current.data) {
-			newList.Append(current.data)
-		}
+        value := current.data
+        datalist = append(datalist, value)
+		lazyOps = append(lazyOps, func() bool {
+			return operation(value)
+		})
 		current = current.next
 	}
-	return *newList
+
+	return LazyFilterList[T]{
+		operations: lazyOps,
+        data: datalist,
+	}
 }
 
+func (l LazyFilterList[T]) Execute() LinkedList[T] {
+	result := make([]bool, len(l.operations))
+	for i, op := range l.operations {
+		result[i] = op()
+	}
+
+    outputList := &LinkedList[T]{}
+
+    for i := 0; i<  len(result); i++ {
+        if result[i]{
+            outputList.Append(l.data[i])
+        }
+    }
+	return *outputList
+}
 
 func (queue *Queue[T]) Filter(operation func(T) bool) *Queue[T] {
 	return &Queue[T]{list: queue.list.Filter(operation)}
@@ -117,15 +144,14 @@ func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
 	return result, nil
 }
 
-
 func Reduce[T comparable, U comparable](list LinkedList[T], operation func(any, any) U) (U, error) {
 	if list.head == nil {
 		var zero U
 		return zero, errors.New("Reduce Function not allowed on empty List")
 	}
 	current := list.head
-    var initial U
-    result := operation(initial, current.data)
+	var initial U
+	result := operation(initial, current.data)
 
 	for current.next != nil {
 		current = current.next

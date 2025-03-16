@@ -10,6 +10,7 @@ type Node[T any] struct {
 	data T
 }
 
+
 type LinkedList[T comparable] struct {
 	head   *Node[T]
 	length int

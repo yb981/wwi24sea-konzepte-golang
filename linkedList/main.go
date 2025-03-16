@@ -32,13 +32,13 @@ func main() {
 	fmt.Println("List with doubled Value: ", doubleValueList.ToString())
 
 	oddList := mylist.LazyFilter(isOdd[int])
-	fmt.Println("List with odd Value: ", oddList.ToString())
+	fmt.Println("This is the lazy list but not executed: ", oddList)
+	fmt.Println("now executed")
+	result := oddList.Execute()
+	fmt.Println("Executed Lazy Filter: ", result.ToString())
 
 	myQueue := new(datastructures.Queue[int])
 	fmt.Println("Add the Values 0, 1, 2, 3, 4, 5, 6")
-	for i := 0; i < 7; i++ {
-		myQueue.Enqueue(i)
-	}
 
 	newQueue := myQueue.Map(doubleValue[int])
 	fmt.Println("Queue with doubled Value: ", newQueue.ToString())
