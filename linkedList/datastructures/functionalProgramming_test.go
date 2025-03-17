@@ -2,6 +2,7 @@ package datastructures
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -66,13 +67,29 @@ func TestMapVariant(t *testing.T) {
 
 func TestMapVariant_DefaultCase(t *testing.T) {
 	list := &LinkedList[int]{}
+	original := &LinkedList[int]{}
+	
 	list.Add(1, 2, 3)
+	original.Add(1, 2, 3)
 
 	invalidType := CollectionType(999) // Ungültiger Typ
 	result := list.MapVariant(func(x int) any { return x * 2 }, invalidType)
 
 	if result != nil {
 		t.Errorf("Expected nil for invalid CollectionType, but got %v", result)
+	}
+
+	resultLL := list.MapVariant(func(x int) any { return x * 2 }, LinkedListType).(*LinkedList[any])
+	if !list.Equals(original) {
+		t.Errorf("Expected original list not to change, but got %v", list)
+	}
+	expected := LinkedList[any]{}
+	expected.Append(2)
+	expected.Append(4)
+	expected.Append(6)
+	
+	if !resultLL.Equals(&expected) {
+		t.Errorf("Expected %v, but got %v", expected.ToString(), resultLL.ToString())
 	}
 }
 
@@ -202,6 +219,126 @@ func TestFilter(t *testing.T) {
 	}
 }
 
+func TestFilterVariantLinkedList(t *testing.T) {
+	list := LinkedList[int]{}
+	list.Append(1)
+	list.Append(2)
+	list.Append(3)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	result := list.FilterVariant(isEven, LinkedListType)
+	filteredList, ok := result.(*LinkedList[any])
+	if !ok {
+		t.Errorf("Expected result to be of type LinkedList, but got %T", result)
+	}
+
+	expected := LinkedList[any]{}
+	expected.Append(2)
+
+	if !reflect.DeepEqual(filteredList, &expected) {
+		t.Errorf("Expected %v, but got %v", expected, filteredList)
+	}
+}
+
+func TestFilterVariantQueue(t *testing.T) {
+	list := LinkedList[int]{}
+	list.Append(1)
+	list.Append(2)
+	list.Append(3)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	result := list.FilterVariant(isEven, QueueType)
+	filteredQueue, ok := result.(*Queue[any])
+	if !ok {
+		t.Errorf("Expected result to be of type Queue, but got %T", result)
+	}
+
+	expected := Queue[any]{}
+	expected.Enqueue(2)
+
+	if !reflect.DeepEqual(filteredQueue, &expected) {
+		t.Errorf("Expected %v, but got %v", expected, filteredQueue)
+	}
+}
+
+func TestFilterVariantStack(t *testing.T) {
+	list := LinkedList[int]{}
+	list.Append(1)
+	list.Append(2)
+	list.Append(3)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	result := list.FilterVariant(isEven, StackType)
+	filteredStack, ok := result.(*Stack[any])
+	if !ok {
+		t.Errorf("Expected result to be of type Stack, but got %T", result)
+	}
+
+	expected := Stack[any]{}
+	expected.Push(2)
+
+	if !reflect.DeepEqual(filteredStack, &expected) {
+		t.Errorf("Expected %v, but got %v", expected, filteredStack)
+	}
+}
+
+func TestFilterVariantEmptyList(t *testing.T) {
+	list := LinkedList[int]{}
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	result := list.FilterVariant(isEven, LinkedListType)
+	filteredList, ok := result.(*LinkedList[any])
+	if !ok {
+		t.Errorf("Expected result to be of type LinkedList, but got %T", result)
+	}
+
+	expected := LinkedList[any]{}
+
+	if !reflect.DeepEqual(filteredList, &expected) {
+		t.Errorf("Expected %v, but got %v", expected, filteredList)
+	}
+}
+
+func TestFilterVariantNoMatch(t *testing.T) {
+	list := LinkedList[int]{}
+	list.Append(1)
+	list.Append(3)
+	list.Append(5)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	result := list.FilterVariant(isEven, LinkedListType)
+	filteredList, ok := result.(*LinkedList[any])
+	if !ok {
+		t.Errorf("Expected result to be of type LinkedList, but got %T", result)
+	}
+
+	expected := LinkedList[any]{}
+
+	if !reflect.DeepEqual(filteredList, &expected) {
+		t.Errorf("Expected %v, but got %v", expected, filteredList)
+	}
+}
+
+func TestFilterVariantUnknownType(t *testing.T) {
+	list := LinkedList[int]{}
+	list.Append(1)
+	list.Append(2)
+	list.Append(3)
+
+	isEven := func(x int) bool { return x%2 == 0 }
+
+	result := list.FilterVariant(isEven, CollectionType(-1))  // Unknown collection type
+
+	if result != nil {
+		t.Errorf("Expected nil, but got %v", result)
+	}
+}
+
 func TestLazyFilter(t *testing.T) {
 	isEvenFunc := func(a int) bool { return a%2 == 0 }
 
@@ -232,6 +369,7 @@ func TestLazyFilter(t *testing.T) {
 		}
 	}
 }
+
 func TestMap(t *testing.T) {
 	// Funktion zum Verdoppeln einer Zahl
 	doubleFunc := func(a int) int { return a * 2 }
