@@ -171,7 +171,6 @@ func (stack *Stack[T]) Map(operation func(T) T) *Stack[T] {
 	return &Stack[T]{list: *stack.list.Map(operation)}
 }
 
-// Lazy Map missing
 func (list *LinkedList[T]) LazyMap(operation func(T) T) LazyMapList[T] {
 	current := list.head
 	lazyOps := []MapFunc[T]{}
@@ -232,7 +231,13 @@ func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType Coll
 	}
 }
 
-//------------------------------------------------------------------------------------------
+func (queue *Queue[T]) MapVariant(operation func(T) any, collectionType CollectionType) Collection[any] {
+	return &Queue[T]{list: *queue.list.MapVariant(operation, collectionType).(*LinkedList[T])}
+}
+
+func (stack *Stack[T]) MapVariant(operation func(T) any, collectionType CollectionType) Collection[any] {
+	return &Stack[T]{list: *stack.list.MapVariant(operation, collectionType).(*LinkedList[T])}
+}
 
 func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) LinkedList[U] {
 	current := list.head
@@ -243,6 +248,7 @@ func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) Li
 	}
 	return *newList
 }
+//------------------------------------------------------------------------------------------
 
 func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
 	if list.head == nil {
