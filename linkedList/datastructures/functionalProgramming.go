@@ -65,6 +65,44 @@ func (list *LinkedList[T]) Filter(operation func(T) bool) *LinkedList[T] {
 	return newList
 }
 
+func (list *LinkedList[T]) FilterVariant(operation func(T) bool, collectionType CollectionType) Collection[any] {
+	current := list.head
+
+	switch collectionType {
+	case LinkedListType:
+		newList := LinkedList[any]{}
+		for current != nil {
+			if operation(current.data) {
+				newList.Append(current.data)
+			}
+			current = current.next
+		}
+		return &newList
+	
+	case QueueType:
+		newQueue := Queue[any]{}
+		for current != nil {
+			if operation(current.data) {
+				newQueue.Enqueue(current.data)
+			}
+			current = current.next
+		}
+		return &newQueue
+
+	case StackType:
+		newStack := Stack[any]{}
+		for current != nil {
+			if operation(current.data) {
+				newStack.Push(current.data)
+			}
+			current = current.next
+		}
+		return &newStack
+	}
+
+	return nil
+}
+
 func (list *LinkedList[T]) LazyFilter(operation func(T) bool) LazyFilterList[T] {
 	current := list.head
 	lazyOps := []FilterFunc[T]{}
