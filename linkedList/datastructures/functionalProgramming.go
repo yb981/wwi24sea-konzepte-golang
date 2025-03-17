@@ -8,7 +8,13 @@ type FilterFunc[T any] func() bool
 
 type LazyFilterList[T comparable] struct {
 	data       []T
-	operations []FilterFunc[T]
+	Operations []FilterFunc[T]
+}
+
+type MapFunc[T any] func() T
+
+type LazyMapList[T comparable] struct {
+	Operations []MapFunc[T]
 }
 
 // -----------------------------------------------------------------------------------------
@@ -62,14 +68,14 @@ func (list *LinkedList[T]) LazyFilter(operation func(T) bool) LazyFilterList[T] 
 	}
 
 	return LazyFilterList[T]{
-		operations: lazyOps,
+		Operations: lazyOps,
 		data:       datalist,
 	}
 }
 
-func (l LazyFilterList[T]) Execute() LinkedList[T] {
-	result := make([]bool, len(l.operations))
-	for i, op := range l.operations {
+func (l LazyFilterList[T]) Execute() *LinkedList[T] {
+	result := make([]bool, len(l.Operations))
+	for i, op := range l.Operations {
 		result[i] = op()
 	}
 
@@ -80,7 +86,7 @@ func (l LazyFilterList[T]) Execute() LinkedList[T] {
 			outputList.Append(l.data[i])
 		}
 	}
-	return *outputList
+	return outputList
 }
 
 func (queue *Queue[T]) Filter(operation func(T) bool) *Queue[T] {
@@ -115,12 +121,32 @@ func (stack *Stack[T]) Map(operation func(T) T) *Stack[T] {
 	return &Stack[T]{list: *stack.list.Map(operation)}
 }
 
+// Lazy Map missing
+func (list *LinkedList[T]) LazyMap(operation func(T) T) LazyMapList[T] {
+	current := list.head
+	lazyOps := []MapFunc[T]{}
 
-//Lazy Map missing
+	for current != nil {
+		value := current.data
+		lazyOps = append(lazyOps, func() T {
+			return operation(value)
+		})
+		current = current.next
+	}
 
+	return LazyMapList[T]{
+		Operations: lazyOps,
+	}
+}
 
-
-
+func (l LazyMapList[T]) ExecuteMap() *LinkedList[T] {
+	output := &LinkedList[T]{}
+	for _, op := range l.Operations {
+		value := op()
+		output.Append(value)
+	}
+	return output
+}
 
 //------------------------------------------------------------------------------------------
 
