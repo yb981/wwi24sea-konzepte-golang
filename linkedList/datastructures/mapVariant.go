@@ -1,5 +1,5 @@
 package datastructures
-
+/*
 type Collection[T any] interface {
 	ToString() string
 }
@@ -11,7 +11,8 @@ const (
 	QueueType
 	StackType
 )
-
+*/
+/*
 func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType CollectionType) Collection[any] {
 	current := list.head
 
@@ -45,3 +46,4 @@ func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType Coll
 		return nil
 	}
 }
+	*/

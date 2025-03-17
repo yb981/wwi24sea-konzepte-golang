@@ -17,6 +17,18 @@ type LazyMapList[T comparable] struct {
 	Operations []MapFunc[T]
 }
 
+type Collection[T any] interface {
+	ToString() string
+}
+
+type CollectionType int
+
+const (
+	LinkedListType CollectionType = iota
+	QueueType
+	StackType
+)
+
 // -----------------------------------------------------------------------------------------
 // For Each Method
 // -----------------------------------------------------------------------------------------
@@ -148,6 +160,40 @@ func (l LazyMapList[T]) ExecuteMap() *LinkedList[T] {
 	return output
 }
 
+func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType CollectionType) Collection[any] {
+	current := list.head
+
+	switch collectionType {
+	case LinkedListType:
+		newList := LinkedList[any]{}
+		for current != nil {
+			newList.Append(operation(current.data))
+			current = current.next
+		}
+		return &newList
+
+	case QueueType:
+		newQueue := Queue[any]{}
+		for current != nil {
+			newQueue.Enqueue(operation(current.data))
+			current = current.next
+		}
+		return &newQueue
+
+	case StackType:
+		newStack := Stack[any]{}
+		for current != nil {
+			newStack.Push(operation(current.data))
+			current = current.next
+		}
+		return &newStack
+
+	default:
+		println("Type not found")
+		return nil
+	}
+}
+
 //------------------------------------------------------------------------------------------
 
 func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) LinkedList[U] {
@@ -210,3 +256,4 @@ func Reduce[U comparable, T comparable](list LinkedList[T], operation func(U, T)
 	}
 	return result, nil
 }
+
