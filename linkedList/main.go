@@ -18,24 +18,12 @@ func isOdd(value int) bool {
 	return value%2 != 0
 }
 
-func is6(value int) bool {
-	if value == 6 {
-		return true
-	}
-	return false
-}
-
 func Add(first int, second int) int {
 	return first + second
 }
 
 func stringify(first string, second int) string {
 	return first + fmt.Sprintf("%v", second)
-}
-
-func doubleValueVLukas(value int) int {
-	value = value * 2
-	return value
 }
 
 func main() {
@@ -114,10 +102,10 @@ func main() {
 		test := chainCalls.Map(doubleValue).Filter(is6).Map(doubleValue)
 		fmt.Println("verkettung: ", test.ToString())
 	*/
-	createDemo()
+	functionalProgrammingDemo()
 }
 
-func createDemo() {
+func functionalProgrammingDemo() {
 	//init and fill list
 	demoList := &datastructures.LinkedList[int]{}
 	demoList.Add(1, 2, 3, 4, 5, 6, 7, 8)
@@ -179,16 +167,16 @@ func createDemo() {
 	result, _ = demoQueue.Reduce(Add)
 	fmt.Println(result)
 	fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Demo der Lazy Variante bei der Filterfunktion mit isOdd auf einer Liste: ")
+	fmt.Println("Demo der Lazy Variante bei der Filter Funktion mit isOdd auf einer Liste: ")
 	fmt.Println()
 	unexecutedLazyFilter := demoList.LazyFilter(isOdd)
 	fmt.Println("Unexecuted LazyFilter: ", unexecutedLazyFilter.Operations)
 	fmt.Println("Executed LazyFilter: ", unexecutedLazyFilter.Execute().ToString())
 	fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
-	fmt.Println("Demo der Lazy Variante bei der Mapfunktion mit doubleValue auf einer Liste: ")
+	fmt.Println("Demo der Lazy Variante bei der Map Funktion mit doubleValue auf einer Liste: ")
 	fmt.Println()
 	unexecutedLazyMap := demoList.LazyMap(doubleValue)
-	fmt.Println("Unexecuted LazyFilter: ", unexecutedLazyMap.Operations)
-	fmt.Println("Executed LazyFilter: ", unexecutedLazyMap.ExecuteMap().ToString())
+	fmt.Println("Unexecuted LazyMap: ", unexecutedLazyMap.Operations)
+	fmt.Println("Executed LazyMap: ", unexecutedLazyMap.ExecuteMap().ToString())
 	fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
 }
