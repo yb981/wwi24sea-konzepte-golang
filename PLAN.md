@@ -11,12 +11,12 @@ VORTRAGENDE*R: Adrian
 ## Termin 2
 Präsentation der Unterstützung für generische Programmierung und der
 Wiederverwendbarkeit von Funktionalität anhand der Implementierung einfacher Datenstrukturen.
-? VORTRAGENDE*R: Kevin oder Daniel
+? VORTRAGENDE*R: Daniel
 
 ## Termin 3
 Präsentation der grundlegenden Konzepte der funktionalen Programmierung anhand
 der Implementierung einer einfachen Datenstruktur sowie der Verarbeitung von Datenströmen.
-? VORTRAGENDE*R: Lea oder Ajun
+? VORTRAGENDE*R: Lea (10/9/10)
 
 ## Termin 4
 Präsentation der grundlegenden Konzepte der nebenläufigen Programmierung anhand
