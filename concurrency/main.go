@@ -1,6 +1,7 @@
 package main
 
 import (
+	"concurrency/concurrency"
 	"fmt"
 )
 
@@ -8,12 +9,17 @@ func doubleValue(input int) int {
 	return input * 2
 }
 
+func add(input1 int, input2 int) int {
+	return input1 + input2
+}
+
 func main() {
-	myList := &ArrayList[int]{}
-	for i := range 10 {
+	myList := &concurrency.ArrayList[int]{}
+	for i := range 1000000 {
 		myList.Append(i)
 	}
-	parallelList := myList.parallelMap(doubleValue)
 
-	fmt.Println(parallelList)
+	reduceList := myList.ParallelReduce(add)
+
+	fmt.Println(reduceList)
 }
