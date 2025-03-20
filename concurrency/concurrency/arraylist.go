@@ -1,6 +1,7 @@
 package concurrency
 
 import (
+	"errors"
 	"runtime"
 	"sync"
 )
@@ -31,8 +32,12 @@ func (al *ArrayList[T]) ParallelMap(f func(T) T) *ArrayList[T] {
 	return output
 }
 
-func (al *ArrayList[T]) ParallelReduce(operation func(a, b T) T) T {
-	chunk := len(al.list) / runtime.NumCPU() // split the array into chunks which equal the number of the cpus available 
+func (al *ArrayList[T]) ParallelReduce(operation func(a, b T) T) (T, error) {
+	if len(al.list) == 0 {
+		var zero T
+		return zero, errors.New("Reduce not possible for empty List!")
+	}
+	chunk := len(al.list) / runtime.NumCPU() // split the array into chunks which equal the number of the cpus available
 	output := &ArrayList[T]{list: make([]T, runtime.NumCPU())}
 	var wg sync.WaitGroup
 
@@ -63,5 +68,5 @@ func (al *ArrayList[T]) ParallelReduce(operation func(a, b T) T) T {
 		finalResult = operation(finalResult, output.list[i])
 	}
 
-	return finalResult
+	return finalResult, nil
 }
