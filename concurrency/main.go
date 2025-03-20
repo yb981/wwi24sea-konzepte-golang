@@ -25,15 +25,18 @@ func add(input1 int, input2 int) int {
 
 func main() {
 	myList := &concurrency.ArrayList[int]{}
-	for i := range 100000000 {
+	for i := range 10000000 {
 		myList.Append(i)
 	}
 
-	reduceList, err := myList.ParallelReduce(add)
+	parMapList, err := myList.ParallelReduce(add)
+	mapList, err := myList.Reduce(add)
+
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(reduceList)
+	fmt.Println(parMapList)
+	fmt.Println(mapList)
 }
