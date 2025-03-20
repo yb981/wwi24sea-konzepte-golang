@@ -45,4 +45,19 @@ func main() {
 
 	fmt.Println(parMapList)
 	fmt.Println(mapList)
+	parReduce, err := myList.ParallelReduce(runtime.NumCPU(), add)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	reduce, err := myList.Reduce(add)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(parReduce)
+	fmt.Println(reduce)
 }

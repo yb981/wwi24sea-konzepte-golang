@@ -49,45 +49,6 @@ func (al *ArrayList[T]) ParallelMap(workerNum int, operation func(a T) T) (Array
 	return *output, nil
 }
 
-func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) (T, error) {
-	if al.isEmpty() {
-		var zero T
-		return zero, errors.New("Reduce not possible for empty List")
-	}
-	chunk := len(al.list) / workerNum // split the array into chunks which equal the number of the cpus available
-	output := &ArrayList[T]{list: make([]T, workerNum)}
-	var wg sync.WaitGroup
-
-	for i := 0; i < workerNum; i++ {
-		wg.Add(1) // increase waitgroup counter for every iteration
-		// start a GO Routine for every CPU Core available in the system
-		go func(i int) {
-			defer wg.Done()
-			start := i * chunk
-			end := start + chunk
-
-			// last chunk could be smaller
-			if i == workerNum-1 {
-				end = len(al.list)
-			}
-
-			result := al.list[start]
-			for j := start + 1; j < end; j++ {
-				result = operation(result, al.list[j])
-			}
-			output.list[i] = result
-		}(i)
-	}
-	wg.Wait()
-
-	finalResult := output.list[0]
-	for i := 1; i < len(output.list); i++ {
-		finalResult = operation(finalResult, output.list[i])
-	}
-
-	return finalResult, nil
-}
-
 func (al *ArrayList[T]) Map(operation func(T) T) (*ArrayList[T], error) {
 	if al.isEmpty() {
 		var zero *ArrayList[T]
@@ -113,4 +74,51 @@ func (al *ArrayList[T]) Reduce(f func(a, b T) T) (T, error) {
 	}
 
 	return result, nil
+}
+
+func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) (T, error) {
+	if al.isEmpty() {
+		var zero T
+		return zero, errors.New("Reduce not possible for empty List")
+	}
+
+	n := len(al.list)
+	if workerNum > n {
+		workerNum = n // Nicht mehr Worker als Elemente
+	}
+
+	chunk := n / workerNum
+	results := make(chan T, workerNum) // Channel für Zwischenergebnisse
+
+	var wg sync.WaitGroup
+
+	// Arbeiter starten
+	for i := 0; i < workerNum; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			start := i * chunk
+			end := start + chunk
+			if i == workerNum-1 { // Letzter Worker bekommt den Rest
+				end = n
+			}
+
+			result := al.list[start]
+			for j := start + 1; j < end; j++ {
+				result = operation(result, al.list[j])
+			}
+			results <- result
+		}(i)
+	}
+
+	wg.Wait()
+	close(results)
+
+	// Endgültige Reduktion
+	finalResult := <-results
+	for res := range results {
+		finalResult = operation(finalResult, res)
+	}
+
+	return finalResult, nil
 }
