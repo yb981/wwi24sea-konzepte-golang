@@ -2,6 +2,7 @@ package main
 
 import (
 	"concurrency/concurrency"
+	"runtime"
 	"testing"
 )
 
@@ -27,7 +28,7 @@ func BenchmarkParallelReduce(b *testing.B) {
 
 	b.ResetTimer() // Starte den Timer für den eigentlichen Benchmark
 	for i := 0; i < b.N; i++ {
-		_, _ = myList.ParallelReduce(add)
+		_, _ = myList.ParallelReduce(runtime.NumCPU(), add)
 	}
 }
 
@@ -51,6 +52,6 @@ func BenchmarkParallelMap(b *testing.B) {
 
 	b.ResetTimer() // Starte den Timer für den eigentlichen Benchmark
 	for i := 0; i < b.N; i++ {
-		_, _ = myList.ParallelMap(doubleValue)
+		_, _ = myList.ParallelMap(runtime.NumCPU(), doubleValue)
 	}
 }

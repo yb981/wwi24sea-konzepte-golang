@@ -3,6 +3,7 @@ package main
 import (
 	"concurrency/concurrency"
 	"fmt"
+	"runtime"
 )
 
 func doubleValue(input int) int {
@@ -29,7 +30,7 @@ func main() {
 		myList.Append(i)
 	}
 
-	parMapList, err := myList.ParallelMap(doubleValue)
+	parMapList, err := myList.ParallelMap(runtime.NumCPU(), doubleValue)
 	if err != nil {
 		fmt.Println(err)
 		return
