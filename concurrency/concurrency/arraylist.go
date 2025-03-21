@@ -122,3 +122,61 @@ func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) 
 
 	return finalResult, nil
 }
+
+func (al *ArrayList[T]) ParallelReduceJobChannel(workerNum int, operation func(a, b T) T) (T, error) {
+	if al.isEmpty() {
+		var zero T
+		return zero, errors.New("Reduce not possible for empty List")
+	}
+
+	n := len(al.list)
+	if workerNum > n {
+		workerNum = n
+	}
+
+	jobs := make(chan [2]int, workerNum) // Channel für Start- und Endindex-Paare
+	results := make(chan T, workerNum)   // Channel für Zwischenergebnisse
+
+	var wg sync.WaitGroup
+
+	// Worker starten
+	for i := 0; i < workerNum; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for job := range jobs {
+				start, end := job[0], job[1]
+				result := al.list[start]
+				for j := start + 1; j < end; j++ {
+					result = operation(result, al.list[j])
+				}
+				results <- result
+			}
+		}()
+	}
+
+	// Jobs an den Channel senden
+	chunk := n / workerNum
+	for i := 0; i < workerNum; i++ {
+		start := i * chunk
+		end := start + chunk
+		if i == workerNum-1 { // Letzter Worker bekommt den Rest
+			end = n
+		}
+		jobs <- [2]int{start, end}
+	}
+	close(jobs)
+
+	// Warten auf die Worker
+	wg.Wait()
+	close(results)
+
+	// Endgültige Reduktion
+	finalResult := <-results
+	for res := range results {
+		finalResult = operation(finalResult, res)
+	}
+
+	return finalResult, nil
+}
+

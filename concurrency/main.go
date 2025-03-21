@@ -6,10 +6,7 @@ import (
 	"runtime"
 )
 
-func doubleValue(input int) int {
-	return input * 2
-}
-
+/*
 func ackermann(m, n int) int {
 	if m == 0 {
 		return n + 1
@@ -18,6 +15,11 @@ func ackermann(m, n int) int {
 	} else {
 		return ackermann(m-1, ackermann(m, n-1))
 	}
+}
+*/
+
+func doubleValue(input int) int {
+	return input * 2
 }
 
 func add(input1 int, input2 int) int {
@@ -45,6 +47,7 @@ func main() {
 
 	fmt.Println(parMapList)
 	fmt.Println(mapList)
+
 	parReduce, err := myList.ParallelReduce(runtime.NumCPU(), add)
 	if err != nil {
 		fmt.Println(err)
