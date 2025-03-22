@@ -27,10 +27,16 @@ func add(input1 int, input2 int) int {
 }
 
 func main() {
+	createDemoOutput()
+}
+
+func createDemoOutput(){
+	// initialize list and fill with values
 	myList := &concurrency.ArrayList[int]{}
 	for i := range 10 {
 		myList.Append(i)
 	}
+	fmt.Println("My List: ", myList)
 
 	parMapList, err := myList.ParallelMap(runtime.NumCPU(), doubleValue)
 	if err != nil {
@@ -45,8 +51,8 @@ func main() {
 		return
 	}
 
-	fmt.Println(parMapList)
-	fmt.Println(mapList)
+	fmt.Println("Test sequencial Map with double Value Function. Result: ", *mapList)
+	fmt.Println("Test parallel Map with double Value Function. Result:   ", parMapList)
 
 	parReduce, err := myList.ParallelReduce(runtime.NumCPU(), add)
 	if err != nil {
@@ -61,6 +67,6 @@ func main() {
 		return
 	}
 
-	fmt.Println(parReduce)
-	fmt.Println(reduce)
+	fmt.Println("Test sequencial Reduce with Add Function. Result: ", reduce)
+	fmt.Println("Test parallel Reduce with Add Function. Result:   ", parReduce)
 }
