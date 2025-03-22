@@ -179,3 +179,60 @@ func (al *ArrayList[T]) ParallelReduceJobChannel(workerNum int, operation func(a
 
 	return finalResult, nil
 }
+
+func (al *ArrayList[T]) ParallelReduceJobChannelWLoop(workerNum int, operation func(a, b T) T) (T, error) {
+	if al.isEmpty() {
+		var zero T
+		return zero, errors.New("Reduce not possible for empty List")
+	}
+
+	n := len(al.list)
+
+	// if worker num is bigger than the array then limit the workerNum to the Array Size
+	if workerNum > n {
+		workerNum = n
+	}
+
+	jobs := make(chan [2]int, workerNum) // Channel for chunkindexes
+	results := make(chan T, workerNum)   // Channel for chunk results
+
+	var wg sync.WaitGroup
+
+	for i := 0; i < workerNum; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			job := <- jobs 
+			start, end := job[0], job[1]
+			result := al.list[start]
+			for j := start + 1; j < end; j++ {
+				result = operation(result, al.list[j])
+			}
+			results <- result
+			
+		}()
+	}
+
+	// send jobs to job channel
+	chunk := n / workerNum
+	for i := 0; i < workerNum; i++ {
+		start := i * chunk
+		end := start + chunk
+		if i == workerNum-1 { // last worker gets the remaining part
+			end = n
+		}
+		jobs <- [2]int{start, end}
+	}
+	close(jobs)
+
+	wg.Wait()
+	close(results)
+
+	// final reduction of the partial results
+	finalResult := <-results
+	for res := range results {
+		finalResult = operation(finalResult, res)
+	}
+
+	return finalResult, nil
+}

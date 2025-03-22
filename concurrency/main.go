@@ -26,6 +26,10 @@ func add(input1 int, input2 int) int {
 	return input1 + input2
 }
 
+func concatToString(a string, b string) string{
+	return a + b
+}
+
 func main() {
 	createDemoOutput()
 }
