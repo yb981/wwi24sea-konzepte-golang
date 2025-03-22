@@ -45,11 +45,21 @@ func (al *ArrayList[T]) Reduce(f func(a, b T) T) (T, error) {
 }
 
 func (al *ArrayList[T]) ParallelMap(workerNum int, operation func(a T) T) (ArrayList[T], error) {
+	if workerNum == 0 {
+		var zero ArrayList[T]
+		return zero, errors.New("cannot start with 0 workers")
+	}
 	if al.isEmpty() {
 		var zero ArrayList[T]
-		return zero, errors.New("Reduce not possible for empty List")
+		return zero, errors.New("cannot use map on empty list")
 	}
-	chunk := len(al.list) / workerNum // split the array into chunks which equal the number of the cpus available
+
+	n := len(al.list)
+	if workerNum > n {
+		workerNum = n
+	}
+
+	chunk := n / workerNum
 	output := &ArrayList[T]{list: make([]T, len(al.list))}
 	var wg sync.WaitGroup
 
@@ -77,6 +87,11 @@ func (al *ArrayList[T]) ParallelMap(workerNum int, operation func(a T) T) (Array
 }
 
 func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) (T, error) {
+	if workerNum == 0 {
+		var zero T
+		return zero, errors.New("cannot start with 0 workers")
+	}
+
 	if al.isEmpty() {
 		var zero T
 		return zero, errors.New("Reduce not possible for empty List")
@@ -124,6 +139,11 @@ func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) 
 }
 
 func (al *ArrayList[T]) ParallelReduceJobChannel(workerNum int, operation func(a, b T) T) (T, error) {
+	if workerNum == 0 {
+		var zero T
+		return zero, errors.New("cannot start with 0 workers")
+	}
+
 	if al.isEmpty() {
 		var zero T
 		return zero, errors.New("Reduce not possible for empty List")
@@ -145,14 +165,14 @@ func (al *ArrayList[T]) ParallelReduceJobChannel(workerNum int, operation func(a
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			job := <- jobs 
-			start, end := job[0], job[1]
-			result := al.list[start]
-			for j := start + 1; j < end; j++ {
-				result = operation(result, al.list[j])
+			for job := range jobs {
+				start, end := job[0], job[1]
+				result := al.list[start]
+				for j := start + 1; j < end; j++ {
+					result = operation(result, al.list[j])
+				}
+				results <- result
 			}
-			results <- result
-			
 		}()
 	}
 
