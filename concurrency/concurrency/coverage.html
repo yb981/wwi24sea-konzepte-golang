@@ -88,38 +88,6 @@ func (al *ArrayList[T]) isEmpty() bool <span class="cov8" title="1">{
         return len(al.list) == 0
 }</span>
 
-func (al *ArrayList[T]) ParallelMap(workerNum int, operation func(a T) T) (ArrayList[T], error) <span class="cov8" title="1">{
-        if al.isEmpty() </span><span class="cov8" title="1">{
-                var zero ArrayList[T]
-                return zero, errors.New("Reduce not possible for empty List")
-        }</span>
-        <span class="cov8" title="1">chunk := len(al.list) / workerNum // split the array into chunks which equal the number of the cpus available
-        output := &amp;ArrayList[T]{list: make([]T, len(al.list))}
-        var wg sync.WaitGroup
-
-        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
-                wg.Add(1) // increase waitgroup counter for every iteration
-                // start a GO Routine for every CPU Core available in the system
-                go func(i int) </span><span class="cov8" title="1">{
-                        defer wg.Done()
-                        start := i * chunk
-                        end := start + chunk
-
-                        // last chunk could be smaller
-                        if i == workerNum-1 </span><span class="cov8" title="1">{
-                                end = len(al.list)
-                        }</span>
-
-                        <span class="cov8" title="1">for j := start; j &lt; end; j++ </span><span class="cov8" title="1">{
-                                output.list[j] = operation(al.list[j])
-                        }</span>
-                }(i)
-        }
-        <span class="cov8" title="1">wg.Wait()
-
-        return *output, nil</span>
-}
-
 func (al *ArrayList[T]) Map(operation func(T) T) (*ArrayList[T], error) <span class="cov8" title="1">{
         if al.isEmpty() </span><span class="cov8" title="1">{
                 var zero *ArrayList[T]
@@ -147,8 +115,55 @@ func (al *ArrayList[T]) Reduce(f func(a, b T) T) (T, error) <span class="cov8" t
         <span class="cov8" title="1">return result, nil</span>
 }
 
+func (al *ArrayList[T]) ParallelMap(workerNum int, operation func(a T) T) (ArrayList[T], error) <span class="cov8" title="1">{
+        if workerNum == 0 </span><span class="cov8" title="1">{
+                var zero ArrayList[T]
+                return zero, errors.New("cannot start with 0 workers")
+        }</span>
+        <span class="cov8" title="1">if al.isEmpty() </span><span class="cov8" title="1">{
+                var zero ArrayList[T]
+                return zero, errors.New("cannot use map on empty list")
+        }</span>
+
+        <span class="cov8" title="1">n := len(al.list)
+        if workerNum &gt; n </span><span class="cov8" title="1">{
+                workerNum = n
+        }</span>
+
+        <span class="cov8" title="1">chunk := n / workerNum
+        output := &amp;ArrayList[T]{list: make([]T, len(al.list))}
+        var wg sync.WaitGroup
+
+        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
+                wg.Add(1) // increase waitgroup counter for every iteration
+                // start a GO Routine for every CPU Core available in the system
+                go func(i int) </span><span class="cov8" title="1">{
+                        defer wg.Done()
+                        start := i * chunk
+                        end := start + chunk
+
+                        // last chunk could be smaller
+                        if i == workerNum-1 </span><span class="cov8" title="1">{
+                                end = len(al.list)
+                        }</span>
+
+                        <span class="cov8" title="1">for j := start; j &lt; end; j++ </span><span class="cov8" title="1">{
+                                output.list[j] = operation(al.list[j])
+                        }</span>
+                }(i)
+        }
+        <span class="cov8" title="1">wg.Wait()
+
+        return *output, nil</span>
+}
+
 func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) (T, error) <span class="cov8" title="1">{
-        if al.isEmpty() </span><span class="cov8" title="1">{
+        if workerNum == 0 </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("cannot start with 0 workers")
+        }</span>
+
+        <span class="cov8" title="1">if al.isEmpty() </span><span class="cov8" title="1">{
                 var zero T
                 return zero, errors.New("Reduce not possible for empty List")
         }</span>
@@ -186,6 +201,68 @@ func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) 
         close(results)
 
         // Endgültige Reduktion
+        finalResult := &lt;-results
+        for res := range results </span><span class="cov8" title="1">{
+                finalResult = operation(finalResult, res)
+        }</span>
+
+        <span class="cov8" title="1">return finalResult, nil</span>
+}
+
+func (al *ArrayList[T]) ParallelReduceJobChannel(workerNum int, operation func(a, b T) T) (T, error) <span class="cov8" title="1">{
+        if workerNum == 0 </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("cannot start with 0 workers")
+        }</span>
+
+        <span class="cov8" title="1">if al.isEmpty() </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("Reduce not possible for empty List")
+        }</span>
+
+        <span class="cov8" title="1">n := len(al.list)
+
+        // if worker num is bigger than the array then limit the workerNum to the Array Size
+        if workerNum &gt; n </span><span class="cov8" title="1">{
+                workerNum = n
+        }</span>
+
+        <span class="cov8" title="1">jobs := make(chan [2]int, workerNum) // Channel for chunkindexes
+        results := make(chan T, workerNum)   // Channel for chunk results
+
+        var wg sync.WaitGroup
+
+        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
+                wg.Add(1)
+                go func() </span><span class="cov8" title="1">{
+                        defer wg.Done()
+                        for job := range jobs </span><span class="cov8" title="1">{
+                                start, end := job[0], job[1]
+                                result := al.list[start]
+                                for j := start + 1; j &lt; end; j++ </span><span class="cov8" title="1">{
+                                        result = operation(result, al.list[j])
+                                }</span>
+                                <span class="cov8" title="1">results &lt;- result</span>
+                        }
+                }()
+        }
+
+        // send jobs to job channel
+        <span class="cov8" title="1">chunk := n / workerNum
+        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
+                start := i * chunk
+                end := start + chunk
+                if i == workerNum-1 </span><span class="cov8" title="1">{ // last worker gets the remaining part
+                        end = n
+                }</span>
+                <span class="cov8" title="1">jobs &lt;- [2]int{start, end}</span>
+        }
+        <span class="cov8" title="1">close(jobs)
+
+        wg.Wait()
+        close(results)
+
+        // final reduction of the partial results
         finalResult := &lt;-results
         for res := range results </span><span class="cov8" title="1">{
                 finalResult = operation(finalResult, res)
