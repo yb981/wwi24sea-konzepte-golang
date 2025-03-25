@@ -26,10 +26,6 @@ func add(input1 int, input2 int) int {
 	return input1 + input2
 }
 
-func concatToString(a string, b string) string {
-	return a + b
-}
-
 func main() {
 	createDemoOutput()
 }
@@ -40,7 +36,7 @@ func createDemoOutput() {
 	for i := range 10 {
 		myList.Append(i)
 	}
-	fmt.Println("My List: ", myList)
+	fmt.Println("My List: ", *myList)
 
 	parMapList, err := myList.ParallelMap(runtime.NumCPU(), doubleValue)
 	if err != nil {
@@ -54,10 +50,10 @@ func createDemoOutput() {
 		fmt.Println(err)
 		return
 	}
-
+	fmt.Println()
 	fmt.Println("Test sequencial Map with double Value Function. Result: ", *mapList)
 	fmt.Println("Test parallel Map with double Value Function. Result:   ", parMapList)
-
+	fmt.Println()
 	parReduce, err := myList.ParallelReduce(runtime.NumCPU(), add)
 	if err != nil {
 		fmt.Println(err)

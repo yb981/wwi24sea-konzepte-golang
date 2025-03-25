@@ -156,8 +156,8 @@ func (al *ArrayList[T]) ParallelReduceJobChannel(workerNum int, operation func(a
 		workerNum = n
 	}
 
-	jobs := make(chan [2]int, workerNum) // Channel for chunkindexes
-	results := make(chan T, workerNum)   // Channel for chunk results
+	jobs := make(chan [2]int, workerNum) // Channel for chunk-indexes
+	results := make(chan T, workerNum)   // Channel for chunk-results
 
 	var wg sync.WaitGroup
 
