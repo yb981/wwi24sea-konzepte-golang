@@ -5,8 +5,6 @@ import(
 )
 
 func main(){
-	a := Sub{Add{Var{}, Const{3}}, Mult{Const{5}, Const{4}}}
-	b := Div{Const{5}, Const{2}}
-	fmt.Println(a.eval(10))
-	fmt.Println(b.eval(0))
+	a := Sub{Add{Pow{Var{}, Const{2}}, Mult{Const{2}, Var{}}}, Const{3}}
+	fmt.Println(a.eval(5), a)
 }
