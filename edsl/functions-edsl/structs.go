@@ -1,6 +1,9 @@
 package main
 
-import "math"
+import (
+	"math"
+	"fmt"
+)
 
 // 1. Ansatz: Mit Interfaces & Structs
 
@@ -8,6 +11,23 @@ type Expression interface {
 	eval(num float64) float64
 	derive() Expression
 	latex() string
+}
+
+// Function
+type Func struct{
+	fn Expression
+}
+
+func (f Func) eval(num float64) float64 {
+	return f.fn.eval(num)
+}
+
+func (f Func) derive() Expression {
+	return Func{f.fn.derive()}
+}
+
+func (f Func) latex() string {
+	return fmt.Sprintf("\\( f(x) = %s \\)", f.fn.latex())
 }
 
 // Variable
@@ -22,7 +42,7 @@ func (v Var) derive() Expression {
 }
 
 func (v Var) latex() string {
-	return ""
+	return "x"
 }
 
 // Constant
@@ -40,7 +60,7 @@ func (c Const) derive() Expression {
 }
 
 func (c Const) latex() string {
-	return ""
+	return fmt.Sprintf("%.2f", c.val)
 }
 
 // Addition
@@ -54,11 +74,17 @@ func (a Add) eval(num float64) float64 {
 }
 
 func (a Add) derive() Expression {
+	if a.left.derive().latex() == "0.00" {
+		return a.right.derive()
+	}
+	if a.right.derive().latex() == "0.00" {
+		return a.left.derive()
+	}
 	return Add{a.left.derive(), a.right.derive()}
 }
 
 func (a Add) latex() string {
-	return ""
+	return fmt.Sprintf("%s + %s", a.left.latex(), a.right.latex())
 }
 
 // Subtract
@@ -72,13 +98,15 @@ func (s Sub) eval(num float64) float64 {
 }
 
 func (s Sub) derive() Expression {
+	if s.right.derive().latex() == "0.00" {
+		return s.left.derive()
+	}
 	return Sub{s.left.derive(), s.right.derive()}
 }
 
 func (s Sub) latex() string {
-	return ""
+	return fmt.Sprintf("%s - %s", s.left.latex(), s.right.latex())
 }
-
 // Multiply
 
 type Mult struct {
@@ -102,7 +130,7 @@ func (m Mult) derive() Expression {
 }
 
 func (m Mult) latex() string {
-	return ""
+	return fmt.Sprintf("%s * %s", m.left.latex(), m.right.latex())
 }
 
 // Divide
@@ -120,7 +148,7 @@ func (d Div) derive() Expression{
 }
 
 func (d Div) latex() string {
-	return ""
+	return fmt.Sprintf("\\frac{%s}{%s}", d.left.latex(), d.right.latex())
 }
 
 // Power
@@ -139,7 +167,7 @@ func (p Pow) derive() Expression {
 }
 
 func (p Pow) latex() string {
-	return ""
+	return fmt.Sprintf("%s ^ %s", p.val.latex(), string(p.exp.latex()[0]))
 }
 
 // Root
@@ -153,9 +181,12 @@ func (s Sqr) eval(num float64) float64 {
 }
 
 func (s Sqr) derive() Expression {
-	return Const{1}
+	if s.val.eval(0) == 0 {
+		return Div{Const{1}, Mult{Const{2}, s}}
+	}
+	return Const{0}
 }
 
 func (s Sqr) latex() string {
-	return ""
+	return fmt.Sprintf("\\sqrt{%s}", string(s.val.latex()[0]))
 }
