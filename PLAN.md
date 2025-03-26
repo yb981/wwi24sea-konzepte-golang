@@ -25,12 +25,11 @@ der Implementierung einer einfachen Datenstruktur sowie der Verarbeitung von Dat
 
 Präsentation der grundlegenden Konzepte der nebenläufigen Programmierung anhand
 der Parallelisierung von gängigen Higher-Order-Funktionen.
-? VORTRAGENDE\*R: Till
+? VORTRAGENDE\*R: Till (10/8,5/10)
 
 ## Termin 5
 
 Präsentation einer einfachen eDSL (embedded Domain Specific Language)
-_kann geskippt werden oder ersetzt werden vom prof_
 VORTRAGENDE\*R: Kevin
 
 ## Termin 6
