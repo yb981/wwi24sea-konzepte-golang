@@ -19,7 +19,7 @@ VORTRAGENDE\*R: Daniel (10/7/10)
 
 Präsentation der grundlegenden Konzepte der funktionalen Programmierung anhand
 der Implementierung einer einfachen Datenstruktur sowie der Verarbeitung von Datenströmen.
-? VORTRAGENDE\*R: Lea
+? VORTRAGENDE\*R: Lea (10/9/10)
 
 ## Termin 4
 
