@@ -5,9 +5,10 @@ import(
 )
 
 func main(){
-	a := Func{Sub{Const{10}, Var{}}}
-	fmt.Println(a.latex())
+	a := Func{Add{Mult{Var{}, Const{6}}, Var{}}}
 	b := a.derive()
+	fmt.Println(a)
+	fmt.Println(b)
 	fmt.Println(b.latex())
-	fmt.Println(b.eval(9))
+	fmt.Println(a.eval(2))
 }
