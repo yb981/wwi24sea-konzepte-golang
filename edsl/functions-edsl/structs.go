@@ -18,6 +18,10 @@ type Func struct{
 	fn Expression
 }
 
+func (f Func) String() string{
+	return fmt.Sprintf(f.latex()[3:len(f.latex()) - 3])
+}
+
 func (f Func) eval(num float64) float64 {
 	return f.fn.eval(num)
 }
@@ -163,7 +167,7 @@ func (p Pow) eval(num float64) float64 {
 }
 
 func (p Pow) derive() Expression {
-	return Const{1}
+	return Mult{p.exp, Pow{p.val, Const{p.exp.val - 1}}}
 }
 
 func (p Pow) latex() string {
