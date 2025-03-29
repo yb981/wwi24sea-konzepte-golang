@@ -1,11 +1,11 @@
 package main
 
-import(
+import (
 	"fmt"
 )
 
-func main(){
-	a := Func{Add{Mult{Var{}, Const{6}}, Var{}}}
+func main() {
+	a := Func{Add{Const{5.23}, Var{}}}
 	b := a.derive()
 	fmt.Println(a)
 	fmt.Println(b)

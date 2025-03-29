@@ -1,8 +1,8 @@
 package main
 
 import (
-	"math"
 	"fmt"
+	"math"
 )
 
 // 1. Ansatz: Mit Interfaces & Structs
@@ -14,12 +14,12 @@ type Expression interface {
 }
 
 // Function
-type Func struct{
+type Func struct {
 	fn Expression
 }
 
-func (f Func) String() string{
-	return fmt.Sprintf(f.latex()[3:len(f.latex()) - 3])
+func (f Func) String() string {
+	return fmt.Sprintf(f.latex()[3 : len(f.latex())-3])
 }
 
 func (f Func) eval(num float64) float64 {
@@ -64,7 +64,7 @@ func (c Const) derive() Expression {
 }
 
 func (c Const) latex() string {
-	return fmt.Sprintf("%.2f", c.val)
+	return fmt.Sprintf("%g", c.val)
 }
 
 // Addition
@@ -78,10 +78,10 @@ func (a Add) eval(num float64) float64 {
 }
 
 func (a Add) derive() Expression {
-	if a.left.derive().latex() == "0.00" {
+	if a.left.derive().latex() == "0" {
 		return a.right.derive()
 	}
-	if a.right.derive().latex() == "0.00" {
+	if a.right.derive().latex() == "0" {
 		return a.left.derive()
 	}
 	return Add{a.left.derive(), a.right.derive()}
@@ -111,6 +111,7 @@ func (s Sub) derive() Expression {
 func (s Sub) latex() string {
 	return fmt.Sprintf("%s - %s", s.left.latex(), s.right.latex())
 }
+
 // Multiply
 
 type Mult struct {
@@ -147,7 +148,7 @@ func (d Div) eval(num float64) float64 {
 	return d.left.eval(num) / d.right.eval(num)
 }
 
-func (d Div) derive() Expression{
+func (d Div) derive() Expression {
 	return Const{1}
 }
 
