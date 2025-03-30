@@ -5,10 +5,11 @@ import (
 )
 
 func main() {
-	a := Func{Add{Const{5.23}, Var{}}}
+	a := Func{Add{Const{10}, Sqr{Var{}}}}
 	b := a.derive()
-	fmt.Println(a)
+	c := b.derive()
+	fmt.Print(a, "\n")
 	fmt.Println(b)
+	fmt.Println(c)
 	fmt.Println(b.latex())
-	fmt.Println(a.eval(2))
 }

@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-// 1. Ansatz: Mit Interfaces & Structs
+// Interface, which all Expression types implement
 
 type Expression interface {
 	eval(num float64) float64
@@ -13,7 +13,8 @@ type Expression interface {
 	latex() string
 }
 
-// Function
+// Mathematical Function value: Starting Point for eDSL
+
 type Func struct {
 	fn Expression
 }
@@ -34,7 +35,8 @@ func (f Func) latex() string {
 	return fmt.Sprintf("\\( f(x) = %s \\)", f.fn.latex())
 }
 
-// Variable
+// Used for Variable x
+
 type Var struct{}
 
 func (v Var) eval(num float64) float64 {
@@ -49,7 +51,7 @@ func (v Var) latex() string {
 	return "x"
 }
 
-// Constant
+// Used for Constant Value c
 
 type Const struct {
 	val float64
@@ -67,6 +69,10 @@ func (c Const) latex() string {
 	return fmt.Sprintf("%g", c.val)
 }
 
+/*
+*	Begin of Operator List
+*/
+
 // Addition
 
 type Add struct {
@@ -78,12 +84,16 @@ func (a Add) eval(num float64) float64 {
 }
 
 func (a Add) derive() Expression {
+
+	// Simplification logic
+
 	if a.left.derive().latex() == "0" {
 		return a.right.derive()
 	}
 	if a.right.derive().latex() == "0" {
 		return a.left.derive()
 	}
+
 	return Add{a.left.derive(), a.right.derive()}
 }
 
@@ -91,7 +101,7 @@ func (a Add) latex() string {
 	return fmt.Sprintf("%s + %s", a.left.latex(), a.right.latex())
 }
 
-// Subtract
+// Subtraction
 
 type Sub struct {
 	left, right Expression
@@ -102,9 +112,13 @@ func (s Sub) eval(num float64) float64 {
 }
 
 func (s Sub) derive() Expression {
+
+	//Simplification Logic
+
 	if s.right.derive().latex() == "0.00" {
 		return s.left.derive()
 	}
+
 	return Sub{s.left.derive(), s.right.derive()}
 }
 
@@ -112,7 +126,7 @@ func (s Sub) latex() string {
 	return fmt.Sprintf("%s - %s", s.left.latex(), s.right.latex())
 }
 
-// Multiply
+// Multiplication
 
 type Mult struct {
 	left, right Expression
@@ -123,22 +137,36 @@ func (m Mult) eval(num float64) float64 {
 }
 
 func (m Mult) derive() Expression {
+
+
 	if m.left.derive().eval(1) > 0 && m.right.derive().eval(1) > 0 {
-		return Add{m.left.derive(), m.right.derive()}
+		return Add{
+			checkRedundancyMult(Mult{m.left.derive(), m.right}), 
+			checkRedundancyMult(Mult{m.left, m.right.derive()}),
+		}
 	} else if m.left.derive().eval(1) > 0 {
-		return Mult{m.left.derive(), m.right}
+		return checkRedundancyMult(Mult{m.left.derive(), m.right})
 	} else if m.right.derive().eval(1) > 0 {
-		return Mult{m.left, m.right.derive()}
+		return checkRedundancyMult(Mult{m.left, m.right.derive()})
 	} else {
 		return Const{0}
 	}
+}
+
+func checkRedundancyMult(m Mult) Expression {
+	if m.left.latex() == "1" {
+		return m.right
+	} else if m.right.latex() == "1" {
+		return m.left
+	}
+	return m
 }
 
 func (m Mult) latex() string {
 	return fmt.Sprintf("%s * %s", m.left.latex(), m.right.latex())
 }
 
-// Divide
+// Division
 
 type Div struct {
 	left, right Expression
@@ -172,7 +200,7 @@ func (p Pow) derive() Expression {
 }
 
 func (p Pow) latex() string {
-	return fmt.Sprintf("%s ^ %s", p.val.latex(), string(p.exp.latex()[0]))
+	return fmt.Sprintf("%s ^ %s", p.val.latex(), p.exp.latex())
 }
 
 // Root
@@ -195,3 +223,7 @@ func (s Sqr) derive() Expression {
 func (s Sqr) latex() string {
 	return fmt.Sprintf("\\sqrt{%s}", string(s.val.latex()[0]))
 }
+
+/*
+*	End of Operator List
+*/
