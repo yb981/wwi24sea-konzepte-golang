@@ -1,0 +1,11 @@
+mode: set
+example.com/hi/edsl/vector-edsl/main.go:7.13,20.2 4 0
+example.com/hi/edsl/vector-edsl/svg.go:21.35,24.2 2 1
+example.com/hi/edsl/vector-edsl/svg.go:26.29,28.30 2 1
+example.com/hi/edsl/vector-edsl/svg.go:28.30,30.3 1 1
+example.com/hi/edsl/vector-edsl/svg.go:31.2,32.35 1 1
+example.com/hi/edsl/vector-edsl/svg.go:42.30,45.2 1 1
+example.com/hi/edsl/vector-edsl/svg.go:54.32,57.2 1 1
+example.com/hi/edsl/vector-edsl/svg.go:66.30,69.2 1 1
+example.com/hi/edsl/vector-edsl/svg.go:78.30,81.2 1 1
+example.com/hi/edsl/vector-edsl/svg.go:90.33,93.2 1 1

@@ -18,15 +18,9 @@ type svg struct {
 	content       []Element
 }
 
-func (s svg) String() string {
-	return fmt.Sprintf("SVG Format at adress %p", &s)
-}
-
-func (s svg) saveSVG() {
-	err := os.WriteFile("shapes.svg", []byte(s.toSVG()), 0644)
-	if err != nil {
-		fmt.Println(err)
-	}
+func (s svg) saveSVG(name string) {
+	fileName := fmt.Sprintf("%v.svg", name)
+	os.WriteFile(fileName, []byte(s.toSVG()), 0644)
 }
 
 func (s svg) toSVG() string {
@@ -34,7 +28,7 @@ func (s svg) toSVG() string {
 	for _, v := range s.content {
 		res += v.toSVG() + "\n"
 	}
-	return fmt.Sprintf(`<svg width="%v" height="%v">
+	return fmt.Sprintf(`<svg width="%v" height="%v" xmlns="http://www.w3.org/2000/svg">
 %s</svg>`, s.width, s.height, res)
 }
 

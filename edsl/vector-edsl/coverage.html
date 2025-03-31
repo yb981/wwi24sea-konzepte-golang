@@ -1,0 +1,220 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>vector-edsl: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">example.com/hi/edsl/vector-edsl/main.go (0.0%)</option>
+				
+				<option value="file1">example.com/hi/edsl/vector-edsl/svg.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "fmt"
+)
+
+func main() <span class="cov0" title="0">{
+        a := svg{ width: 200, height: 200,
+                content: []Element{
+                        rect{width: 200, height: 200, fill:"lime"},
+                        rect{width: 100, height: 100, fill:"blue"},
+                        circle{r: 45, cx: 50, cy: 50, fill: "blue"},
+                        line{0, 0, 200, 200, "stroke:coral;stroke-width:14"},
+                        text{x: 75, y: 100, fill: "white", content: "Wassup!!!!"},
+                },
+        }
+        a.saveSVG("shapess")
+        fmt.Println(a.toSVG())
+        fmt.Println(a)
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "fmt"
+        "os"
+)
+
+// Interface which all SVG Elements implement
+
+type Element interface {
+        toSVG() string
+}
+
+// Entry Point for SVG-Generation: SVG Struct
+
+type svg struct {
+        width, height int
+        content       []Element
+}
+
+func (s svg) saveSVG(name string) <span class="cov8" title="1">{
+        fileName := fmt.Sprintf("%v.svg", name)
+        os.WriteFile(fileName, []byte(s.toSVG()), 0644)
+}</span>
+
+func (s svg) toSVG() string <span class="cov8" title="1">{
+        res := ""
+        for _, v := range s.content </span><span class="cov8" title="1">{
+                res += v.toSVG() + "\n"
+        }</span>
+        <span class="cov8" title="1">return fmt.Sprintf(`&lt;svg width="%v" height="%v" xmlns="http://www.w3.org/2000/svg"&gt;
+%s&lt;/svg&gt;`, s.width, s.height, res)</span>
+}
+
+// Rectangle Element: Required Elements are width &amp; height
+
+type rect struct {
+        width, height, x, y, rx, ry int
+        fill   string
+}
+
+func (r rect) toSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;rect width="%v" height="%v" x="%v" y="%v" rx="%v" ry="%v" fill="%v" /&gt;`,
+                r.width, r.height, r.x, r.y, r.rx, r.ry, r.fill)
+}</span>
+
+// Circle Element: Required Element is r
+
+type circle struct {
+        r, cx, cy int
+        fill      string
+}
+
+func (c circle) toSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;circle r="%v" cx="%v" cy="%v" fill="%v" /&gt;`,
+                c.r, c.cx, c.cy, c.fill)
+}</span>
+
+// Line Element
+
+type line struct {
+        x1, y1, x2, y2 int
+        style          string
+}
+
+func (l line) toSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;line x1="%v" y1="%v" x2="%v" y2="%v" style="%s" /&gt;`,
+                l.x1, l.y1, l.x2, l.y2, l.style)
+}</span>
+
+// Text Element
+
+type text struct {
+        x, y, dx, dy, rotate int
+        fill, content        string
+}
+
+func (t text) toSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;text x="%v" y="%v" fill="%v"&gt;%s&lt;/text&gt;`,
+                t.x, t.y, t.fill, t.content)
+}</span>
+
+// Ellipse Element: Required Elements are rx, ry
+
+type ellipse struct {
+        rx, ry, cx, cy int
+        style string
+}
+
+func (e ellipse) toSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;ellipse rx="%v" ry="%v" cx="%v" cy="%v" style="%v"`,
+                e.rx, e.ry, e.cx, e.cy, e.style)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

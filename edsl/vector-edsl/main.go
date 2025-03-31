@@ -14,7 +14,7 @@ func main() {
 			text{x: 75, y: 100, fill: "white", content: "Wassup!!!!"},
 		},
 	}
-	a.saveSVG()
+	a.saveSVG("shapess")
 	fmt.Println(a.toSVG())
 	fmt.Println(a)
 }

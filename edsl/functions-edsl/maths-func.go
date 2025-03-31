@@ -115,7 +115,7 @@ func (s Sub) derive() Expression {
 
 	//Simplification Logic
 
-	if s.right.derive().latex() == "0.00" {
+	if s.right.derive().latex() == "0" {
 		return s.left.derive()
 	}
 
@@ -156,14 +156,12 @@ func (m Mult) derive() Expression {
 func checkRedundancyMult(m Mult) Expression {
 	if m.left.latex() == "1" {
 		return m.right
-	} else if m.right.latex() == "1" {
-		return m.left
 	}
-	return m
+	return m.left
 }
 
 func (m Mult) latex() string {
-	return fmt.Sprintf("%s * %s", m.left.latex(), m.right.latex())
+	return fmt.Sprintf("%s \\cdot %s", m.left.latex(), m.right.latex())
 }
 
 // Division
@@ -196,7 +194,11 @@ func (p Pow) eval(num float64) float64 {
 }
 
 func (p Pow) derive() Expression {
-	return Mult{p.exp, Pow{p.val, Const{p.exp.val - 1}}}
+	if p.val.latex() == "x" {
+		return Mult{p.exp, Pow{p.val, Const{p.exp.val - 1}}}
+	} else {
+		return Const{0}
+	}
 }
 
 func (p Pow) latex() string {
