@@ -13,7 +13,7 @@ func TestSVGToSVG(t *testing.T) {
 			rect{width: 50, height: 50, x: 10, y: 10, rx: 5, ry: 5, fill: "red"},
 			circle{r: 20, cx: 30, cy: 30, fill: "blue"},
 			line{x1: 10, y1: 10, x2: 50, y2: 50, style: "stroke:black;"},
-			text{x: 20, y: 40, dx: 0, dy: 0, rotate: 0, fill: "black", content: "Hello"},
+			text{x: 20, y: 40, fill: "black", content: "Hello", size: 12},
 			ellipse{rx: 25, ry: 15, cx: 50, cy: 50, style: "fill:green;"},
 		},
 	}
@@ -22,8 +22,8 @@ func TestSVGToSVG(t *testing.T) {
 	<rect width="50" height="50" x="10" y="10" rx="5" ry="5" fill="red" />
 	<circle r="20" cx="30" cy="30" fill="blue" />
 	<line x1="10" y1="10" x2="50" y2="50" style="stroke:black;" />
-	<text x="20" y="40" fill="black">Hello</text>
-	<ellipse rx="25" ry="15" cx="50" cy="50" style="fill:green;"
+	<text x="20" y="40" fill="black" font-size="12">Hello</text>
+	<ellipse rx="25" ry="15" cx="50" cy="50" style="fill:green;" />
 </svg>`
 
 	if s.toSVG() != expected {
@@ -65,8 +65,8 @@ func TestLineToSVG(t *testing.T) {
 }
 
 func TestTextToSVG(t *testing.T) {
-	txt := text{x: 20, y: 40, fill: "black", content: "Hello"}
-	expected := `	<text x="20" y="40" fill="black">Hello</text>`
+	txt := text{x: 20, y: 40, fill: "black", content: "Hello", size: 12}
+	expected := `	<text x="20" y="40" fill="black" font-size="12">Hello</text>`
 	if txt.toSVG() != expected {
 		t.Errorf("Expected %v, got %v", expected, txt.toSVG())
 	}
@@ -74,7 +74,7 @@ func TestTextToSVG(t *testing.T) {
 
 func TestEllipseToSVG(t *testing.T) {
 	e := ellipse{rx: 25, ry: 15, cx: 50, cy: 50, style: "fill:green;"}
-	expected := `	<ellipse rx="25" ry="15" cx="50" cy="50" style="fill:green;"`
+	expected := `	<ellipse rx="25" ry="15" cx="50" cy="50" style="fill:green;" />`
 	if e.toSVG() != expected {
 		t.Errorf("Expected %v, got %v", expected, e.toSVG())
 	}
