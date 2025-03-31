@@ -71,7 +71,7 @@ func (c Const) latex() string {
 
 /*
 *	Begin of Operator List
-*/
+ */
 
 // Addition
 
@@ -142,7 +142,7 @@ func (m Mult) derive() Expression {
 
 	if m.left.derive().eval(1) > 0 && m.right.derive().eval(1) > 0 {
 		return Add{
-			checkRedundancyMult(Mult{m.left.derive(), m.right}), 
+			checkRedundancyMult(Mult{m.left.derive(), m.right}),
 			checkRedundancyMult(Mult{m.left, m.right.derive()}),
 		}
 	} else if m.left.derive().eval(1) > 0 {
@@ -238,4 +238,4 @@ func (s Sqrt) latex() string {
 
 /*
 *	End of Operator List
-*/
+ */

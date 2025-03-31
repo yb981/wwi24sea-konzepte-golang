@@ -36,7 +36,7 @@ func (s svg) toSVG() string {
 
 type rect struct {
 	width, height, x, y, rx, ry int
-	fill   string
+	fill                        string
 }
 
 func (r rect) toSVG() string {
@@ -71,8 +71,8 @@ func (l line) toSVG() string {
 // Text Element
 
 type text struct {
-	x, y, dx, dy, rotate, size int
-	fill, content        string
+	x, y, size    int
+	fill, content string
 }
 
 func (t text) toSVG() string {
@@ -84,7 +84,7 @@ func (t text) toSVG() string {
 
 type ellipse struct {
 	rx, ry, cx, cy int
-	style string
+	style          string
 }
 
 func (e ellipse) toSVG() string {

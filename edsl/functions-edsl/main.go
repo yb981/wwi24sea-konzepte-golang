@@ -14,7 +14,7 @@ func main() {
 	fmt.Printf("f(9) = %v\n", f.eval(9))
 	fmt.Println("Latex Output: ", f.latex())
 	fmt.Printf("Derivative Function: %v\n\n", f.derive())
-	
+
 	fmt.Printf("----------------------------------------- 2nd FUNCTION --------------------------------------\n\n")
 
 	f = Func{Add{Var{}, Mult{Var{}, Var{}}}}

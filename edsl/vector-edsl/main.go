@@ -9,10 +9,10 @@ func main() {
 
 	fmt.Printf("------------------------------------- FIRST SVG SCHOWCASE -----------------------------------\n\n")
 
-	a := svg{ width: 200, height: 200,
+	a := svg{width: 200, height: 200,
 		content: []Element{
-			rect{width: 200, height: 200, fill:"lime"},
-			rect{width: 100, height: 100, fill:"blue"},
+			rect{width: 200, height: 200, fill: "lime"},
+			rect{width: 100, height: 100, fill: "blue"},
 			circle{r: 45, cx: 50, cy: 50, fill: "blue"},
 			line{0, 0, 200, 200, "stroke:coral;stroke-width:14"},
 			text{x: 75, y: 100, fill: "white", content: "Wassup!!!!", size: 20},
@@ -26,8 +26,8 @@ func main() {
 
 	b := svg{200, 200, []Element{
 		rect{width: 200, height: 200},
-		circle{r: 100, fill:"yellow"},
-		ellipse{rx: 20, ry: 20, style:"fill:lime"},
+		circle{r: 100, fill: "yellow"},
+		ellipse{rx: 20, ry: 20, style: "fill:lime"},
 	}}
 
 	fmt.Println(b.toSVG())
@@ -36,13 +36,13 @@ func main() {
 	fmt.Printf("------------------------------------ THIRD SVG SHOWCASE -----------------------------------\n\n")
 
 	c := svg{1000, 1000, []Element{
-		rect{width: 1000, height: 1000, fill:"purple"},
-		rect{width: 900, height: 900, x: 50, y: 50, fill:"teal"},
+		rect{width: 1000, height: 1000, fill: "purple"},
+		rect{width: 900, height: 900, x: 50, y: 50, fill: "teal"},
 		circle{r: 500, cx: 500, cy: 500},
-		rect{width: 900, height: 300, x: 50, y: 350, fill:"white"},
-		text{x: 250, y: 525, content: "SVG is cool!", fill:"black", size: 100},
+		rect{width: 900, height: 300, x: 50, y: 350, fill: "white"},
+		text{x: 250, y: 525, content: "SVG is cool!", fill: "black", size: 100},
 	}}
-	
+
 	fmt.Println(c.toSVG())
 	c.saveSVG("shapes3")
 }
