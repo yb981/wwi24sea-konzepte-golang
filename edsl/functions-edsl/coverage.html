@@ -78,9 +78,69 @@ import (
 )
 
 func main() <span class="cov0" title="0">{
-        a := Mult{Var{}, Var{}}
-        fmt.Println(a.latex())
-        fmt.Println(a.derive().latex())
+        fmt.Print("\033[H\033[2J")
+        fmt.Printf("-------------------------------------- LIVE DEMO SHOWCASE -----------------------------------\n\n")
+        fmt.Printf("----------------------------------------- 1st FUNCTION --------------------------------------\n\n")
+        f := Func{Mult{Const{2}, Var{}}}
+        fmt.Printf("First Function: f(x) = 2 * x\n\n")
+
+        fmt.Printf("f(9) = %v\n", f.eval(9))
+        fmt.Println("Latex Output: ", f.latex())
+        fmt.Printf("Derivative Function: %v\n\n", f.derive())
+        
+        fmt.Printf("----------------------------------------- 2nd FUNCTION --------------------------------------\n\n")
+
+        f = Func{Add{Var{}, Mult{Var{}, Var{}}}}
+        fmt.Printf("First Function: f(x) = x + x * x\n\n")
+
+        fmt.Printf("f(9) = %v\n", f.eval(9))
+        fmt.Println("Latex Output: ", f.latex())
+        fmt.Printf("Derivative Function: %v\n", f.derive())
+        fmt.Printf("Value of derivative Function f(9): %v\n\n", f.derive().eval(9))
+
+        fmt.Printf("----------------------------------------- 3rd FUNCTION --------------------------------------\n\n")
+        f = Func{Pow{Var{}, Const{10}}}
+        fmt.Printf("First Function: f(x) = x ^ 10\n\n")
+
+        fmt.Printf("f(10) = %v\n", f.eval(10))
+        fmt.Println("Latex Output: ", f.latex())
+        fmt.Printf("1st derivative Function: %v\n", f.derive())
+        fmt.Printf("2nd derivative Function: %v\n", f.derive().derive())
+        fmt.Printf("3rd derivative Function: %v\n", f.derive().derive().derive())
+        fmt.Printf("Value of 3rd derivative: f(1) = %v\n\n", f.derive().derive().derive().eval(1))
+
+        fmt.Printf("----------------------------------------- 4th FUNCTION --------------------------------------\n\n")
+        f = Func{Div{Var{}, Add{Const{10}, Const{20}}}}
+        fmt.Printf("First Function: f(x) =  x / (10 + 20)\n\n")
+
+        fmt.Printf("f(10) = %v\n", f.eval(30))
+        fmt.Println("Latex Output: ", f.latex())
+        fmt.Printf("1st derivative Function: %v\n", f.derive())
+        fmt.Printf("2nd derivative Function: %v\n", f.derive().derive())
+        fmt.Printf("Value of 1st derivative: f(1000000) = %v\n\n", f.derive().eval(1000000))
+
+        fmt.Printf("----------------------------------------- 5th FUNCTION --------------------------------------\n\n")
+        f = Func{Div{Var{}, Var{}}}
+        fmt.Printf("First Function: f(x) =  x / x\n\n")
+
+        fmt.Printf("f(30) = %v\n", f.eval(30))
+        fmt.Println("Latex Output: ", f.latex())
+        fmt.Printf("1st derivative Function: %v\n", f.derive())
+        fmt.Printf("Value of 1st derivative: f(1000000) = %v\n\n", f.derive().eval(1000000))
+
+        fmt.Printf("----------------------------------------- 6th FUNCTION --------------------------------------\n\n")
+        f = Func{Sqrt{Var{}}}
+        fmt.Printf("First Function: f(x) = \\sqrt{x}\n\n")
+
+        fmt.Printf("f(9) = %v\n", f.eval(9))
+        fmt.Println("Latex Output: ", f.latex())
+        fmt.Printf("1st derivative Function: %v\n", f.derive())
+        fmt.Printf("Value of 1st derivative: f(9) = %v\n\n", f.derive().eval(9))
+
+        fmt.Printf("----------------------------------------- 7th FUNCTION --------------------------------------\n\n")
+        fmt.Println("Live demo! :D")
+        c := Func{Div{Var{}, Const{10}}}
+        fmt.Println(c.derive().latex())
 }</span>
 </pre>
 		
@@ -224,6 +284,7 @@ func (m Mult) eval(num float64) float64 <span class="cov8" title="1">{
 
 func (m Mult) derive() Expression <span class="cov8" title="1">{
 
+        // Simplification Logic
 
         if m.left.derive().eval(1) &gt; 0 &amp;&amp; m.right.derive().eval(1) &gt; 0 </span><span class="cov8" title="1">{
                 return Add{
@@ -242,8 +303,10 @@ func (m Mult) derive() Expression <span class="cov8" title="1">{
 func checkRedundancyMult(m Mult) Expression <span class="cov8" title="1">{
         if m.left.latex() == "1" </span><span class="cov8" title="1">{
                 return m.right
+        }</span> else<span class="cov8" title="1"> if m.right.latex() == "1" </span><span class="cov8" title="1">{
+                return m.left
         }</span>
-        <span class="cov8" title="1">return m.left</span>
+        <span class="cov8" title="1">return m</span>
 }
 
 func (m Mult) latex() string <span class="cov8" title="1">{
@@ -261,8 +324,15 @@ func (d Div) eval(num float64) float64 <span class="cov8" title="1">{
 }</span>
 
 func (d Div) derive() Expression <span class="cov8" title="1">{
-        return Const{1}
-}</span>
+        if d.left.derive().eval(0) != 0 &amp;&amp; d.right.derive().eval(0) != 0 </span><span class="cov8" title="1">{
+                return Div{Sub{Mult{d.left.derive(), d.right}, Mult{d.left.derive(), d.right}}, Pow{d.right, Const{2}}}
+        }</span> else<span class="cov8" title="1"> if d.left.derive().eval(0) != 0 </span><span class="cov8" title="1">{
+                return Div{d.left.derive(), d.right}
+        }</span> else<span class="cov8" title="1"> if d.right.derive().eval(0) != 0 </span><span class="cov8" title="1">{
+                return Sub{Const{0}, Div{d.left, Pow{Var{}, Const{2}}}}
+        }</span>
+        <span class="cov8" title="1">return Const{0}</span>
+}
 
 func (d Div) latex() string <span class="cov8" title="1">{
         return fmt.Sprintf("\\frac{%s}{%s}", d.left.latex(), d.right.latex())
@@ -293,22 +363,22 @@ func (p Pow) latex() string <span class="cov8" title="1">{
 
 // Root
 
-type Sqr struct {
+type Sqrt struct {
         val Expression
 }
 
-func (s Sqr) eval(num float64) float64 <span class="cov8" title="1">{
+func (s Sqrt) eval(num float64) float64 <span class="cov8" title="1">{
         return math.Sqrt(s.val.eval(num))
 }</span>
 
-func (s Sqr) derive() Expression <span class="cov8" title="1">{
+func (s Sqrt) derive() Expression <span class="cov8" title="1">{
         if s.val.eval(0) == 0 </span><span class="cov8" title="1">{
                 return Div{Const{1}, Mult{Const{2}, s}}
         }</span>
         <span class="cov8" title="1">return Const{0}</span>
 }
 
-func (s Sqr) latex() string <span class="cov8" title="1">{
+func (s Sqrt) latex() string <span class="cov8" title="1">{
         return fmt.Sprintf("\\sqrt{%s}", string(s.val.latex()[0]))
 }</span>
 

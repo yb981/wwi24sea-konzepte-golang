@@ -110,6 +110,11 @@ func TestMult(t *testing.T) {
 	if mult.derive().latex() != "5" {
 		t.Errorf("Expected 5, got %v", mult.derive().latex())
 	}
+
+	mult = Mult{Mult{Const{2}, Var{}}, Mult{Const{2}, Var{}}}
+	if mult.derive().latex() != "2 \\cdot 2 \\cdot x + 2 \\cdot x \\cdot 2" {
+		t.Errorf("Expected a, got %v", mult.derive().latex())
+	}
 }
 
 func TestDiv(t *testing.T) {
@@ -117,11 +122,28 @@ func TestDiv(t *testing.T) {
 	if div.eval(0) != 5 {
 		t.Errorf("Expected 5, got %f", div.eval(0))
 	}
-	if div.derive().eval(0) != 1 {
-		t.Errorf("Expected derivative 1, got %f", div.derive().eval(0))
+	if div.derive().eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", div.derive().eval(0))
 	}
 	if div.latex() != "\\frac{10}{2}" {
 		t.Errorf("Expected \\frac{10}{2}, got %v", div.latex())
+	}
+	div = Div{Var{}, Var{}}
+	l := "\\frac{1 \\cdot x - 1 \\cdot x}{x ^ 2}"
+	if div.derive().latex() != l {
+		t.Errorf("Expected %v, got %v", l, div.derive().latex())
+	}
+
+	div = Div{Const{10}, Var{}}
+	l = "0 - \\frac{10}{x ^ 2}"
+	if div.derive().latex() != l {
+		t.Errorf("Expected %v, got %v", l, div.derive().latex())
+	}
+
+	div = Div{Var{}, Const{10}}
+	l = "\\frac{1}{10}"
+	if div.derive().latex() != l {
+		t.Errorf("Expected %v, got %v", l, div.derive().latex())
 	}
 }
 
@@ -146,8 +168,8 @@ func TestPow(t *testing.T) {
 	}
 }
 
-func TestSqr(t *testing.T) {
-	sqr := Sqr{Const{9}}
+func TestSqrt(t *testing.T) {
+	sqr := Sqrt{Const{9}}
 	if sqr.eval(0) != 3 {
 		t.Errorf("Expected 3, got %f", sqr.eval(0))
 	}
@@ -157,7 +179,7 @@ func TestSqr(t *testing.T) {
 	if sqr.latex() != "\\sqrt{9}" {
 		t.Errorf("Expected \\sqrt{9}, got %v", sqr.latex())
 	}
-	sqr = Sqr{Var{}}
+	sqr = Sqrt{Var{}}
 	if sqr.derive().eval(1) != 0.5 {
 		t.Errorf("Expected 1, got %v", sqr.derive().eval(1))
 	}

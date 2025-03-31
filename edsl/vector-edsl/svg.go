@@ -71,13 +71,13 @@ func (l line) toSVG() string {
 // Text Element
 
 type text struct {
-	x, y, dx, dy, rotate int
+	x, y, dx, dy, rotate, size int
 	fill, content        string
 }
 
 func (t text) toSVG() string {
-	return fmt.Sprintf(`	<text x="%v" y="%v" fill="%v">%s</text>`,
-		t.x, t.y, t.fill, t.content)
+	return fmt.Sprintf(`	<text x="%v" y="%v" fill="%v" font-size="%v">%s</text>`,
+		t.x, t.y, t.fill, t.size, t.content)
 }
 
 // Ellipse Element: Required Elements are rx, ry
@@ -88,6 +88,6 @@ type ellipse struct {
 }
 
 func (e ellipse) toSVG() string {
-	return fmt.Sprintf(`	<ellipse rx="%v" ry="%v" cx="%v" cy="%v" style="%v"`,
+	return fmt.Sprintf(`	<ellipse rx="%v" ry="%v" cx="%v" cy="%v" style="%v" />`,
 		e.rx, e.ry, e.cx, e.cy, e.style)
 }

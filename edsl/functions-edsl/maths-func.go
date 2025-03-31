@@ -138,6 +138,7 @@ func (m Mult) eval(num float64) float64 {
 
 func (m Mult) derive() Expression {
 
+	// Simplification Logic
 
 	if m.left.derive().eval(1) > 0 && m.right.derive().eval(1) > 0 {
 		return Add{
@@ -156,8 +157,10 @@ func (m Mult) derive() Expression {
 func checkRedundancyMult(m Mult) Expression {
 	if m.left.latex() == "1" {
 		return m.right
+	} else if m.right.latex() == "1" {
+		return m.left
 	}
-	return m.left
+	return m
 }
 
 func (m Mult) latex() string {
@@ -175,7 +178,14 @@ func (d Div) eval(num float64) float64 {
 }
 
 func (d Div) derive() Expression {
-	return Const{1}
+	if d.left.derive().eval(0) != 0 && d.right.derive().eval(0) != 0 {
+		return Div{Sub{Mult{d.left.derive(), d.right}, Mult{d.left.derive(), d.right}}, Pow{d.right, Const{2}}}
+	} else if d.left.derive().eval(0) != 0 {
+		return Div{d.left.derive(), d.right}
+	} else if d.right.derive().eval(0) != 0 {
+		return Sub{Const{0}, Div{d.left, Pow{Var{}, Const{2}}}}
+	}
+	return Const{0}
 }
 
 func (d Div) latex() string {
@@ -207,22 +217,22 @@ func (p Pow) latex() string {
 
 // Root
 
-type Sqr struct {
+type Sqrt struct {
 	val Expression
 }
 
-func (s Sqr) eval(num float64) float64 {
+func (s Sqrt) eval(num float64) float64 {
 	return math.Sqrt(s.val.eval(num))
 }
 
-func (s Sqr) derive() Expression {
+func (s Sqrt) derive() Expression {
 	if s.val.eval(0) == 0 {
 		return Div{Const{1}, Mult{Const{2}, s}}
 	}
 	return Const{0}
 }
 
-func (s Sqr) latex() string {
+func (s Sqrt) latex() string {
 	return fmt.Sprintf("\\sqrt{%s}", string(s.val.latex()[0]))
 }
 
