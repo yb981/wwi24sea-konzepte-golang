@@ -39,4 +39,9 @@ func main() {
 		}
 	}
 	fmt.Printf("Gesamtdauer: %v\n", time.Since(start))
+
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	fmt.Printf("Verbrauchter Speicher: %.4f MB\n", float64(m.Alloc)/1024/1024)
+
 }

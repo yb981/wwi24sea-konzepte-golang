@@ -82,11 +82,6 @@ func process(chunk []byte, start time.Time) {
 			continue
 		}
 
-		// Windows-Zeilenumbruch--> entferne \r
-		if line[len(line)-1] == '\r' {
-			line = line[:len(line)-1]
-		}
-
 		// original
 		check(line, start)
 
@@ -106,8 +101,6 @@ func process(chunk []byte, start time.Time) {
 	}
 }
 
-
-
 func check(word []byte, start time.Time) {
 	h := hash(word)
 
@@ -124,7 +117,7 @@ func check(word []byte, start time.Time) {
 			if atomic.CompareAndSwapUint32(&resultMask, resultMask, resultMask|mask) {
 				results[i] = string(word)
 				resultTimes[i] = time.Since(start)
-				fmt.Printf("✅ MATCH: %q => Hash %x\n", word, h)
+				fmt.Printf("MATCH: %q => Hash %x\n", word, h)
 			}
 		}
 	}
