@@ -51,7 +51,7 @@ func (al *ArrayList[T]) ParallelMap(workerNum int, operation func(a T) T) (Array
 	}
 	if al.isEmpty() {
 		var zero ArrayList[T]
-		return zero, errors.New("cannot use map on empty list")
+		return zero, nil
 	}
 
 	n := len(al.list)
