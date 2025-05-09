@@ -1,3 +1,9 @@
+// linkedlist.go
+// Generische, einfach verkettete Liste mit grundlegenden Methoden.
+//
+// Author: Till Burdorf, Lukas Gröning, Daniel Brecht
+// Date: 24.02.2025
+
 package datastructures
 
 import (
@@ -10,13 +16,14 @@ type Node[T any] struct {
 	data T
 }
 
-
+// LinkedList ist eine generische einfach verkettete Liste.
 type LinkedList[T comparable] struct {
 	head   *Node[T]
 	length int
 }
 
-// get the node at position pos | helping function to iterate over the list
+// getNode gibt den Node an der angegebenen Position zurück.
+// Hilfsfunktion zum durchlaufen der Liste
 func (list *LinkedList[T]) getNode(pos int) *Node[T] {
 	current := list.head
 	currentPosition := 0
@@ -27,7 +34,7 @@ func (list *LinkedList[T]) getNode(pos int) *Node[T] {
 	return current
 }
 
-// get the element at position pos
+// Get gibt das Element an der angegebenen Position zurück.
 func (list *LinkedList[T]) Get(pos int) (T, error) {
 	if pos < 0 || pos >= list.length {
 		var zero T
@@ -36,14 +43,14 @@ func (list *LinkedList[T]) Get(pos int) (T, error) {
 	return list.getNode(pos).data, nil
 }
 
-// add one or multiple elements to the list
+// Add fügt ein oder mehrere Elemente ans Ende der Liste an.
 func (list *LinkedList[T]) Add(datas ...T) {
 	for _, data := range datas {
 		list.Append(data)
 	}
 }
 
-// insert an element at a position
+// Insert fügt ein Element an der angegebenen Position ein.
 func (list *LinkedList[T]) Insert(pos int, data T) error {
 	if pos < 0 || pos >= list.length {
 		return errors.New("index out of bounds")
@@ -52,18 +59,17 @@ func (list *LinkedList[T]) Insert(pos int, data T) error {
 		list.Prepend(data)
 		return nil
 	}
-	// the node with position - 1 next pointer is set to a new node which contains data and the node after the chosen  position as next
 	list.getNode(pos - 1).next = &Node[T]{data: data, next: list.getNode(pos + 1)}
 	list.length++
 	return nil
 }
 
-// removes the element elem from the list
+// Remove entfernt das erste Vorkommen des angegebenen Elements.
 func (list *LinkedList[T]) Remove(elem T) error {
 	if list.Size() == 0 {
 		return errors.New("list is empty")
 	}
-	// reset head, if head is the first element
+
 	if list.head.data == elem {
 		list.head = list.head.next
 		list.length--
@@ -83,7 +89,7 @@ func (list *LinkedList[T]) Remove(elem T) error {
 	return nil
 }
 
-// removes the element at position pos from the list
+// RemoveAt entfernt das Element an der angegebenen Position.
 func (list *LinkedList[T]) RemoveAt(pos int) error {
 	if list.Size() == 0 {
 		return errors.New("list is empty")
@@ -100,7 +106,7 @@ func (list *LinkedList[T]) RemoveAt(pos int) error {
 	return nil
 }
 
-// repleaces the element at position pos with new element with value val
+// Replace ersetzt das Element an der angegebenen Position mit dem neuen Wert.
 func (list *LinkedList[T]) Replace(pos int, val T) {
 	if pos == 0 {
 		list.head.data = val
@@ -109,13 +115,13 @@ func (list *LinkedList[T]) Replace(pos int, val T) {
 	list.getNode(pos).data = val
 }
 
-// adds a new element at the front of the list
+// Prepend fügt ein neues Element am Anfang der Liste ein.
 func (list *LinkedList[T]) Prepend(data T) {
 	list.head = &Node[T]{data: data, next: list.head}
 	list.length++
 }
 
-// adds a new element at the end of the list
+// Append fügt ein neues Element am Ende der Liste ein.
 func (list *LinkedList[T]) Append(data T) {
 
 	if list.head == nil {
@@ -129,7 +135,7 @@ func (list *LinkedList[T]) Append(data T) {
 	list.length++
 }
 
-// prints all elements on the console
+// Print gibt alle Elemente der Liste in der Konsole aus (zeilenweise).
 func (list *LinkedList[T]) Print() {
 	current := list.head
 	for current != nil {
@@ -138,21 +144,22 @@ func (list *LinkedList[T]) Print() {
 	}
 }
 
-// get the current size of the list
+// Size gibt die Anzahl der Elemente in der Liste zurück.
 func (list *LinkedList[T]) Size() int {
 	return list.length
 }
 
-// is true if the list is empty
+// IsEmpty gibt true zurück, wenn die Liste leer ist.
 func (list *LinkedList[T]) IsEmpty() bool {
 	return list.head == nil
 }
 
-// is true if the list is not empty
+// IsFull gibt true zurück, wenn die Liste mindestens ein Element enthält.
 func (list *LinkedList[T]) IsFull() bool {
 	return list.head != nil
 }
 
+// ToString gibt eine String-Repräsentation der Liste im Format [a, b, c] zurück.
 func (list *LinkedList[T]) ToString() string {
 	stringifiedList := "["
 	current := list.head
@@ -167,6 +174,7 @@ func (list *LinkedList[T]) ToString() string {
 	return stringifiedList
 }
 
+// Equals prüft, ob zwei Listen inhaltlich gleich sind.
 func (list *LinkedList[T]) Equals(secondList *LinkedList[T]) bool {
 	if list == nil || secondList == nil {
 		return list == secondList
