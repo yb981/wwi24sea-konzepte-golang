@@ -1,5 +1,5 @@
 // main.go
-// Main function to start the calculator programm.
+// Startet das RPN Calculator Programm.
 //
 // Author: Lukas Gröning
 // Date: 22.02.2025
@@ -25,6 +25,7 @@ func main() {
 	}
 }
 
+// getInput liest die Benutzereingabe von der Konsole ein.
 func getInput() string {
 	var input string
 	_, err := fmt.Scan(&input)

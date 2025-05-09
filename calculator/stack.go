@@ -1,10 +1,8 @@
 // stack.go
-// Package stack implements a basic stack data structure.
+// Generische Stack-Implementierung basierend auf einer verketteten Liste.
 //
 // Author: Lukas Gröning
 // Date: 22.02.2025
-//
-// This file contains methods for stack operations.
 
 package main
 

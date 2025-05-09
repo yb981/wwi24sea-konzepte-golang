@@ -4,7 +4,8 @@
 // Author: Lukas Gröning
 // Date: 22.02.2025
 //
-// RPN Calculator with basic operations.
+// Ein Reverse Polish Notation (RPN) Taschenrechner mit grundlegenden Rechenoperationen,
+// Unterstützung für eine LaTeX-Ausgabe, basierend auf einem Stack.
 
 package main
 
@@ -15,14 +16,20 @@ import (
 	"strconv"
 )
 
+// calculator definiert den Hauptrechner mit einem Stack für Zahlen, Verlauf und LaTeX-Ausdrücke
+// numberStack speichert aktuelle Eingabewerte
+// history speichert die bisherigen Rechenausdrücke in Textform
+// latex speichert die bisherigen Eingaben umgewandelt in LaTeX-Form.
 type calculator struct {
 	numberStack Stack[float64]
 	history     Stack[string]
 	latex     	Stack[string]
 }
 
+// checkInput verarbeitet den Benutzereingabe-String und entschiedet,
+// ob es sich um einen Befehl oder Operation oder eine Zahl handelt.
 func (c *calculator) checkInput(input string) {
-	// Commands
+	// Befehle
 	switch input {
 	case "exit":
 		fmt.Println("\nQuitting Application. See you soon!")
@@ -35,7 +42,7 @@ func (c *calculator) checkInput(input string) {
 		return
 	}
 
-	// Operations handling
+	// Operationen und Nummern
 	switch input {
 	case "+", "-", "*", "/", "^":
 		c.performBinaryOperation(input)
@@ -48,6 +55,7 @@ func (c *calculator) checkInput(input string) {
 	}
 }
 
+// performBinaryOperation führt eine binäre Operation mit den obersten zwei Stackwerten druch
 func (c *calculator) performBinaryOperation(op string) {
 	if len(c.numberStack) < 2 {
 		fmt.Println("Error: Need at least 2 numbers on the stack.")
@@ -89,6 +97,7 @@ func (c *calculator) performBinaryOperation(op string) {
 	c.numberStack.Push(result)
 }
 
+// performUnaryOperation führt eine unäre Operation auf dem obersten Stackwert durch.
 func (c *calculator) performUnaryOperation(op string) {
 	if len(c.numberStack) < 1 {
 		fmt.Println("Error: Need at least 1 number on the stack.")
@@ -138,6 +147,7 @@ func (c *calculator) performUnaryOperation(op string) {
 	c.numberStack.Push(result)
 }
 
+// perform MutliOperation führt eine Operation über alle Werte auf dem Stack aus (Addition/Multiplikation)
 func (c *calculator) performMultiOperation(op string) {
 	if len(c.numberStack) < 2 {
 		fmt.Println("Error: Need at least 2 numbers on the stack.")
@@ -189,6 +199,7 @@ func (c *calculator) performMultiOperation(op string) {
 	fmt.Printf("current calculation: %s = %v\n", historyOutput, result)
 }
 
+// handleNumberInput verarbeitet die Eingabe, wenn es sich um einen Zahl handelt.
 func (c *calculator) handleNumberInput(input string) {
 	number, err := strconv.ParseFloat(input, 64)
 	if err == nil {
@@ -200,7 +211,7 @@ func (c *calculator) handleNumberInput(input string) {
 	}
 }
 
-// Helper function to compute factorial of a non-negative integer
+// factorial berechnet die Fakultät eines nicht-negativen ganzzahligen Werts.
 func (c calculator) factorial(n float64) float64 {
 	if n == 0 {
 		return 1 // 0! is 1
@@ -212,13 +223,15 @@ func (c calculator) factorial(n float64) float64 {
 	return result
 }
 
+// restoreState stellt den vorherigen Zustand des Stacks wieder her, 
+// wenn eine Operation fehlschlägt. (Error handling)
 func (c *calculator) restoreState(term1 string, latex1 string, currentNumber float64) {
 	c.numberStack.Push(currentNumber)
 	c.history.Push(term1)
 	c.latex.Push(latex1)
 }
 
-// Pops n Operands from the Stacks in reversed order
+// popAndReverse entfernt die obersten n Elemente von allen Stacks und gibt sie in umgekehrter Reihenfolge zurück.
 func (c *calculator) popAndReverse(n int) ([]float64, []string, []string) {
 	tempSlice := make([]float64, n)
 	tempSliceHistory := make([]string, n)
@@ -232,6 +245,7 @@ func (c *calculator) popAndReverse(n int) ([]float64, []string, []string) {
 	return tempSlice, tempSliceHistory, tempSliceLatex
 }
 
+// printWelcomeMessage zeigt dem Benutzer eine Übersicht aller Funktionen und Befehle an.
 func (c calculator) printWelcomeMessage() {
 	fmt.Println("=========================================")
 	fmt.Println("        Welcome to the RPN Calculator   ")
