@@ -68,7 +68,7 @@ func TestMapVariant(t *testing.T) {
 func TestMapVariant_DefaultCase(t *testing.T) {
 	list := &LinkedList[int]{}
 	original := &LinkedList[int]{}
-	
+
 	list.Add(1, 2, 3)
 	original.Add(1, 2, 3)
 
@@ -87,7 +87,7 @@ func TestMapVariant_DefaultCase(t *testing.T) {
 	expected.Append(2)
 	expected.Append(4)
 	expected.Append(6)
-	
+
 	if !resultLL.Equals(&expected) {
 		t.Errorf("Expected %v, but got %v", expected.ToString(), resultLL.ToString())
 	}
@@ -332,7 +332,7 @@ func TestFilterVariantUnknownType(t *testing.T) {
 
 	isEven := func(x int) bool { return x%2 == 0 }
 
-	result := list.FilterVariant(isEven, CollectionType(-1))  // Unknown collection type
+	result := list.FilterVariant(isEven, CollectionType(-1)) // Unknown collection type
 
 	if result != nil {
 		t.Errorf("Expected nil, but got %v", result)
@@ -488,7 +488,6 @@ func TestLazyMap(t *testing.T) {
 		}
 	}
 }
-
 
 func TestReduce(t *testing.T) {
 	// Testfunktion: Summe berechnen

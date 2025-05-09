@@ -78,7 +78,7 @@ func (list *LinkedList[T]) FilterVariant(operation func(T) bool, collectionType 
 			current = current.next
 		}
 		return &newList
-	
+
 	case QueueType:
 		newQueue := Queue[any]{}
 		for current != nil {
@@ -240,6 +240,7 @@ func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) Li
 	}
 	return *newList
 }
+
 //------------------------------------------------------------------------------------------
 
 func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
@@ -292,4 +293,3 @@ func Reduce[U comparable, T comparable](list LinkedList[T], operation func(U, T)
 	}
 	return result, nil
 }
-

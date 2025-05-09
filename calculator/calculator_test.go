@@ -5,13 +5,32 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/yb981/wwi24sea-konzepte-golang/datastructures"
 )
 
 func setupCalculator() *calculator {
 	return &calculator{
-		numberStack: Stack[float64]{},
-		history:     Stack[string]{},
-		latex:       Stack[string]{},
+		numberStack: datastructures.Stack[float64]{},
+		history:     datastructures.Stack[string]{},
+		latex:       datastructures.Stack[string]{},
+	}
+}
+
+func assertTopFloat(t *testing.T, stack datastructures.Stack[float64], expected float64, msg string) {
+	t.Helper()
+	val, err := stack.Peek()
+	if err != nil || val != expected {
+		t.Errorf("%s: expected %v, got %v", msg, expected, val)
+	}
+	_, _ = stack.Pop() // remove top for next test if needed
+}
+
+func assertTopString(t *testing.T, stack datastructures.Stack[string], expected string, msg string) {
+	t.Helper()
+	val, err := stack.Peek()
+	if err != nil || val != expected {
+		t.Errorf("%s: expected %s, got %s", msg, expected, val)
 	}
 }
 
@@ -21,114 +40,78 @@ func TestBinaryOperations(t *testing.T) {
 	calc.numberStack.Push(4)
 	calc.numberStack.Push(2)
 	calc.performBinaryOperation("+")
-	if calc.numberStack.Pop() != 6 {
-		t.Error("4 + 2 sollte 6 sein")
-	}
+	assertTopFloat(t, calc.numberStack, 6, "4 + 2 sollte 6 sein")
 
 	calc.numberStack.Push(10)
 	calc.numberStack.Push(2)
 	calc.performBinaryOperation("/")
-	if calc.numberStack.Pop() != 5 {
-		t.Error("10 / 2 sollte 5 sein")
-	}
+	assertTopFloat(t, calc.numberStack, 5, "10 / 2 sollte 5 sein")
 
 	calc.numberStack.Push(3)
 	calc.numberStack.Push(3)
 	calc.performBinaryOperation("^")
-	if calc.numberStack.Pop() != 27 {
-		t.Error("3 ^ 3 sollte 27 sein")
-	}
+	assertTopFloat(t, calc.numberStack, 27, "3 ^ 3 sollte 27 sein")
 }
 
 func TestFactorial(t *testing.T) {
 	calc := setupCalculator()
-
-	if calc.factorial(0) != 1 {
-		t.Error("0! sollte 1 sein")
-	}
-
-	if calc.factorial(5) != 120 {
-		t.Error("5! sollte 120 sein")
-	}
-
-	if calc.factorial(1) != 1 {
-		t.Error("1! sollte 1 sein")
+	if calc.factorial(0) != 1 || calc.factorial(5) != 120 || calc.factorial(1) != 1 {
+		t.Error("Factorial function is incorrect")
 	}
 }
 
 func TestSumOperation(t *testing.T) {
 	calc := setupCalculator()
-
 	calc.numberStack.Push(1)
 	calc.numberStack.Push(2)
 	calc.numberStack.Push(3)
 	calc.performMultiOperation("++")
-	if calc.numberStack.Pop() != 6 {
-		t.Error("1 + 2 + 3 sollte 6 sein")
-	}
+	assertTopFloat(t, calc.numberStack, 6, "1 + 2 + 3 sollte 6 sein")
 }
 
 func TestProductOperation(t *testing.T) {
 	calc := setupCalculator()
-
 	calc.numberStack.Push(2)
 	calc.numberStack.Push(3)
 	calc.numberStack.Push(4)
 	calc.performMultiOperation("**")
-	if calc.numberStack.Pop() != 24 {
-		t.Error("2 * 3 * 4 sollte 24 sein")
-	}
+	assertTopFloat(t, calc.numberStack, 24, "2 * 3 * 4 sollte 24 sein")
 }
 
 func TestHandleWrongInput(t *testing.T) {
 	calc := setupCalculator()
 	calc.handleNumberInput("abc")
-	if len(calc.numberStack) != 0 {
+	if calc.numberStack.Size() != 0 {
 		t.Error("Ungültige Eingabe sollte nicht auf den Stack gelangen")
 	}
 }
 
 func TestIntegration(t *testing.T) {
 	calc := setupCalculator()
-
 	calc.handleNumberInput("2")
 	calc.handleNumberInput("3")
 	calc.checkInput("+")
-	if calc.numberStack.Pop() != 5 {
-		t.Error("2 + 3 sollte 5 sein")
-	}
+	assertTopFloat(t, calc.numberStack, 5, "2 + 3 sollte 5 sein")
 
 	calc.handleNumberInput("4")
 	calc.checkInput("sqrt")
-	if calc.numberStack.Pop() != 2 {
-		t.Error("sqrt(4) sollte 2 sein")
-	}
+	assertTopFloat(t, calc.numberStack, 2, "sqrt(4) sollte 2 sein")
 }
 
 func TestInfixNotationOutput(t *testing.T) {
 	calc := setupCalculator()
-
 	calc.handleNumberInput("3")
 	calc.handleNumberInput("5")
 	calc.performBinaryOperation("+")
-	expected := "(3 + 5)"
-	if calc.history.Top() != expected {
-		t.Errorf("Erwartete Infix-Notation: %s, aber erhalten: %s", expected, calc.history.Top())
-	}
+	assertTopString(t, calc.history, "(3 + 5)", "Erwartete Infix-Notation 1")
 
 	calc.handleNumberInput("2")
 	calc.performBinaryOperation("*")
-	expected = "((3 + 5) * 2)"
-	if calc.history.Top() != expected {
-		t.Errorf("Erwartete Infix-Notation: %s, aber erhalten: %s", expected, calc.history.Top())
-	}
+	assertTopString(t, calc.history, "((3 + 5) * 2)", "Erwartete Infix-Notation 2")
 
 	calc.handleNumberInput("2")
 	calc.performBinaryOperation("^")
-	expected = "(((3 + 5) * 2) ^ 2)"
-	if calc.history.Top() != expected {
-		t.Errorf("Erwartete Infix-Notation: %s, aber erhalten: %s", expected, calc.history.Top())
-	}
+	assertTopString(t, calc.history, "(((3 + 5) * 2) ^ 2)", "Erwartete Infix-Notation 3")
 }
 
 func TestComplexCalculationWithFactorial(t *testing.T) {
@@ -139,8 +122,9 @@ func TestComplexCalculationWithFactorial(t *testing.T) {
 	calc.handleNumberInput("2")
 	calc.performUnaryOperation("!")
 	calc.performBinaryOperation("+")
-	if calc.numberStack.Pop() != 8 {
-		t.Error("3! + 2! sollte 8 sein")
+	res, err := calc.numberStack.Pop()
+	if err != nil || res != 8 {
+		t.Errorf("3! + 2! sollte 8 sein, aber war %v (err: %v)", res, err)
 	}
 
 	calc.handleNumberInput("5")
@@ -151,8 +135,9 @@ func TestComplexCalculationWithFactorial(t *testing.T) {
 	calc.handleNumberInput("2")
 	calc.performUnaryOperation("!")
 	calc.performBinaryOperation("*")
-	if calc.numberStack.Pop() != 192 {
-		t.Error("(5! - 4!) * 2! sollte 192 sein")
+	res, err = calc.numberStack.Pop()
+	if err != nil || res != 192 {
+		t.Errorf("(5! - 4!) * 2! sollte 192 sein, aber war %v (err: %v)", res, err)
 	}
 
 	calc.handleNumberInput("5")
@@ -166,8 +151,9 @@ func TestComplexCalculationWithFactorial(t *testing.T) {
 	calc.performUnaryOperation("!")
 	calc.performBinaryOperation("+")
 	calc.performBinaryOperation("*")
-	if calc.numberStack.Pop() != 768 {
-		t.Error("(5! - 4!) * (3! + 2!) sollte 768 sein")
+	res, err = calc.numberStack.Pop()
+	if err != nil || res != 768 {
+		t.Errorf("(5! - 4!) * (3! + 2!) sollte 768 sein, aber war %v (err: %v)", res, err)
 	}
 }
 
@@ -226,19 +212,33 @@ func TestPerformMultiOperation_TooFewItems(t *testing.T) {
 func TestHandleNumberInput(t *testing.T) {
 	c := setupCalculator()
 	c.handleNumberInput("42.5")
-	if len(c.numberStack) != 1 || c.numberStack.Top() != 42.5 {
-		t.Error("handleNumberInput hat nicht die richtige Nummer auf den Stack gelegt")
+	if c.numberStack.Size() != 1 {
+		t.Error("handleNumberInput hat nichts auf den Stack gelegt")
+	}
+	top, err := c.numberStack.Peek()
+	if err != nil || top != 42.5 {
+		t.Errorf("Top des Stacks sollte 42.5 sein, war aber %v (err: %v)", top, err)
 	}
 }
 
 func TestRestoreState(t *testing.T) {
 	c := setupCalculator()
 	c.restoreState("term", "latex", 5.0)
-	if c.numberStack.Top() != 5.0 || c.history.Top() != "term" || c.latex.Top() != "latex" {
-		t.Error("restoreState hat nicht die richtigen Werte restored")
+
+	num, err1 := c.numberStack.Peek()
+	hist, err2 := c.history.Peek()
+	latex, err3 := c.latex.Peek()
+
+	if err1 != nil || num != 5.0 {
+		t.Errorf("Zahl Stack: Erwartet 5.0, aber war %v (err: %v)", num, err1)
+	}
+	if err2 != nil || hist != "term" {
+		t.Errorf("History Stack: Erwartet 'term', aber war %v (err: %v)", hist, err2)
+	}
+	if err3 != nil || latex != "latex" {
+		t.Errorf("Latex Stack: Erwartet 'latex', aber war %v (err: %v)", latex, err3)
 	}
 }
-
 func TestUnaryOperations_Abs(t *testing.T) {
 	c := setupCalculator()
 	c.numberStack.Push(-5)

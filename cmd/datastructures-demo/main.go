@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/yb981/wwi24sea-konzepte-golang/datastructures/datastructures"
+	"github.com/yb981/wwi24sea-konzepte-golang/datastructures"
 )
 
 func printValue(value int) {

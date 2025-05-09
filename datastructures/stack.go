@@ -6,7 +6,9 @@
 
 package datastructures
 
-import "errors"
+import (
+	"errors"
+)
 
 // Stack ist eine generische Stack-Implementierung nach dem LIFO-Prinzip.
 type Stack[T comparable] struct {

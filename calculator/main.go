@@ -17,7 +17,7 @@ func main() {
 	calculator.printWelcomeMessage()
 
 	for {
-		calculator.numberStack.Print()
+		calculator.numberStack.ToString()
 
 		input := getInput()
 

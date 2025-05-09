@@ -50,11 +50,11 @@ func TestPush(t *testing.T) {
 
 func TestSize(t *testing.T) {
 	var tests = []struct {
-		input 		[]string
-		expected 	int
+		input    []string
+		expected int
 	}{
-		{[]string{"1","2","3"},3},
-		{[]string{"1","2","3","r"},4},
+		{[]string{"1", "2", "3"}, 3},
+		{[]string{"1", "2", "3", "r"}, 4},
 	}
 
 	for _, test := range tests {
@@ -71,11 +71,11 @@ func TestSize(t *testing.T) {
 
 func StackTestIsEmpty(t *testing.T) {
 	var tests = []struct {
-		input 		[]string
-		expected 	bool
+		input    []string
+		expected bool
 	}{
-		{[]string{"1","2","3"},false},
-		{[]string{},true},
+		{[]string{"1", "2", "3"}, false},
+		{[]string{}, true},
 	}
 
 	for _, test := range tests {
@@ -92,11 +92,11 @@ func StackTestIsEmpty(t *testing.T) {
 
 func TestIsFull(t *testing.T) {
 	var tests = []struct {
-		input 		[]int
-		expected 	bool
+		input    []int
+		expected bool
 	}{
-		{[]int{1,2,3},true},
-		{[]int{},false},
+		{[]int{1, 2, 3}, true},
+		{[]int{}, false},
 	}
 
 	for _, test := range tests {
@@ -240,8 +240,8 @@ func TestStackToString(t *testing.T) {
 
 func TestStackEqual(t *testing.T) {
 	tests := []struct {
-		first []int
-		second []int
+		first    []int
+		second   []int
 		expected bool
 	}{
 		{[]int{}, []int{}, true},

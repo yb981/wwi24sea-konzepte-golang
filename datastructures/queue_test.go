@@ -56,7 +56,7 @@ func TestQueue_Peek(t *testing.T) {
 		t.Errorf("Expected Peek value to be 10, got %v", value)
 	}
 
-	queue.Dequeue()  // Remove the only element
+	queue.Dequeue() // Remove the only element
 
 	_, err = queue.Peek()
 	if err == nil {
@@ -98,11 +98,11 @@ func TestQueueIsFull(t *testing.T) {
 
 func TestQueueSize(t *testing.T) {
 	tests := []struct {
-		input []int
+		input    []int
 		expected int
 	}{
 		{[]int{}, 0},
-		{[]int{1,2}, 2},
+		{[]int{1, 2}, 2},
 	}
 
 	for _, test := range tests {
@@ -141,8 +141,8 @@ func TestQueueToString(t *testing.T) {
 
 func TestEqual(t *testing.T) {
 	tests := []struct {
-		first []int
-		second []int
+		first    []int
+		second   []int
 		expected bool
 	}{
 		{[]int{}, []int{}, true},
