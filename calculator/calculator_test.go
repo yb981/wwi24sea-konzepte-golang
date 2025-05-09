@@ -313,3 +313,13 @@ func TestBinaryOperation_NoNumbers(t *testing.T) {
 		t.Error("binary operation sollte ohne Nummern nicht funktionieren")
 	}
 }
+
+func TestUnaryOperation_NoNumbers(t *testing.T) {
+	c := setupCalculator()
+	output := captureOutput(func() {
+		c.performUnaryOperation("abs")
+	})
+	if !strings.Contains(output, "at least 1 number") {
+		t.Error("unary operation sollte ohne Nummern nicht funktionieren")
+	}
+}

@@ -55,7 +55,7 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">test/calculator/calculator/calculator.go (61.9%)</option>
+				<option value="file0">test/calculator/calculator/calculator.go (96.6%)</option>
 				
 				<option value="file1">test/calculator/calculator/main.go (33.3%)</option>
 				
@@ -109,10 +109,10 @@ func (c *calculator) checkInput(input string) <span class="cov8" title="1">{
         case "exit":<span class="cov0" title="0">
                 fmt.Println("\nQuitting Application. See you soon!")
                 os.Exit(0)</span>
-        case "latex":<span class="cov0" title="0">
+        case "latex":<span class="cov8" title="1">
                 fmt.Println("\\["+c.latex.Top()+"\\]")
                 return</span>
-        case "help":<span class="cov0" title="0">
+        case "help":<span class="cov8" title="1">
                 c.printWelcomeMessage()
                 return</span>
         }
@@ -123,7 +123,7 @@ func (c *calculator) checkInput(input string) <span class="cov8" title="1">{
                 c.performBinaryOperation(input)</span>
         case "abs", "sqrt", "log", "!":<span class="cov8" title="1">
                 c.performUnaryOperation(input)</span>
-        case "++", "**":<span class="cov0" title="0">
+        case "++", "**":<span class="cov8" title="1">
                 c.performMultiOperation(input)</span>
         default:<span class="cov0" title="0">
                 c.handleNumberInput(input)</span>
@@ -132,7 +132,7 @@ func (c *calculator) checkInput(input string) <span class="cov8" title="1">{
 
 // performBinaryOperation führt eine binäre Operation mit den obersten zwei Stackwerten druch
 func (c *calculator) performBinaryOperation(op string) <span class="cov8" title="1">{
-        if len(c.numberStack) &lt; 2 </span><span class="cov0" title="0">{
+        if len(c.numberStack) &lt; 2 </span><span class="cov8" title="1">{
                 fmt.Println("Error: Need at least 2 numbers on the stack.")
                 return
         }</span>
@@ -186,12 +186,12 @@ func (c *calculator) performUnaryOperation(op string) <span class="cov8" title="
         var result float64
 
         switch op </span>{
-        case "abs":<span class="cov0" title="0">
+        case "abs":<span class="cov8" title="1">
                 result = math.Abs(current)
                 c.history.Push(fmt.Sprintf("abs(%s)", term1))
                 c.latex.Push(fmt.Sprintf("\\lvert{%s}\\rvert", latex1))</span>
         case "sqrt":<span class="cov8" title="1">
-                if current &lt; 0 </span><span class="cov0" title="0">{
+                if current &lt; 0 </span><span class="cov8" title="1">{
                         c.restoreState(term1,latex1,current)
                         fmt.Println("Error:", "Error: Square root is not defined for negative numbers.")
                         return
@@ -199,17 +199,17 @@ func (c *calculator) performUnaryOperation(op string) <span class="cov8" title="
                 <span class="cov8" title="1">result = math.Sqrt(current)
                 c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
                 c.latex.Push(fmt.Sprintf("\\sqrt{%s}", latex1))</span>
-        case "log":<span class="cov0" title="0">
-                if current &lt;= 0  </span><span class="cov0" title="0">{
+        case "log":<span class="cov8" title="1">
+                if current &lt;= 0  </span><span class="cov8" title="1">{
                         c.restoreState(term1,latex1,current)
                         fmt.Println("Error: Logarithm is not defined for zero or negative numbers.")
                         return
                 }</span>
-                <span class="cov0" title="0">result = math.Log(current)
+                <span class="cov8" title="1">result = math.Log(current)
                 c.history.Push(fmt.Sprintf("log(%s)", term1))
                 c.latex.Push(fmt.Sprintf("log{%s}", latex1))</span>
         case "!":<span class="cov8" title="1">
-                if current &lt; 0 || current != math.Floor(current) </span><span class="cov0" title="0">{
+                if current &lt; 0 || current != math.Floor(current) </span><span class="cov8" title="1">{
                         c.restoreState(term1,latex1,current)
                         fmt.Println("Error: Factorial is not defined for negative numbers or non-integers.")
                         return
@@ -224,7 +224,7 @@ func (c *calculator) performUnaryOperation(op string) <span class="cov8" title="
 
 // perform MutliOperation führt eine Operation über alle Werte auf dem Stack aus (Addition/Multiplikation)
 func (c *calculator) performMultiOperation(op string) <span class="cov8" title="1">{
-        if len(c.numberStack) &lt; 2 </span><span class="cov0" title="0">{
+        if len(c.numberStack) &lt; 2 </span><span class="cov8" title="1">{
                 fmt.Println("Error: Need at least 2 numbers on the stack.")
                 return
         }</span>
@@ -300,7 +300,7 @@ func (c calculator) factorial(n float64) float64 <span class="cov8" title="1">{
 
 // restoreState stellt den vorherigen Zustand des Stacks wieder her, 
 // wenn eine Operation fehlschlägt. (Error handling)
-func (c *calculator) restoreState(term1 string, latex1 string, currentNumber float64) <span class="cov0" title="0">{
+func (c *calculator) restoreState(term1 string, latex1 string, currentNumber float64) <span class="cov8" title="1">{
         c.numberStack.Push(currentNumber)
         c.history.Push(term1)
         c.latex.Push(latex1)
@@ -321,7 +321,7 @@ func (c *calculator) popAndReverse(n int) ([]float64, []string, []string) <span 
 }
 
 // printWelcomeMessage zeigt dem Benutzer eine Übersicht aller Funktionen und Befehle an.
-func (c calculator) printWelcomeMessage() <span class="cov0" title="0">{
+func (c calculator) printWelcomeMessage() <span class="cov8" title="1">{
         fmt.Println("=========================================")
         fmt.Println("        Welcome to the RPN Calculator   ")
         fmt.Println("=========================================")
