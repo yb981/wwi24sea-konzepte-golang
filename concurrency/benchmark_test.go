@@ -1,14 +1,13 @@
 package main
 
 import (
-	"concurrency/concurrency"
 	"runtime"
 	"testing"
 )
 
 // Benchmark für die sequenzielle Reduce-Funktion
 func BenchmarkReduce(b *testing.B) {
-	myList := &concurrency.ArrayList[int]{}
+	myList := &ArrayList[int]{}
 	for i := 0; i < 100000000; i++ {
 		myList.Append(i)
 	}
@@ -21,7 +20,7 @@ func BenchmarkReduce(b *testing.B) {
 
 // Benchmark für die parallele Reduce-Funktion
 func BenchmarkParallelReduce(b *testing.B) {
-	myList := &concurrency.ArrayList[int]{}
+	myList := &ArrayList[int]{}
 	for i := 0; i < 100000000; i++ {
 		myList.Append(i)
 	}
@@ -34,7 +33,7 @@ func BenchmarkParallelReduce(b *testing.B) {
 
 // Benchmark für die parallele Reduce-Funktion
 func BenchmarkParallelReduceJobChan(b *testing.B) {
-	myList := &concurrency.ArrayList[int]{}
+	myList := &ArrayList[int]{}
 	for i := 0; i < 100000000; i++ {
 		myList.Append(i)
 	}
@@ -46,7 +45,7 @@ func BenchmarkParallelReduceJobChan(b *testing.B) {
 }
 
 func BenchmarkMap(b *testing.B) {
-	myList := &concurrency.ArrayList[int]{}
+	myList := &ArrayList[int]{}
 	for i := 0; i < 100000000; i++ {
 		myList.Append(i)
 	}
@@ -58,7 +57,7 @@ func BenchmarkMap(b *testing.B) {
 }
 
 func BenchmarkParallelMap(b *testing.B) {
-	myList := &concurrency.ArrayList[int]{}
+	myList := &ArrayList[int]{}
 	for i := 0; i < 100000000; i++ {
 		myList.Append(i)
 	}

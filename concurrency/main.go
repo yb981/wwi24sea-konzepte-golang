@@ -1,7 +1,6 @@
 package main
 
 import (
-	"concurrency/concurrency"
 	"fmt"
 	"runtime"
 )
@@ -32,7 +31,7 @@ func main() {
 
 func createDemoOutput() {
 	// initialize list and fill with values
-	myList := &concurrency.ArrayList[int]{}
+	myList := &ArrayList[int]{}
 	for i := range 10 {
 		myList.Append(i)
 	}
