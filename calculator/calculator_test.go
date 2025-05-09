@@ -7,8 +7,16 @@ import (
 	"testing"
 )
 
+func setupCalculator() *calculator {
+	return &calculator{
+		numberStack: Stack[float64]{},
+		history:     Stack[string]{},
+		latex:       Stack[string]{},
+	}
+}
+
 func TestBinaryOperations(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 
 	calc.numberStack.Push(4)
 	calc.numberStack.Push(2)
@@ -33,7 +41,7 @@ func TestBinaryOperations(t *testing.T) {
 }
 
 func TestFactorial(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 
 	if calc.factorial(0) != 1 {
 		t.Error("0! sollte 1 sein")
@@ -49,7 +57,7 @@ func TestFactorial(t *testing.T) {
 }
 
 func TestSumOperation(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 
 	calc.numberStack.Push(1)
 	calc.numberStack.Push(2)
@@ -61,7 +69,7 @@ func TestSumOperation(t *testing.T) {
 }
 
 func TestProductOperation(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 
 	calc.numberStack.Push(2)
 	calc.numberStack.Push(3)
@@ -73,7 +81,7 @@ func TestProductOperation(t *testing.T) {
 }
 
 func TestHandleWrongInput(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 	calc.handleNumberInput("abc")
 	if len(calc.numberStack) != 0 {
 		t.Error("Ungültige Eingabe sollte nicht auf den Stack gelangen")
@@ -81,7 +89,7 @@ func TestHandleWrongInput(t *testing.T) {
 }
 
 func TestIntegration(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 
 	calc.handleNumberInput("2")
 	calc.handleNumberInput("3")
@@ -98,7 +106,7 @@ func TestIntegration(t *testing.T) {
 }
 
 func TestInfixNotationOutput(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 
 	calc.handleNumberInput("3")
 	calc.handleNumberInput("5")
@@ -124,7 +132,7 @@ func TestInfixNotationOutput(t *testing.T) {
 }
 
 func TestComplexCalculationWithFactorial(t *testing.T) {
-	calc := calculator{}
+	calc := setupCalculator()
 
 	calc.handleNumberInput("3")
 	calc.performUnaryOperation("!")
@@ -163,14 +171,6 @@ func TestComplexCalculationWithFactorial(t *testing.T) {
 	}
 }
 
-func setupCalculator() *calculator {
-	return &calculator{
-		numberStack: Stack[float64]{},
-		history:     Stack[string]{},
-		latex:       Stack[string]{},
-	}
-}
-
 func captureOutput(f func()) string {
 	// Speichere das aktuelle stdout
 	old := os.Stdout
@@ -200,7 +200,7 @@ func TestCheckInput_Commands(t *testing.T) {
 		c.checkInput("help")
 	})
 	if !strings.Contains(output, "Welcome to the RPN Calculator") {
-		t.Error("help command did not produce expected output")
+		t.Error("help Befehl gab falsche Ausgabe")
 	}
 
 	// Test latex
@@ -209,7 +209,7 @@ func TestCheckInput_Commands(t *testing.T) {
 		c.checkInput("latex")
 	})
 	if !strings.Contains(output, "\\[x^2\\]") {
-		t.Error("latex command did not print expected LaTeX output")
+		t.Error("latex Befehl gab falsche Ausgabe")
 	}
 }
 
@@ -219,7 +219,7 @@ func TestPerformMultiOperation_TooFewItems(t *testing.T) {
 		c.checkInput("++")
 	})
 	if !strings.Contains(output, "at least 2 numbers") {
-		t.Error("multi-op with <2 items should produce error")
+		t.Error("multi-op mit <2 items soll einen Fehler ergeben")
 	}
 }
 
@@ -227,7 +227,7 @@ func TestHandleNumberInput(t *testing.T) {
 	c := setupCalculator()
 	c.handleNumberInput("42.5")
 	if len(c.numberStack) != 1 || c.numberStack.Top() != 42.5 {
-		t.Error("handleNumberInput did not push correct number")
+		t.Error("handleNumberInput hat nicht die richtige Nummer auf den Stack gelegt")
 	}
 }
 
@@ -235,7 +235,7 @@ func TestRestoreState(t *testing.T) {
 	c := setupCalculator()
 	c.restoreState("term", "latex", 5.0)
 	if c.numberStack.Top() != 5.0 || c.history.Top() != "term" || c.latex.Top() != "latex" {
-		t.Error("restoreState did not restore correct values")
+		t.Error("restoreState hat nicht die richtigen Werte restored")
 	}
 }
 
@@ -248,7 +248,7 @@ func TestUnaryOperations_Abs(t *testing.T) {
 		c.performUnaryOperation("abs")
 	})
 	if !strings.Contains(output, "abs(-5) = 5") {
-		t.Error("abs did not calculate correctly")
+		t.Error("abs funktionert nicht richtig")
 	}
 }
 
@@ -261,7 +261,7 @@ func TestUnaryOperations_Sqrt_Negative(t *testing.T) {
 		c.performUnaryOperation("sqrt")
 	})
 	if !strings.Contains(output, "not defined for negative numbers") {
-		t.Error("sqrt error handling failed for negative number")
+		t.Error("sqrt error handling für negative Nummer fehlgeschlagen")
 	}
 }
 
@@ -274,7 +274,7 @@ func TestUnaryOperations_Log_Normal(t *testing.T) {
 		c.performUnaryOperation("log")
 	})
 	if !strings.Contains(output, "log(10)") {
-		t.Error("log normal calculation failed")
+		t.Error("log Berechnung falsch")
 	}
 }
 
@@ -287,7 +287,7 @@ func TestUnaryOperations_Log_Error(t *testing.T) {
 		c.performUnaryOperation("log")
 	})
 	if !strings.Contains(output, "not defined for zero or negative numbers") {
-		t.Error("log error handling failed")
+		t.Error("log error handling falsch")
 	}
 }
 
@@ -300,7 +300,7 @@ func TestUnaryOperations_Factorial_Error(t *testing.T) {
 		c.performUnaryOperation("!")
 	})
 	if !strings.Contains(output, "Factorial is not defined for negative numbers") {
-		t.Error("factorial error handling failed")
+		t.Error("factorial error handling falsch")
 	}
 }
 
@@ -310,6 +310,6 @@ func TestBinaryOperation_NoNumbers(t *testing.T) {
 		c.performBinaryOperation("+")
 	})
 	if !strings.Contains(output, "at least 2 numbers") {
-		t.Error("binary operation should fail with no numbers")
+		t.Error("binary operation sollte ohne Nummern nicht funktionieren")
 	}
 }
