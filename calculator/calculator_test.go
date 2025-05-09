@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bytes"
+	"os"
+	"strings"
 	"testing"
 )
 
@@ -157,5 +160,156 @@ func TestComplexCalculationWithFactorial(t *testing.T) {
 	calc.performBinaryOperation("*")
 	if calc.numberStack.Pop() != 768 {
 		t.Error("(5! - 4!) * (3! + 2!) sollte 768 sein")
+	}
+}
+
+func setupCalculator() *calculator {
+	return &calculator{
+		numberStack: Stack[float64]{},
+		history:     Stack[string]{},
+		latex:       Stack[string]{},
+	}
+}
+
+func captureOutput(f func()) string {
+	// Speichere das aktuelle stdout
+	old := os.Stdout
+
+	// Pipe erstellen
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	// Funktion ausführen, deren Ausgabe wir abfangen wollen
+	f()
+
+	// Pipe schließen und os.Stdout wiederherstellen
+	w.Close()
+	os.Stdout = old
+
+	// Ausgabe lesen
+	var buf bytes.Buffer
+	_, _ = buf.ReadFrom(r)
+
+	return buf.String()
+}
+
+func TestCheckInput_Commands(t *testing.T) {
+	c := setupCalculator()
+	// Test help
+	output := captureOutput(func() {
+		c.checkInput("help")
+	})
+	if !strings.Contains(output, "Welcome to the RPN Calculator") {
+		t.Error("help command did not produce expected output")
+	}
+
+	// Test latex
+	c.latex.Push("x^2")
+	output = captureOutput(func() {
+		c.checkInput("latex")
+	})
+	if !strings.Contains(output, "\\[x^2\\]") {
+		t.Error("latex command did not print expected LaTeX output")
+	}
+}
+
+func TestPerformMultiOperation_TooFewItems(t *testing.T) {
+	c := setupCalculator()
+	output := captureOutput(func() {
+		c.checkInput("++")
+	})
+	if !strings.Contains(output, "at least 2 numbers") {
+		t.Error("multi-op with <2 items should produce error")
+	}
+}
+
+func TestHandleNumberInput(t *testing.T) {
+	c := setupCalculator()
+	c.handleNumberInput("42.5")
+	if len(c.numberStack) != 1 || c.numberStack.Top() != 42.5 {
+		t.Error("handleNumberInput did not push correct number")
+	}
+}
+
+func TestRestoreState(t *testing.T) {
+	c := setupCalculator()
+	c.restoreState("term", "latex", 5.0)
+	if c.numberStack.Top() != 5.0 || c.history.Top() != "term" || c.latex.Top() != "latex" {
+		t.Error("restoreState did not restore correct values")
+	}
+}
+
+func TestUnaryOperations_Abs(t *testing.T) {
+	c := setupCalculator()
+	c.numberStack.Push(-5)
+	c.history.Push("-5")
+	c.latex.Push("-5")
+	output := captureOutput(func() {
+		c.performUnaryOperation("abs")
+	})
+	if !strings.Contains(output, "abs(-5) = 5") {
+		t.Error("abs did not calculate correctly")
+	}
+}
+
+func TestUnaryOperations_Sqrt_Negative(t *testing.T) {
+	c := setupCalculator()
+	c.numberStack.Push(-4)
+	c.history.Push("-4")
+	c.latex.Push("-4")
+	output := captureOutput(func() {
+		c.performUnaryOperation("sqrt")
+	})
+	if !strings.Contains(output, "not defined for negative numbers") {
+		t.Error("sqrt error handling failed for negative number")
+	}
+}
+
+func TestUnaryOperations_Log_Normal(t *testing.T) {
+	c := setupCalculator()
+	c.numberStack.Push(10)
+	c.history.Push("10")
+	c.latex.Push("10")
+	output := captureOutput(func() {
+		c.performUnaryOperation("log")
+	})
+	if !strings.Contains(output, "log(10)") {
+		t.Error("log normal calculation failed")
+	}
+}
+
+func TestUnaryOperations_Log_Error(t *testing.T) {
+	c := setupCalculator()
+	c.numberStack.Push(0)
+	c.history.Push("0")
+	c.latex.Push("0")
+	output := captureOutput(func() {
+		c.performUnaryOperation("log")
+	})
+	if !strings.Contains(output, "not defined for zero or negative numbers") {
+		t.Error("log error handling failed")
+	}
+}
+
+func TestUnaryOperations_Factorial_Error(t *testing.T) {
+	c := setupCalculator()
+	c.numberStack.Push(-2)
+	c.history.Push("-2")
+	c.latex.Push("-2")
+	output := captureOutput(func() {
+		c.performUnaryOperation("!")
+	})
+	if !strings.Contains(output, "Factorial is not defined for negative numbers") {
+		t.Error("factorial error handling failed")
+	}
+}
+
+func TestBinaryOperation_NoNumbers(t *testing.T) {
+	c := setupCalculator()
+	output := captureOutput(func() {
+		c.performBinaryOperation("+")
+	})
+	if !strings.Contains(output, "at least 2 numbers") {
+		t.Error("binary operation should fail with no numbers")
 	}
 }
