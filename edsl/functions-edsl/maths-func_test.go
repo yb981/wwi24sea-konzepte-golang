@@ -1,4 +1,4 @@
-package main
+package maths
 
 import (
 	"fmt"
@@ -7,180 +7,180 @@ import (
 
 func TestFunc(t *testing.T) {
 	f := Func{Var{}}
-	if f.latex() != "\\( f(x) = x \\)" {
-		t.Errorf("Expected \\( f(x) = x \\), got %s", f.latex())
+	if f.Latex() != "\\( f(x) = x \\)" {
+		t.Errorf("Expected \\( f(x) = x \\), got %s", f.Latex())
 	}
 	if fmt.Sprintf("%v", f) != "f(x) = x" {
 		t.Errorf("Expected f(x) = x, got %s", f)
 	}
-	if f.derive().eval(1) != 1 {
-		t.Errorf("Expected 0, got %v", f.derive().eval(1))
+	if f.Derive().Eval(1) != 1 {
+		t.Errorf("Expected 0, got %v", f.Derive().Eval(1))
 	}
 }
 
 func TestConst(t *testing.T) {
 	c := Const{5}
-	if c.eval(0) != 5 {
-		t.Errorf("Expected 5, got %f", c.eval(0))
+	if c.Eval(0) != 5 {
+		t.Errorf("Expected 5, got %f", c.Eval(0))
 	}
-	if c.derive().eval(0) != 0 {
-		t.Errorf("Expected derivative 0, got %f", c.derive().eval(0))
+	if c.Derive().Eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", c.Derive().Eval(0))
 	}
 }
 
 func TestVar(t *testing.T) {
 	v := Var{}
-	if v.eval(3) != 3 {
-		t.Errorf("Expected 3, got %f", v.eval(3))
+	if v.Eval(3) != 3 {
+		t.Errorf("Expected 3, got %f", v.Eval(3))
 	}
-	if v.derive().eval(0) != 1 {
-		t.Errorf("Expected derivative 1, got %f", v.derive().eval(0))
+	if v.Derive().Eval(0) != 1 {
+		t.Errorf("Expected derivative 1, got %f", v.Derive().Eval(0))
 	}
 }
 
 func TestAdd(t *testing.T) {
 	add := Add{Const{2}, Const{3}}
-	if add.eval(0) != 5 {
-		t.Errorf("Expected 5, got %f", add.eval(0))
+	if add.Eval(0) != 5 {
+		t.Errorf("Expected 5, got %f", add.Eval(0))
 	}
-	if add.derive().eval(0) != 0 {
-		t.Errorf("Expected derivative 0, got %f", add.derive().eval(0))
+	if add.Derive().Eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", add.Derive().Eval(0))
 	}
-	if add.latex() != "2 + 3" {
-		t.Errorf("Expected 2 + 3, got %v", add.latex())
+	if add.Latex() != "2 + 3" {
+		t.Errorf("Expected 2 + 3, got %v", add.Latex())
 	}
 
 	add = Add{Var{}, Const{20}}
-	if add.derive().eval(1) != 1 {
-		t.Errorf("Expected 1, got %s", add.latex())
+	if add.Derive().Eval(1) != 1 {
+		t.Errorf("Expected 1, got %s", add.Latex())
 	}
 
 	add = Add{Var{}, Var{}}
-	if add.derive().eval(1) != 2 {
-		t.Errorf("Expected 2, got %v", add.derive().eval(1))
+	if add.Derive().Eval(1) != 2 {
+		t.Errorf("Expected 2, got %v", add.Derive().Eval(1))
 	}
 }
 
 func TestSub(t *testing.T) {
 	sub := Sub{Const{5}, Const{2}}
-	if sub.eval(0) != 3 {
-		t.Errorf("Expected 3, got %f", sub.eval(0))
+	if sub.Eval(0) != 3 {
+		t.Errorf("Expected 3, got %f", sub.Eval(0))
 	}
-	if sub.derive().eval(0) != 0 {
-		t.Errorf("Expected derivative 0, got %f", sub.derive().eval(0))
+	if sub.Derive().Eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", sub.Derive().Eval(0))
 	}
 
 	sub = Sub{Var{}, Const{10}}
-	if sub.derive().latex() != "1" {
-		t.Errorf("Expected 1, got %s", sub.derive().latex())
+	if sub.Derive().Latex() != "1" {
+		t.Errorf("Expected 1, got %s", sub.Derive().Latex())
 	}
 
 	sub = Sub{Var{}, Var{}}
-	if sub.derive().eval(1) != 0 {
-		t.Errorf("Expected 0, got %v", sub.derive().eval(1))
+	if sub.Derive().Eval(1) != 0 {
+		t.Errorf("Expected 0, got %v", sub.Derive().Eval(1))
 	}
-	if sub.latex() != "x - x" {
-		t.Errorf("Expected x - x, got %v", sub.latex())
+	if sub.Latex() != "x - x" {
+		t.Errorf("Expected x - x, got %v", sub.Latex())
 	}
 }
 
 func TestMult(t *testing.T) {
 	mult := Mult{Const{3}, Const{4}}
-	if mult.eval(0) != 12 {
-		t.Errorf("Expected 12, got %f", mult.eval(0))
+	if mult.Eval(0) != 12 {
+		t.Errorf("Expected 12, got %f", mult.Eval(0))
 	}
-	if mult.derive().eval(0) != 0 {
-		t.Errorf("Expected derivative 0, got %f", mult.derive().eval(0))
+	if mult.Derive().Eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", mult.Derive().Eval(0))
 	}
 
 	mult = Mult{Var{}, Var{}}
-	if mult.derive().latex() != "x + x" {
-		t.Errorf("Expected x + x, got %v", mult.derive().latex())
+	if mult.Derive().Latex() != "x + x" {
+		t.Errorf("Expected x + x, got %v", mult.Derive().Latex())
 	}
-	if mult.latex() != "x \\cdot x" {
-		t.Errorf("Expected x \\cdot x, got %v", mult.latex())
+	if mult.Latex() != "x \\cdot x" {
+		t.Errorf("Expected x \\cdot x, got %v", mult.Latex())
 	}
 
 	mult = Mult{Var{}, Const{5}}
-	if mult.derive().latex() != "5" {
-		t.Errorf("Expected 5, got %v", mult.derive().latex())
+	if mult.Derive().Latex() != "5" {
+		t.Errorf("Expected 5, got %v", mult.Derive().Latex())
 	}
 
 	mult = Mult{Const{5}, Var{}}
-	if mult.derive().latex() != "5" {
-		t.Errorf("Expected 5, got %v", mult.derive().latex())
+	if mult.Derive().Latex() != "5" {
+		t.Errorf("Expected 5, got %v", mult.Derive().Latex())
 	}
 
 	mult = Mult{Mult{Const{2}, Var{}}, Mult{Const{2}, Var{}}}
-	if mult.derive().latex() != "2 \\cdot 2 \\cdot x + 2 \\cdot x \\cdot 2" {
-		t.Errorf("Expected a, got %v", mult.derive().latex())
+	if mult.Derive().Latex() != "2 \\cdot 2 \\cdot x + 2 \\cdot x \\cdot 2" {
+		t.Errorf("Expected a, got %v", mult.Derive().Latex())
 	}
 }
 
 func TestDiv(t *testing.T) {
 	div := Div{Const{10}, Const{2}}
-	if div.eval(0) != 5 {
-		t.Errorf("Expected 5, got %f", div.eval(0))
+	if div.Eval(0) != 5 {
+		t.Errorf("Expected 5, got %f", div.Eval(0))
 	}
-	if div.derive().eval(0) != 0 {
-		t.Errorf("Expected derivative 0, got %f", div.derive().eval(0))
+	if div.Derive().Eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", div.Derive().Eval(0))
 	}
-	if div.latex() != "\\frac{10}{2}" {
-		t.Errorf("Expected \\frac{10}{2}, got %v", div.latex())
+	if div.Latex() != "\\frac{10}{2}" {
+		t.Errorf("Expected \\frac{10}{2}, got %v", div.Latex())
 	}
 	div = Div{Var{}, Var{}}
 	l := "\\frac{1 \\cdot x - 1 \\cdot x}{x ^ 2}"
-	if div.derive().latex() != l {
-		t.Errorf("Expected %v, got %v", l, div.derive().latex())
+	if div.Derive().Latex() != l {
+		t.Errorf("Expected %v, got %v", l, div.Derive().Latex())
 	}
 
 	div = Div{Const{10}, Var{}}
 	l = "0 - \\frac{10}{x ^ 2}"
-	if div.derive().latex() != l {
-		t.Errorf("Expected %v, got %v", l, div.derive().latex())
+	if div.Derive().Latex() != l {
+		t.Errorf("Expected %v, got %v", l, div.Derive().Latex())
 	}
 
 	div = Div{Var{}, Const{10}}
 	l = "\\frac{1}{10}"
-	if div.derive().latex() != l {
-		t.Errorf("Expected %v, got %v", l, div.derive().latex())
+	if div.Derive().Latex() != l {
+		t.Errorf("Expected %v, got %v", l, div.Derive().Latex())
 	}
 }
 
 func TestPow(t *testing.T) {
 	pow := Pow{Const{2}, Const{3}}
-	if pow.eval(0) != 8 {
-		t.Errorf("Expected 8, got %f", pow.eval(0))
+	if pow.Eval(0) != 8 {
+		t.Errorf("Expected 8, got %f", pow.Eval(0))
 	}
-	if pow.derive().eval(0) != 0 {
-		t.Errorf("Expected derivative 0, got %f", pow.derive().eval(0))
+	if pow.Derive().Eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", pow.Derive().Eval(0))
 	}
 
 	pow = Pow{Var{}, Const{10}}
-	if pow.eval(0) != 0 {
-		t.Errorf("Expected 0, got %f", pow.eval(0))
+	if pow.Eval(0) != 0 {
+		t.Errorf("Expected 0, got %f", pow.Eval(0))
 	}
-	if pow.derive().eval(1) != 10 {
-		t.Errorf("Expected 10, got %f", pow.eval(1))
+	if pow.Derive().Eval(1) != 10 {
+		t.Errorf("Expected 10, got %f", pow.Eval(1))
 	}
-	if pow.latex() != "x ^ 10" {
-		t.Errorf("Expected x ^ 10, got %s", pow.latex())
+	if pow.Latex() != "x ^ 10" {
+		t.Errorf("Expected x ^ 10, got %s", pow.Latex())
 	}
 }
 
 func TestSqrt(t *testing.T) {
 	sqr := Sqrt{Const{9}}
-	if sqr.eval(0) != 3 {
-		t.Errorf("Expected 3, got %f", sqr.eval(0))
+	if sqr.Eval(0) != 3 {
+		t.Errorf("Expected 3, got %f", sqr.Eval(0))
 	}
-	if sqr.derive().eval(0) != 0 {
-		t.Errorf("Expected derivative 0, got %f", sqr.derive().eval(0))
+	if sqr.Derive().Eval(0) != 0 {
+		t.Errorf("Expected derivative 0, got %f", sqr.Derive().Eval(0))
 	}
-	if sqr.latex() != "\\sqrt{9}" {
-		t.Errorf("Expected \\sqrt{9}, got %v", sqr.latex())
+	if sqr.Latex() != "\\sqrt{9}" {
+		t.Errorf("Expected \\sqrt{9}, got %v", sqr.Latex())
 	}
 	sqr = Sqrt{Var{}}
-	if sqr.derive().eval(1) != 0.5 {
-		t.Errorf("Expected 1, got %v", sqr.derive().eval(1))
+	if sqr.Derive().Eval(1) != 0.5 {
+		t.Errorf("Expected 1, got %v", sqr.Derive().Eval(1))
 	}
 }
