@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	. "github.com/yb981/wwi24sea-konzepte-golang/edsl/vector-edsl"
 )
 
 func main() {
@@ -9,40 +11,40 @@ func main() {
 
 	fmt.Printf("------------------------------------- FIRST SVG SCHOWCASE -----------------------------------\n\n")
 
-	a := svg{width: 200, height: 200,
-		content: []Element{
-			rect{width: 200, height: 200, fill: "lime"},
-			rect{width: 100, height: 100, fill: "blue"},
-			circle{r: 45, cx: 50, cy: 50, fill: "blue"},
-			line{0, 0, 200, 200, "stroke:coral;stroke-width:14"},
-			text{x: 75, y: 100, fill: "white", content: "Wassup!!!!", size: 20},
+	a := Svg{Width: 200, Height: 200,
+		Content: []Element{
+			Rect{Width: 200, Height: 200, Fill: "lime"},
+			Rect{Width: 100, Height: 100, Fill: "blue"},
+			Circle{R: 45, Cx: 50, Cy: 50, Fill: "blue"},
+			Line{0, 0, 200, 200, "stroke:coral;stroke-Width:14"},
+			Text{X: 75, Y: 100, Fill: "white", Content: "Wassup!!!!", Size: 20},
 		},
 	}
 
-	a.saveSVG("shapes")
-	fmt.Println(a.toSVG())
+	a.SaveSVG("shapes")
+	fmt.Println(a.ToSVG())
 
 	fmt.Printf("------------------------------------ SECOND SVG SHOWCASE -----------------------------------\n\n")
 
-	b := svg{200, 200, []Element{
-		rect{width: 200, height: 200},
-		circle{r: 100, fill: "yellow"},
-		ellipse{rx: 20, ry: 20, style: "fill:lime"},
+	b := Svg{200, 200, []Element{
+		Rect{Width: 200, Height: 200},
+		Circle{R: 100, Fill: "yellow"},
+		Ellipse{Rx: 20, Ry: 20, Style: "Fill:lime"},
 	}}
 
-	fmt.Println(b.toSVG())
-	b.saveSVG("shapes2")
+	fmt.Println(b.ToSVG())
+	b.SaveSVG("shapes2")
 
 	fmt.Printf("------------------------------------ THIRD SVG SHOWCASE -----------------------------------\n\n")
 
-	c := svg{1000, 1000, []Element{
-		rect{width: 1000, height: 1000, fill: "purple"},
-		rect{width: 900, height: 900, x: 50, y: 50, fill: "teal"},
-		circle{r: 500, cx: 500, cy: 500},
-		rect{width: 900, height: 300, x: 50, y: 350, fill: "white"},
-		text{x: 250, y: 525, content: "SVG is cool!", fill: "black", size: 100},
+	c := Svg{1000, 1000, []Element{
+		Rect{Width: 1000, Height: 1000, Fill: "purple"},
+		Rect{Width: 900, Height: 900, X: 50, Y: 50, Fill: "teal"},
+		Circle{R: 500, Cx: 500, Cy: 500},
+		Rect{Width: 900, Height: 300, X: 50, Y: 350, Fill: "white"},
+		Text{X: 250, Y: 525, Content: "SVG is cool!", Fill: "black", Size: 100},
 	}}
 
-	fmt.Println(c.toSVG())
-	c.saveSVG("shapes3")
+	fmt.Println(c.ToSVG())
+	c.SaveSVG("shapes3")
 }

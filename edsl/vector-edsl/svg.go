@@ -1,4 +1,4 @@
-package main
+package svg
 
 import (
 	"fmt"
@@ -6,88 +6,81 @@ import (
 )
 
 // Interface which all SVG Elements implement
-
 type Element interface {
-	toSVG() string
+	ToSVG() string
 }
 
 // Entry Point for SVG-Generation: SVG Struct
-
-type svg struct {
-	width, height int
-	content       []Element
+type Svg struct {
+	Width, Height int
+	Content       []Element
 }
 
-func (s svg) saveSVG(name string) {
+func (s Svg) SaveSVG(name string) {
 	fileName := fmt.Sprintf("%v.svg", name)
-	os.WriteFile(fileName, []byte(s.toSVG()), 0644)
+	os.WriteFile(fileName, []byte(s.ToSVG()), 0644)
 }
 
-func (s svg) toSVG() string {
+func (s Svg) ToSVG() string {
 	res := ""
-	for _, v := range s.content {
-		res += v.toSVG() + "\n"
+	for _, v := range s.Content {
+		res += v.ToSVG() + "\n"
 	}
 	return fmt.Sprintf(`<svg width="%v" height="%v" xmlns="http://www.w3.org/2000/svg">
-%s</svg>`, s.width, s.height, res)
+%s</svg>`, s.Width, s.Height, res)
 }
 
-// Rectangle Element: Required Elements are width & height
-
-type rect struct {
-	width, height, x, y, rx, ry int
-	fill                        string
+// Rectangle Element
+type Rect struct {
+	Width, Height, X, Y, Rx, Ry int
+	Fill                        string
 }
 
-func (r rect) toSVG() string {
+func (r Rect) ToSVG() string {
 	return fmt.Sprintf(`	<rect width="%v" height="%v" x="%v" y="%v" rx="%v" ry="%v" fill="%v" />`,
-		r.width, r.height, r.x, r.y, r.rx, r.ry, r.fill)
+		r.Width, r.Height, r.X, r.Y, r.Rx, r.Ry, r.Fill)
 }
 
-// Circle Element: Required Element is r
-
-type circle struct {
-	r, cx, cy int
-	fill      string
+// Circle Element
+type Circle struct {
+	R, Cx, Cy int
+	Fill      string
 }
 
-func (c circle) toSVG() string {
+func (c Circle) ToSVG() string {
 	return fmt.Sprintf(`	<circle r="%v" cx="%v" cy="%v" fill="%v" />`,
-		c.r, c.cx, c.cy, c.fill)
+		c.R, c.Cx, c.Cy, c.Fill)
 }
 
 // Line Element
-
-type line struct {
-	x1, y1, x2, y2 int
-	style          string
+type Line struct {
+	X1, Y1, X2, Y2 int
+	Style          string
 }
 
-func (l line) toSVG() string {
+func (l Line) ToSVG() string {
 	return fmt.Sprintf(`	<line x1="%v" y1="%v" x2="%v" y2="%v" style="%s" />`,
-		l.x1, l.y1, l.x2, l.y2, l.style)
+		l.X1, l.Y1, l.X2, l.Y2, l.Style)
 }
 
 // Text Element
-
-type text struct {
-	x, y, size    int
-	fill, content string
+type Text struct {
+	X, Y, Size    int
+	Fill, Content string
 }
 
-func (t text) toSVG() string {
+func (t Text) ToSVG() string {
 	return fmt.Sprintf(`	<text x="%v" y="%v" fill="%v" font-size="%v">%s</text>`,
-		t.x, t.y, t.fill, t.size, t.content)
+		t.X, t.Y, t.Fill, t.Size, t.Content)
 }
 
-// Ellipse Element: Required Elements are rx, ry
-
-type ellipse struct {
-	rx, ry, cx, cy int
-	style          string
+// Ellipse Element
+type Ellipse struct {
+	Rx, Ry, Cx, Cy int
+	Style          string
 }
 
-func (e ellipse) toSVG() string {
+func (e Ellipse) ToSVG() string {
 	return fmt.Sprintf(`	<ellipse rx="%v" ry="%v" cx="%v" cy="%v" style="%v" />`,
-		e.rx, e.ry, e.cx, e.cy, e.style)
+		e.Rx, e.Ry, e.Cx, e.Cy, e.Style)
 }
