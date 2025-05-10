@@ -1,3 +1,17 @@
+// datastructures_test.go
+//
+// Testdatei für funktionale Operationen auf generischen Datenstrukturen, inklusive LinkedList, Queue und Stack
+//
+//Test-Coverage:
+
+/*
+Commands für Test
+cd .\datastructures\
+go test -v
+go test -cover
+go test -coverprofile=coverage
+go tool cover -html=coverage -o coverage.html
+*/
 package datastructures
 
 import (
@@ -6,16 +20,7 @@ import (
 	"testing"
 )
 
-/*
-Commands für Test
-Zuerst:
-cd .\datastructures\
-go test -v
-go test -cover
-go test -coverprofile=coverage
-go tool cover -html=coverage -o coverage.html
-*/
-
+// Testdatei für Methode MapVariant
 func TestMapVariant(t *testing.T) {
 	doubleFunc := func(a int) any { return a * 2 }
 
@@ -66,6 +71,7 @@ func TestMapVariant(t *testing.T) {
 	}
 }
 
+// Testdatei für Verwendung der Methode MapVariant
 func TestMapVariant_DefaultCase(t *testing.T) {
 	list := &LinkedList[int]{}
 	original := &LinkedList[int]{}
@@ -73,7 +79,8 @@ func TestMapVariant_DefaultCase(t *testing.T) {
 	list.Add(1, 2, 3)
 	original.Add(1, 2, 3)
 
-	invalidType := CollectionType(999) // Ungültiger Typ
+	// Verhalten bei ungültigen CollectionType
+	invalidType := CollectionType(999)
 	result := list.MapVariant(func(x int) any { return x * 2 }, invalidType)
 
 	if result != nil {
@@ -158,6 +165,7 @@ func TestForEach(t *testing.T) {
 	}
 }
 
+// Testdatei für Filter-Methode indem nach geraden Zahlen gefiltert wird
 func TestFilter(t *testing.T) {
 	isEvenFunc := func(a int) bool {
 		return a%2 == 0
@@ -172,7 +180,7 @@ func TestFilter(t *testing.T) {
 		{[]int{50, -2, 20}, []int{50, -2, 20}},
 	}
 
-	// test for linked list
+	// 	Test für Linked List
 	for _, test := range tests {
 		var testList LinkedList[int]
 		for _, v := range test.input {
@@ -189,7 +197,7 @@ func TestFilter(t *testing.T) {
 		}
 	}
 
-	// test for queue
+	// test für Queue
 	for _, test := range tests {
 		var testQueue Queue[int]
 		for _, v := range test.input {
@@ -206,7 +214,7 @@ func TestFilter(t *testing.T) {
 		}
 	}
 
-	// test for stack
+	// Test for Stack
 	for _, test := range tests {
 		var testStack Stack[int]
 		for _, v := range test.input {
@@ -224,6 +232,7 @@ func TestFilter(t *testing.T) {
 	}
 }
 
+// Testdatei für Filter-Methode indem nach ganzen Zahlen gefiltert wird
 func TestFilterVariantLinkedList(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Append(1)
@@ -246,6 +255,7 @@ func TestFilterVariantLinkedList(t *testing.T) {
 	}
 }
 
+// Testdatei für Methode FilterVariant mit Queue indem nach gerade Zahlen gefiltert wird
 func TestFilterVariantQueue(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Append(1)
@@ -268,6 +278,7 @@ func TestFilterVariantQueue(t *testing.T) {
 	}
 }
 
+// // Testdatei für Methode FilterVariant mit Stack indem nach gerade Zahlen gefiltert wird
 func TestFilterVariantStack(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Append(1)
@@ -290,6 +301,7 @@ func TestFilterVariantStack(t *testing.T) {
 	}
 }
 
+// Testdatei für Methode FilterVariant mit leerer Liste
 func TestFilterVariantEmptyList(t *testing.T) {
 	list := LinkedList[int]{}
 
@@ -308,6 +320,7 @@ func TestFilterVariantEmptyList(t *testing.T) {
 	}
 }
 
+// Testdatei für Methode FilterVariant wenn keine Übereinstimmungen vorhanden sind
 func TestFilterVariantNoMatch(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Append(1)
@@ -329,6 +342,7 @@ func TestFilterVariantNoMatch(t *testing.T) {
 	}
 }
 
+// Testdatei für Methode FilterVariant mit einem unbekannten Typen
 func TestFilterVariantUnknownType(t *testing.T) {
 	list := LinkedList[int]{}
 	list.Append(1)
@@ -344,6 +358,7 @@ func TestFilterVariantUnknownType(t *testing.T) {
 	}
 }
 
+// Testdatei für die LazyFilter-Methode, indem nur gerade Zahlen gefiltert werden
 func TestLazyFilter(t *testing.T) {
 	isEvenFunc := func(a int) bool { return a%2 == 0 }
 
@@ -375,6 +390,7 @@ func TestLazyFilter(t *testing.T) {
 	}
 }
 
+// Testdatei für Map-Methode, um die Verdopplung der Werte zu testen, inklusive der Verwendung einer generischen Mapping-Funktion, die eine Typumwandlung durchführt.
 func TestMap(t *testing.T) {
 	// Funktion zum Verdoppeln einer Zahl
 	doubleFunc := func(a int) int { return a * 2 }
@@ -462,6 +478,7 @@ func TestMap(t *testing.T) {
 	}
 }
 
+// Test führt die LazyMap-Methode, die das Quadrieren der Werte ausführt
 func TestLazyMap(t *testing.T) {
 	// Funktion zum Quadrieren einer Zahl
 	squareFunc := func(a int) int { return a * a }
@@ -494,6 +511,7 @@ func TestLazyMap(t *testing.T) {
 	}
 }
 
+// Test für die Reduce-Methode, um die Summe der Werte zu berechnen, einschließlich des Falles einer leeren Liste
 func TestReduce(t *testing.T) {
 	// Testfunktion: Summe berechnen
 	sumFunc := func(a, b int) int { return a + b }
