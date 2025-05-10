@@ -1,25 +1,32 @@
-# Makefile für Go-Projekt
+# Ausführbare Demos
+CMDS := calculator datastructures-demo edsl-functions-demo edsl-vector-demo password concurrency
 
-# Standard-Ziel: baue und teste alles
-all: build test coverage
+# Binaries in ./bin
+BIN_DIR := bin
 
-# Baue alle Module im Projekt
+# build all
 build:
-	go build ./...
+	@mkdir -p $(BIN_DIR)
+	@for cmd in $(CMDS); do \
+		echo "Building $$cmd..."; \
+		go build -o $(BIN_DIR)/$$cmd ./cmd/$$cmd/*.go || exit 1; \
+	done
 
-# Führe alle Tests aus
+# run specific demo, e.g., make run CMD=calculator
+run:
+	@$(BIN_DIR)/$(CMD)
+
+# test all packages (nicht cmd/)
 test:
-	go test ./... -v
+	go test ./...
 
-# Generiere Coverage-Datei und HTML-Bericht
+# coverage
 coverage:
 	go test ./... -coverprofile=coverage.out
 	go tool cover -html=coverage.out -o coverage.html
 
-# Zeige Coverage in der Konsole
 coverage-report:
 	go tool cover -func=coverage.out
 
-# Entferne temporäre Dateien
 clean:
-	rm -f coverage.out coverage.html
+	rm -rf $(BIN_DIR) coverage.out coverage.html
