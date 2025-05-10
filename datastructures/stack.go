@@ -2,7 +2,7 @@
 // Generischer Stack (LIFO-Datenstruktur) basierend auf einer verketteten Liste.
 //
 // Author: Till Burdorf, Lukas Gröning, Daniel Brecht
-// Date: 24.02.2025
+// Date: 10.03.2025
 
 package datastructures
 

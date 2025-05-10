@@ -1,26 +1,48 @@
+// linkedListFunctional.go
+//
+// Funktionale Erweiterungen für generische LinkedLists, Queues und Stacks.
+//
+// Beinhaltet Implementierungen für Filter, Map und Reduce sowie Lazy Evaluation.
+//
+// Author: Till Burdorf, Lukas Gröning
+// Date: 17.03.2025
+
 package datastructures
 
 import (
 	"errors"
 )
 
+// -------------------------------------------
+// Typdefinitionen für Lazy Evaluation
+// -------------------------------------------
+
+// FilterFunc definiert eine verzögerte Filterfunktion ohne Parameter
 type FilterFunc[T any] func() bool
 
+// LazyFilterList speichert Daten und eine Liste verzögerter Filterfunktionen
 type LazyFilterList[T comparable] struct {
 	data       []T
 	Operations []FilterFunc[T]
 }
 
+// MapFunc definiert eine verzögerte Map-Funktion ohne Parameter
 type MapFunc[T any] func() T
 
+// LazyMapList speichert verzögerte Map-Funktionen
 type LazyMapList[T comparable] struct {
 	Operations []MapFunc[T]
 }
+
+// -------------------------------------------
+// Gemeinsames Collection-Interface
+// -------------------------------------------
 
 type Collection[T any] interface {
 	ToString() string
 }
 
+// Typenumwandlung für polymorphe Map/Filter-Ergebnisse
 type CollectionType int
 
 const (
@@ -30,7 +52,7 @@ const (
 )
 
 // -----------------------------------------------------------------------------------------
-// For Each Method
+// For Each Methode
 // -----------------------------------------------------------------------------------------
 func (list *LinkedList[T]) ForEach(operation func(T)) {
 	current := list.head
@@ -48,11 +70,11 @@ func (stack *Stack[T]) ForEach(operation func(T)) {
 	stack.list.ForEach(operation)
 }
 
-//------------------------------------------------------------------------------------------
+// -------------------------------------------
+// Filter-Methoden (eager und lazy)
+// -------------------------------------------
 
-// -----------------------------------------------------------------------------------------
-// Filter Method
-// -----------------------------------------------------------------------------------------
+// Gibt eine neue LinkedList zurück, gefiltert nach der Bedingung
 func (list *LinkedList[T]) Filter(operation func(T) bool) *LinkedList[T] {
 	current := list.head
 	newList := &LinkedList[T]{}
@@ -65,6 +87,7 @@ func (list *LinkedList[T]) Filter(operation func(T) bool) *LinkedList[T] {
 	return newList
 }
 
+// Gibt je nach CollectionType eine neue gefilterte Collection zurück
 func (list *LinkedList[T]) FilterVariant(operation func(T) bool, collectionType CollectionType) Collection[any] {
 	current := list.head
 
@@ -103,6 +126,7 @@ func (list *LinkedList[T]) FilterVariant(operation func(T) bool, collectionType 
 	return nil
 }
 
+// Erzeugt eine LazyFilterList, die Operationen speichert, aber nicht sofort ausführt
 func (list *LinkedList[T]) LazyFilter(operation func(T) bool) LazyFilterList[T] {
 	current := list.head
 	lazyOps := []FilterFunc[T]{}
@@ -123,6 +147,7 @@ func (list *LinkedList[T]) LazyFilter(operation func(T) bool) LazyFilterList[T] 
 	}
 }
 
+// Führt die gespeicherten LazyFilter-Funktionen aus und gibt gefilterte LinkedList zurück
 func (l LazyFilterList[T]) Execute() *LinkedList[T] {
 	result := make([]bool, len(l.Operations))
 	for i, op := range l.Operations {
@@ -139,6 +164,7 @@ func (l LazyFilterList[T]) Execute() *LinkedList[T] {
 	return outputList
 }
 
+// Varianten für Queue und Stack mit Filterfunktion
 func (queue *Queue[T]) Filter(operation func(T) bool) *Queue[T] {
 	return &Queue[T]{list: *queue.list.Filter(operation)}
 }
@@ -147,12 +173,11 @@ func (stack *Stack[T]) Filter(operation func(T) bool) *Stack[T] {
 	return &Stack[T]{list: *stack.list.Filter(operation)}
 }
 
-//------------------------------------------------------------------------------------------
+// -------------------------------------------
+// Map-Methoden (eager und lazy)
+// -------------------------------------------
 
-// -----------------------------------------------------------------------------------------
-// Map Method
-// -----------------------------------------------------------------------------------------
-// Define the Map method on the generic LinkedList type
+// Führt eine Map-Operation auf jedes Element aus und gibt neue LinkedList zurück
 func (list *LinkedList[T]) Map(operation func(T) T) *LinkedList[T] {
 	current := list.head
 	newList := &LinkedList[T]{}
@@ -163,6 +188,7 @@ func (list *LinkedList[T]) Map(operation func(T) T) *LinkedList[T] {
 	return newList
 }
 
+// Varianten für Queue und Stack mit Map-Funktion
 func (queue *Queue[T]) Map(operation func(T) T) *Queue[T] {
 	return &Queue[T]{list: *queue.list.Map(operation)}
 }
@@ -171,6 +197,7 @@ func (stack *Stack[T]) Map(operation func(T) T) *Stack[T] {
 	return &Stack[T]{list: *stack.list.Map(operation)}
 }
 
+// Erzeugt eine LazyMapList, bei der Operationen erst bei Execute ausgeführt werden
 func (list *LinkedList[T]) LazyMap(operation func(T) T) LazyMapList[T] {
 	current := list.head
 	lazyOps := []MapFunc[T]{}
@@ -188,6 +215,7 @@ func (list *LinkedList[T]) LazyMap(operation func(T) T) LazyMapList[T] {
 	}
 }
 
+// Führt alle LazyMap-Operationen aus und gibt eine LinkedList zurück
 func (l LazyMapList[T]) ExecuteMap() *LinkedList[T] {
 	output := &LinkedList[T]{}
 	for _, op := range l.Operations {
@@ -197,6 +225,7 @@ func (l LazyMapList[T]) ExecuteMap() *LinkedList[T] {
 	return output
 }
 
+// Gibt je nach CollectionType eine neue gemappte Collection zurück
 func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType CollectionType) Collection[any] {
 	current := list.head
 
@@ -231,6 +260,7 @@ func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType Coll
 	}
 }
 
+// Generische Map-Funktion außerhalb von Methoden (für separate Nutzung)
 func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) LinkedList[U] {
 	current := list.head
 	newList := &LinkedList[U]{}
@@ -241,8 +271,11 @@ func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) Li
 	return *newList
 }
 
-//------------------------------------------------------------------------------------------
+// -------------------------------------------
+// Reduce-Methoden
+// -------------------------------------------
 
+// Reduziert die LinkedList auf einen einzelnen Wert
 func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
 	if list.head == nil {
 		var zero T
@@ -258,6 +291,7 @@ func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) {
 	return result, nil
 }
 
+// Varianten für Queue und Stack mit Reduce-Funktion
 func (queue *Queue[T]) Reduce(operation func(T, T) T) (T, error) {
 	value, err := Reduce(queue.list, operation)
 	var zero T
@@ -278,6 +312,7 @@ func (stack *Stack[T]) Reduce(operation func(T, T) T) (T, error) {
 	}
 }
 
+// Alternative Reduce-Variante mit initialem neutralem Wert vom Typ U
 func Reduce[U comparable, T comparable](list LinkedList[T], operation func(U, T) U) (U, error) {
 	if list.head == nil {
 		var zero U
