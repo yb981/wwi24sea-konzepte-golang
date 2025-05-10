@@ -15,6 +15,7 @@ go test -cover
 go test -coverprofile=coverage
 go tool cover -html=coverage -o coverage.html
 */
+
 func TestMapVariant(t *testing.T) {
 	doubleFunc := func(a int) any { return a * 2 }
 
@@ -93,24 +94,28 @@ func TestMapVariant_DefaultCase(t *testing.T) {
 	}
 }
 
+// Testdatei für ForEachMethode
 func TestForEach(t *testing.T) {
 
 	expected := []int{1, 2, 3} //slice, den wir erwarten (slice= array mit flexibler größe)
 
 	// Test für LinkedList
-	ll := LinkedList[int]{} //neue linkedlist(ll) wird erstellt
+	ll := LinkedList[int]{}
 	ll.Add(1, 2, 3)
 
-	result := []int{}            //leeres slice
-	ll.ForEach(func(value int) { //mit foreach packen wir jedes element aus ll in slice
-		result = append(result, value) //
+	// LinkedList in Slice
+	result := []int{}
+	ll.ForEach(func(value int) {
+		result = append(result, value)
 	})
 
-	if len(result) != len(expected) { //Go kann nicht result (als slice) == expected vergleichen, daher vergleichen wir erst die Länge
+	// Vergleich der Längen
+	if len(result) != len(expected) {
 		t.Errorf("LinkedList ForEach failed. Length mismatch. Expected %v, got %v", len(expected), len(result))
 	}
 
-	for i := range expected { //für i wird jedes element verglichen
+	// Vergleich von jedem i
+	for i := range expected {
 		if result[i] != expected[i] {
 			t.Errorf("LinkedList ForEach failed. Expected %v, got %v", expected[i], result[i])
 		}

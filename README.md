@@ -3,7 +3,7 @@
 ## Struktur
 
 - `calculator/`: CLI-Taschenrechner mit Stack-basiertem Rechenmodell
-- `datastructures/`: Eigene Implementierungen von Stack, Queue, LinkedList
+- `datastructures/`: Eigene Implementierungen von Stack, Queue, LinkedList sowie Erweiterungen für Funktionale Programmierung
 - `edsl/`: Domain-Spezifische Sprache (EDSL) für mathematische Ausdrücke
 - `concurrency/`: Demonstration von Goroutines & Channels
 - `password/`: Passwortwiederherstellung

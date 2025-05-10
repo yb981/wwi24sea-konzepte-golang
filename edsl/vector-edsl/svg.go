@@ -1,3 +1,9 @@
+// svg.go
+//
+// SVG-Generierungspaket zur Erzeugung von SVG-Dateien mit verschiedenen SVG-Elemen
+//
+// Author: Kevin Becker, Lukas Grönning
+
 package svg
 
 import (
