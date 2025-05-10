@@ -16,7 +16,7 @@ build:
 run:
 	@$(BIN_DIR)/$(CMD)
 
-# test all packages (nicht cmd/)
+# test all packages
 test:
 	go test ./...
 

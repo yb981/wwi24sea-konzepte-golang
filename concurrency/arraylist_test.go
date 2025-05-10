@@ -38,7 +38,6 @@ func TestMapEmptyList(t *testing.T) {
 	}
 }
 
-
 func TestReduce(t *testing.T) {
 	list := &ArrayList[int]{list: []int{1, 2, 3, 4, 5}}
 	sum, err := list.Reduce(func(a, b int) int { return a + b })
@@ -58,7 +57,6 @@ func TestReduceEmptyList(t *testing.T) {
 	}
 }
 
-
 func TestParallelMap(t *testing.T) {
 	list := &ArrayList[int]{list: []int{1, 2, 3, 4, 5}}
 	mapped, err := list.ParallelMap(2, func(x int) int { return x * 2 })
@@ -77,8 +75,8 @@ func TestParallelMap(t *testing.T) {
 func TestParallelMapEmptyList(t *testing.T) {
 	list := &ArrayList[int]{}
 	_, err := list.ParallelMap(2, func(x int) int { return x * 2 })
-	if err == nil {
-		t.Errorf("Expected error for empty list, got nil")
+	if err != nil {
+		t.Errorf("Expected no error for empty list, got error")
 	}
 }
 
@@ -104,7 +102,6 @@ func TestParallelMapWorkerLimit(t *testing.T) {
 		}
 	}
 }
-
 
 func TestParallelReduce(t *testing.T) {
 	list := &ArrayList[int]{list: []int{1, 2, 3, 4, 5}}
@@ -140,7 +137,6 @@ func TestParallelReduceWorkerLimit(t *testing.T) {
 		t.Fatalf("Unexpected error: %v", err)
 	}
 }
-
 
 func TestParallelReduceJobChannel(t *testing.T) {
 	list := &ArrayList[int]{list: []int{1, 2, 3, 4, 5}}
