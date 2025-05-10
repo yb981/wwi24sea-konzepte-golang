@@ -1,4 +1,5 @@
 // linkedlist.go
+//
 // Generische, einfach verkettete Liste mit grundlegenden Methoden.
 //
 // Author: Till Burdorf, Lukas Gröning, Daniel Brecht

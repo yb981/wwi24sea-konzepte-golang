@@ -1,4 +1,5 @@
 // queue.go
+//
 // Generische Queue-Implementierung mit FIFO-Prinzip.
 //
 // Author: Till Burdorf, Lukas Gröning, Daniel Brecht

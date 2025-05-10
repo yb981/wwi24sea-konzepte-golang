@@ -1,11 +1,11 @@
 // calculator.go
 // RPN Calculator
 //
-// Author: Lukas Gröning
-// Date: 22.02.2025
-//
 // Ein Reverse Polish Notation (RPN) Taschenrechner mit grundlegenden Rechenoperationen,
 // Unterstützung für eine LaTeX-Ausgabe, basierend auf einem Stack.
+//
+// Author: Lukas Gröning
+// Date: 22.02.2025
 
 package main
 

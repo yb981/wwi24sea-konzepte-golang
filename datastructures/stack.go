@@ -1,4 +1,5 @@
 // stack.go
+//
 // Generischer Stack (LIFO-Datenstruktur) basierend auf einer verketteten Liste.
 //
 // Author: Till Burdorf, Lukas Gröning, Daniel Brecht

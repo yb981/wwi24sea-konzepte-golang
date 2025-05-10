@@ -1,7 +1,6 @@
 // linkedListFunctional.go
 //
 // Funktionale Erweiterungen für generische LinkedLists, Queues und Stacks.
-//
 // Beinhaltet Implementierungen für Filter, Map und Reduce sowie Lazy Evaluation.
 //
 // Author: Till Burdorf, Lukas Gröning
