@@ -1,5 +1,8 @@
 // passwordRecov_test.go
-// Test für Passwortwiederherstellung in Go
+//
+// Test für passwordRecov.go
+//
+// Testabdeckung: 100%
 //
 // Author: Ajun Anpalakan
 // Date: 03.04.2025

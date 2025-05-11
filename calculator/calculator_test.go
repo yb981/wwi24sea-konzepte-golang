@@ -1,5 +1,5 @@
 // calculator_test.go
-// test for RPN Calculator
+// Tests für RPN Calculator
 //
 // Author: Lukas Gröning, Ajun Anpalakan
 // Date: 22.02.2025

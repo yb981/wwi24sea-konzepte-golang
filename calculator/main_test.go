@@ -1,11 +1,10 @@
 // main.go
 //
-// Test zum starten das RPN Calculator Programm.
+// Test für getInput() in main.go
 //
-// test-coverage:
-//
-// Author: Ajun Anpalakan
+// Author: Lukas Gröning
 // Date: 22.02.2025
+
 package main
 
 import (

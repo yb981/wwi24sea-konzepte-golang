@@ -2,19 +2,11 @@
 //
 // Testdatei für funktionale Operationen auf generischen Datenstrukturen, inklusive LinkedList, Queue und Stack
 //
-// Test-Coverage:
+// Testabdeckung: 100%
 //
 // Author: Lukas Gröning
 // Date: 10.03.2025
 
-/*
-Commands für Test
-cd .\datastructures\
-go test -v
-go test -cover
-go test -coverprofile=coverage
-go tool cover -html=coverage -o coverage.html
-*/
 package datastructures
 
 import (

@@ -2,10 +2,11 @@
 //
 // Test für generischer Stack (LIFO-Datenstruktur) basierend auf einer verketteten Liste.
 //
-// Test-Coverage:
+// Testabdeckung: 100%
 //
 // Author: Lukas Gröning, Till Burdorf
 // Date: 10.03.2025
+
 package datastructures
 
 import (

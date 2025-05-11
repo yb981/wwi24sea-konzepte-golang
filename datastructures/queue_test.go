@@ -2,10 +2,11 @@
 //
 // Testdatei für Generische Queue-Implementierung mit FIFO-Prinzip.
 //
-// Test-Coverage:
+// Testabdeckung: 100%
 //
 // Author: Lukas Gröning
 // Date: 10.03.2025
+
 package datastructures
 
 import (

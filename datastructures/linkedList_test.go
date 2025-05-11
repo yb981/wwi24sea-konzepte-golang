@@ -1,9 +1,12 @@
 // linkedList_test.go
 //
-// # Tests für LinkedList, die ihre grundlegenden Methoden wie Hinzufügen, Entfernen, Ersetzen und Vergleichen von Elementen prüft
+// Tests für LinkedList, die ihre grundlegenden Methoden wie Hinzufügen, Entfernen, Ersetzen und Vergleichen von Elementen prüft
+//
+// Testabdeckung: 100%
 //
 // Author: Till Burdorf, Lukas Gröning
 // Date: 10.03.2025
+
 package datastructures
 
 import (
