@@ -1,0 +1,2156 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>calculator: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/yb981/wwi24sea-konzepte-golang/calculator/calculator.go (98.0%)</option>
+				
+				<option value="file1">github.com/yb981/wwi24sea-konzepte-golang/calculator/main.go (33.3%)</option>
+				
+				<option value="file2">github.com/yb981/wwi24sea-konzepte-golang/cmd/datastructures-demo/main.go (0.0%)</option>
+				
+				<option value="file3">github.com/yb981/wwi24sea-konzepte-golang/cmd/edsl-functions-demo/main.go (0.0%)</option>
+				
+				<option value="file4">github.com/yb981/wwi24sea-konzepte-golang/cmd/edsl-vector-demo/main.go (0.0%)</option>
+				
+				<option value="file5">github.com/yb981/wwi24sea-konzepte-golang/concurrency/arraylist.go (100.0%)</option>
+				
+				<option value="file6">github.com/yb981/wwi24sea-konzepte-golang/concurrency/main.go (0.0%)</option>
+				
+				<option value="file7">github.com/yb981/wwi24sea-konzepte-golang/datastructures/linkedList.go (100.0%)</option>
+				
+				<option value="file8">github.com/yb981/wwi24sea-konzepte-golang/datastructures/linkedListFunctional.go (100.0%)</option>
+				
+				<option value="file9">github.com/yb981/wwi24sea-konzepte-golang/datastructures/queue.go (100.0%)</option>
+				
+				<option value="file10">github.com/yb981/wwi24sea-konzepte-golang/datastructures/stack.go (100.0%)</option>
+				
+				<option value="file11">github.com/yb981/wwi24sea-konzepte-golang/edsl/functions-edsl/maths-func.go (100.0%)</option>
+				
+				<option value="file12">github.com/yb981/wwi24sea-konzepte-golang/edsl/vector-edsl/svg.go (100.0%)</option>
+				
+				<option value="file13">github.com/yb981/wwi24sea-konzepte-golang/password/main.go (0.0%)</option>
+				
+				<option value="file14">github.com/yb981/wwi24sea-konzepte-golang/password/passwordRecov.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">// calculator.go
+// RPN Calculator
+//
+// Ein Reverse Polish Notation (RPN) Taschenrechner mit grundlegenden Rechenoperationen,
+// Unterstützung für eine LaTeX-Ausgabe, basierend auf einem Stack.
+//
+// Author: Lukas Gröning
+// Date: 22.02.2025
+
+package main
+
+import (
+        "fmt"
+        "math"
+        "os"
+        "strconv"
+
+        "github.com/yb981/wwi24sea-konzepte-golang/datastructures"
+)
+
+// calculator definiert den Hauptrechner mit einem Stack für Zahlen, Verlauf und LaTeX-Ausdrücke
+// numberStack speichert aktuelle Eingabewerte
+// history speichert die bisherigen Rechenausdrücke in Textform
+// latex speichert die bisherigen Eingaben umgewandelt in LaTeX-Form.
+type calculator struct {
+        numberStack datastructures.Stack[float64]
+        history     datastructures.Stack[string]
+        latex       datastructures.Stack[string]
+}
+
+// checkInput verarbeitet den Benutzereingabe-String und entschiedet,
+// ob es sich um einen Befehl oder Operation oder eine Zahl handelt.
+func (c *calculator) checkInput(input string) <span class="cov8" title="1">{
+        // Befehle
+        switch input </span>{
+        case "exit":<span class="cov0" title="0">
+                fmt.Println("\nQuitting Application. See you soon!")
+                os.Exit(0)</span>
+        case "latex":<span class="cov8" title="1">
+                val, _ := c.latex.Peek()
+                fmt.Println("\\[" + val + "\\]")
+                return</span>
+        case "help":<span class="cov8" title="1">
+                c.printWelcomeMessage()
+                return</span>
+        }
+
+        // Operationen und Nummern
+        <span class="cov8" title="1">switch input </span>{
+        case "+", "-", "*", "/", "^":<span class="cov8" title="1">
+                c.performBinaryOperation(input)</span>
+        case "abs", "sqrt", "log", "!":<span class="cov8" title="1">
+                c.performUnaryOperation(input)</span>
+        case "++", "**":<span class="cov8" title="1">
+                c.performMultiOperation(input)</span>
+        default:<span class="cov0" title="0">
+                c.handleNumberInput(input)</span>
+        }
+}
+
+// performBinaryOperation führt eine binäre Operation mit den obersten zwei Stackwerten druch
+func (c *calculator) performBinaryOperation(op string) <span class="cov8" title="1">{
+        if c.numberStack.Size() &lt; 2 </span><span class="cov8" title="1">{
+                fmt.Println("Error: Need at least 2 numbers on the stack.")
+                return
+        }</span>
+
+        <span class="cov8" title="1">latex2, _ := c.latex.Pop()
+        latex1, _ := c.latex.Pop()
+
+        term2, _ := c.history.Pop()
+        term1, _ := c.history.Pop()
+
+        secondOp, _ := c.numberStack.Pop()
+        firstOp, _ := c.numberStack.Pop()
+
+        var result float64
+
+        switch op </span>{
+        case "+":<span class="cov8" title="1">
+                result = firstOp + secondOp
+                c.latex.Push(fmt.Sprintf("({%s} + {%s})", latex1, latex2))</span>
+        case "-":<span class="cov8" title="1">
+                result = firstOp - secondOp
+                c.latex.Push(fmt.Sprintf("({%s} - {%s})", latex1, latex2))</span>
+        case "*":<span class="cov8" title="1">
+                result = firstOp * secondOp
+                c.latex.Push(fmt.Sprintf("({%s} \\cdot {%s})", latex1, latex2))</span>
+        case "/":<span class="cov8" title="1">
+                result = firstOp / secondOp
+                c.latex.Push(fmt.Sprintf("\\frac{%s}{%s}", latex1, latex2))</span>
+        case "^":<span class="cov8" title="1">
+                result = math.Pow(firstOp, secondOp)
+                c.latex.Push(fmt.Sprintf("{%s}^{%s}", latex1, latex2))</span>
+        }
+
+        <span class="cov8" title="1">termNew := fmt.Sprintf("(%s %s %s)", term1, op, term2)
+        c.history.Push(termNew)
+        fmt.Printf("current calculation: %s = %v\n", termNew, result)
+        c.numberStack.Push(result)</span>
+}
+
+// performUnaryOperation führt eine unäre Operation auf dem obersten Stackwert durch.
+func (c *calculator) performUnaryOperation(op string) <span class="cov8" title="1">{
+        if c.numberStack.Size() &lt; 1 </span><span class="cov8" title="1">{
+                fmt.Println("Error: Need at least 1 number on the stack.")
+                return
+        }</span>
+
+        <span class="cov8" title="1">latex1, _ := c.latex.Pop()
+        term1, _ := c.history.Pop()
+        current, _ := c.numberStack.Pop()
+
+        var result float64
+
+        switch op </span>{
+        case "abs":<span class="cov8" title="1">
+                result = math.Abs(current)
+                c.history.Push(fmt.Sprintf("abs(%s)", term1))
+                c.latex.Push(fmt.Sprintf("\\lvert{%s}\\rvert", latex1))</span>
+        case "sqrt":<span class="cov8" title="1">
+                if current &lt; 0 </span><span class="cov8" title="1">{
+                        c.restoreState(term1, latex1, current)
+                        fmt.Println("Error:", "Error: Square root is not defined for negative numbers.")
+                        return
+                }</span>
+                <span class="cov8" title="1">result = math.Sqrt(current)
+                c.history.Push(fmt.Sprintf("sqrt(%s)", term1))
+                c.latex.Push(fmt.Sprintf("\\sqrt{%s}", latex1))</span>
+        case "log":<span class="cov8" title="1">
+                if current &lt;= 0 </span><span class="cov8" title="1">{
+                        c.restoreState(term1, latex1, current)
+                        fmt.Println("Error: Logarithm is not defined for zero or negative numbers.")
+                        return
+                }</span>
+                <span class="cov8" title="1">result = math.Log(current)
+                c.history.Push(fmt.Sprintf("log(%s)", term1))
+                c.latex.Push(fmt.Sprintf("log{%s}", latex1))</span>
+        case "!":<span class="cov8" title="1">
+                if current &lt; 0 || current != math.Floor(current) </span><span class="cov8" title="1">{
+                        c.restoreState(term1, latex1, current)
+                        fmt.Println("Error: Factorial is not defined for negative numbers or non-integers.")
+                        return
+                }</span>
+                <span class="cov8" title="1">result = c.factorial(current)
+                c.history.Push(fmt.Sprintf("%s!", term1))
+                c.latex.Push(fmt.Sprintf("%s!", latex1))</span>
+        }
+        <span class="cov8" title="1">val, _ := c.history.Peek()
+        fmt.Printf("current calculation: %s = %v\n", val, result)
+        c.numberStack.Push(result)</span>
+}
+
+// perform MutliOperation führt eine Operation über alle Werte auf dem Stack aus (Addition/Multiplikation)
+func (c *calculator) performMultiOperation(op string) <span class="cov8" title="1">{
+        if c.numberStack.Size() &lt; 2 </span><span class="cov8" title="1">{
+                fmt.Println("Error: Need at least 2 numbers on the stack.")
+                return
+        }</span>
+
+        <span class="cov8" title="1">n := c.numberStack.Size()
+
+        tempSlice, tempSliceHistory, tempSliceLatex := c.popAndReverse(n)
+
+        historyOutput := "("
+        latexOutput := "("
+
+        var result float64
+        if op == "++" </span><span class="cov8" title="1">{
+                result = 0.0
+        }</span> else<span class="cov8" title="1"> {
+                result = 1.0
+        }</span>
+
+        <span class="cov8" title="1">for i := 0; i &lt; n; i++ </span><span class="cov8" title="1">{
+                current := tempSlice[i]
+                if op == "++" </span><span class="cov8" title="1">{
+                        result += current
+                }</span> else<span class="cov8" title="1"> {
+                        result *= current
+                }</span>
+
+                <span class="cov8" title="1">historyOutput += tempSliceHistory[i]
+                latexOutput += tempSliceLatex[i]
+
+                if i != n-1 </span><span class="cov8" title="1">{
+                        if op == "++" </span><span class="cov8" title="1">{
+                                historyOutput += " + "
+                                latexOutput += " + "
+                        }</span> else<span class="cov8" title="1"> {
+                                historyOutput += " * "
+                                latexOutput += " \\cdot "
+                        }</span>
+                }
+        }
+
+        <span class="cov8" title="1">historyOutput += ")"
+        latexOutput += ")"
+
+        c.numberStack.Push(result)
+        c.history.Push(historyOutput)
+        c.latex.Push(latexOutput)
+        fmt.Printf("current calculation: %s = %v\n", historyOutput, result)</span>
+}
+
+// handleNumberInput verarbeitet die Eingabe, wenn es sich um einen Zahl handelt.
+func (c *calculator) handleNumberInput(input string) <span class="cov8" title="1">{
+        number, err := strconv.ParseFloat(input, 64)
+        if err == nil </span><span class="cov8" title="1">{
+                c.numberStack.Push(number)
+                c.history.Push(input)
+                c.latex.Push(input)
+        }</span> else<span class="cov8" title="1"> {
+                fmt.Println("Error: Wrong Input")
+        }</span>
+}
+
+// factorial berechnet die Fakultät eines nicht-negativen ganzzahligen Werts.
+func (c calculator) factorial(n float64) float64 <span class="cov8" title="1">{
+        if n == 0 </span><span class="cov8" title="1">{
+                return 1 // 0! is 1
+        }</span>
+        <span class="cov8" title="1">var result float64 = 1
+        for i := 1; i &lt;= int(n); i++ </span><span class="cov8" title="1">{
+                result *= float64(i)
+        }</span>
+        <span class="cov8" title="1">return result</span>
+}
+
+// restoreState stellt den vorherigen Zustand des Stacks wieder her,
+// wenn eine Operation fehlschlägt. (Error handling)
+func (c *calculator) restoreState(term1 string, latex1 string, currentNumber float64) <span class="cov8" title="1">{
+        c.numberStack.Push(currentNumber)
+        c.history.Push(term1)
+        c.latex.Push(latex1)
+}</span>
+
+// popAndReverse entfernt die obersten n Elemente von allen Stacks und gibt sie in umgekehrter Reihenfolge zurück.
+func (c *calculator) popAndReverse(n int) ([]float64, []string, []string) <span class="cov8" title="1">{
+        tempSlice := make([]float64, n)
+        tempSliceHistory := make([]string, n)
+        tempSliceLatex := make([]string, n)
+
+        for i := n - 1; i &gt;= 0; i-- </span><span class="cov8" title="1">{
+                tempSlice[i], _ = c.numberStack.Pop()
+                tempSliceHistory[i], _ = c.history.Pop()
+                tempSliceLatex[i], _ = c.latex.Pop()
+        }</span>
+        <span class="cov8" title="1">return tempSlice, tempSliceHistory, tempSliceLatex</span>
+}
+
+// printWelcomeMessage zeigt dem Benutzer eine Übersicht aller Funktionen und Befehle an.
+func (c calculator) printWelcomeMessage() <span class="cov8" title="1">{
+        fmt.Println("=========================================")
+        fmt.Println("        Welcome to the RPN Calculator   ")
+        fmt.Println("=========================================")
+        fmt.Println("Functionality:")
+        fmt.Println(" +  Addition")
+        fmt.Println(" -  Subtraction")
+        fmt.Println(" *  Multiplication")
+        fmt.Println(" /  Division")
+        fmt.Println(" ^  Exponentiation")
+        fmt.Println(" sqrt  Square Root")
+        fmt.Println(" log  Logarithm (Base 10)")
+        fmt.Println(" !  Factorial")
+        fmt.Println(" abs  Absolute Value")
+        fmt.Println(" ++  Sum All Numbers on the Stack")
+        fmt.Println(" **  Multiply All Numbers on the Stack")
+        fmt.Println()
+        fmt.Println("Available Commands:")
+        fmt.Println(" - Type 'help' for assistance")
+        fmt.Println(" - Type 'latex' for LaTeX formatted output")
+        fmt.Println(" - Type 'exit' to close the application")
+        fmt.Println()
+        fmt.Println("=========================================")
+        fmt.Println("Please enter your command:")
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">// main.go
+// Startet das RPN Calculator Programm.
+//
+// Author: Lukas Gröning
+// Date: 22.02.2025
+
+package main
+
+import (
+        "fmt"
+        "os"
+)
+
+func main() <span class="cov0" title="0">{
+        calculator := calculator{}
+
+        calculator.printWelcomeMessage()
+
+        for </span><span class="cov0" title="0">{
+                calculator.numberStack.ToString()
+
+                input := getInput()
+
+                calculator.checkInput(input)
+        }</span>
+}
+
+// getInput liest die Benutzereingabe von der Konsole ein.
+func getInput() string <span class="cov8" title="1">{
+        var input string
+        _, err := fmt.Scan(&amp;input)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println("Error while reading input: ", err.Error())
+                os.Exit(1)
+        }</span>
+        <span class="cov8" title="1">return input</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package main
+
+import (
+        "fmt"
+
+        "github.com/yb981/wwi24sea-konzepte-golang/datastructures"
+)
+
+func printValue(value int) <span class="cov0" title="0">{
+        fmt.Print(value, ", ")
+}</span>
+
+func doubleValue(value int) int <span class="cov0" title="0">{
+        value = value * 2
+        return value
+}</span>
+
+func isOdd(value int) bool <span class="cov0" title="0">{
+        return value%2 != 0
+}</span>
+
+func Add(first int, second int) int <span class="cov0" title="0">{
+        return first + second
+}</span>
+
+func main() <span class="cov0" title="0">{
+        functionalProgrammingDemo()
+}</span>
+
+func functionalProgrammingDemo() <span class="cov0" title="0">{
+        //init and fill list
+        demoList := &amp;datastructures.LinkedList[int]{}
+        demoList.Add(1, 2, 3, 4, 5, 6, 7, 8)
+
+        //init and fill stack
+        demoStack := &amp;datastructures.Stack[int]{}
+        demoStack.PushAll(1, 2, 3, 4, 5, 6, 7, 8)
+
+        //init and fill queue
+        demoQueue := &amp;datastructures.Queue[int]{}
+        for i := 1; i &lt; 9; i++ </span><span class="cov0" title="0">{
+                demoQueue.Enqueue(i)
+        }</span>
+
+        <span class="cov0" title="0">fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
+        fmt.Println("myList: ", demoList.ToString())
+        fmt.Println("myStack: ", demoStack.ToString())
+        fmt.Println("myQueue: ", demoQueue.ToString())
+        fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
+        fmt.Println("Demo der ForEach Methode anhand einer Print Funktion: ")
+        fmt.Println()
+        fmt.Print("ForEach bei der Liste: ")
+        demoList.ForEach(printValue)
+        fmt.Println()
+        fmt.Print("ForEach beim Stack: ")
+        demoStack.ForEach(printValue)
+        fmt.Println()
+        fmt.Print("ForEach bei der Queue: ")
+        demoQueue.ForEach(printValue)
+        fmt.Println()
+        fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
+        fmt.Println("Demo der Filter Methode anhand einer isOdd Funktion: ")
+        fmt.Println()
+        fmt.Print("Filter bei der Liste: ")
+        fmt.Println(demoList.Filter(isOdd).ToString())
+        fmt.Print("Filter beim Stack: ")
+        fmt.Println(demoStack.Filter(isOdd).ToString())
+        fmt.Print("Filter bei der Queue: ")
+        fmt.Println(demoQueue.Filter(isOdd).ToString())
+        fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
+        fmt.Println("Demo der Map Methode anhand einer doubleValue Funktion: ")
+        fmt.Println()
+        fmt.Print("Map bei der Liste: ")
+        fmt.Println(demoList.Map(doubleValue).ToString())
+        fmt.Print("Map beim Stack: ")
+        fmt.Println(demoStack.Map(doubleValue).ToString())
+        fmt.Print("Map bei der Queue: ")
+        fmt.Println(demoQueue.Map(doubleValue).ToString())
+        fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
+        fmt.Println("Demo der Reduce Methode anhand einer Add Funktion: ")
+        fmt.Println()
+        fmt.Print("Reduce bei der Liste: ")
+        result, _ := demoList.Reduce(Add)
+        fmt.Println(result)
+        fmt.Print("Reduce beim Stack: ")
+        result, _ = demoStack.Reduce(Add)
+        fmt.Println(result)
+        fmt.Print("Reduce bei der Queue: ")
+        result, _ = demoQueue.Reduce(Add)
+        fmt.Println(result)
+        fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
+        fmt.Println("Demo der Lazy Variante bei der Filter Funktion mit isOdd auf einer Liste: ")
+        fmt.Println()
+        unexecutedLazyFilter := demoList.LazyFilter(isOdd)
+        fmt.Println("Unexecuted LazyFilter: ", unexecutedLazyFilter.Operations)
+        fmt.Println("Executed LazyFilter: ", unexecutedLazyFilter.Execute().ToString())
+        fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")
+        fmt.Println("Demo der Lazy Variante bei der Map Funktion mit doubleValue auf einer Liste: ")
+        fmt.Println()
+        unexecutedLazyMap := demoList.LazyMap(doubleValue)
+        fmt.Println("Unexecuted LazyMap: ", unexecutedLazyMap.Operations)
+        fmt.Println("Executed LazyMap: ", unexecutedLazyMap.ExecuteMap().ToString())
+        fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------")</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package main
+
+import (
+        "fmt"
+
+        . "github.com/yb981/wwi24sea-konzepte-golang/edsl/functions-edsl"
+)
+
+func main() <span class="cov0" title="0">{
+        fmt.Print("\033[H\033[2J")
+        fmt.Printf("-------------------------------------- LIVE DEMO SHOWCASE -----------------------------------\n\n")
+        fmt.Printf("----------------------------------------- 1st FUNCTION --------------------------------------\n\n")
+        f := Func{Mult{Const{2}, Var{}}}
+        fmt.Printf("First Function: f(x) = 2 * x\n\n")
+
+        fmt.Printf("f(9) = %v\n", f.Eval(9))
+        fmt.Println("Latex Output: ", f.Latex())
+        fmt.Printf("Derivative Function: %v\n\n", f.Derive())
+
+        fmt.Printf("----------------------------------------- 2nd FUNCTION --------------------------------------\n\n")
+
+        f = Func{Add{Var{}, Mult{Var{}, Var{}}}}
+        fmt.Printf("First Function: f(x) = x + x * x\n\n")
+
+        fmt.Printf("f(9) = %v\n", f.Eval(9))
+        fmt.Println("Latex Output: ", f.Latex())
+        fmt.Printf("Derivative Function: %v\n", f.Derive())
+        fmt.Printf("Value of derivative Function f(9): %v\n\n", f.Derive().Eval(9))
+
+        fmt.Printf("----------------------------------------- 3rd FUNCTION --------------------------------------\n\n")
+        f = Func{Pow{Var{}, Const{10}}}
+        fmt.Printf("First Function: f(x) = x ^ 10\n\n")
+
+        fmt.Printf("f(10) = %v\n", f.Eval(10))
+        fmt.Println("Latex Output: ", f.Latex())
+        fmt.Printf("1st derivative Function: %v\n", f.Derive())
+        fmt.Printf("2nd derivative Function: %v\n", f.Derive().Derive())
+        fmt.Printf("3rd derivative Function: %v\n", f.Derive().Derive().Derive())
+        fmt.Printf("Value of 3rd derivative: f(1) = %v\n\n", f.Derive().Derive().Derive().Eval(1))
+
+        fmt.Printf("----------------------------------------- 4th FUNCTION --------------------------------------\n\n")
+        f = Func{Div{Var{}, Add{Const{10}, Const{20}}}}
+        fmt.Printf("First Function: f(x) =  x / (10 + 20)\n\n")
+
+        fmt.Printf("f(10) = %v\n", f.Eval(30))
+        fmt.Println("Latex Output: ", f.Latex())
+        fmt.Printf("1st derivative Function: %v\n", f.Derive())
+        fmt.Printf("2nd derivative Function: %v\n", f.Derive().Derive())
+        fmt.Printf("Value of 1st derivative: f(1000000) = %v\n\n", f.Derive().Eval(1000000))
+
+        fmt.Printf("----------------------------------------- 5th FUNCTION --------------------------------------\n\n")
+        f = Func{Div{Var{}, Var{}}}
+        fmt.Printf("First Function: f(x) =  x / x\n\n")
+
+        fmt.Printf("f(30) = %v\n", f.Eval(30))
+        fmt.Println("Latex Output: ", f.Latex())
+        fmt.Printf("1st derivative Function: %v\n", f.Derive())
+        fmt.Printf("Value of 1st derivative: f(1000000) = %v\n\n", f.Derive().Eval(1000000))
+
+        fmt.Printf("----------------------------------------- 6th FUNCTION --------------------------------------\n\n")
+        f = Func{Sqrt{Var{}}}
+        fmt.Printf("First Function: f(x) = \\sqrt{x}\n\n")
+
+        fmt.Printf("f(9) = %v\n", f.Eval(9))
+        fmt.Println("Latex Output: ", f.Latex())
+        fmt.Printf("1st derivative Function: %v\n", f.Derive())
+        fmt.Printf("Value of 1st derivative: f(9) = %v\n\n", f.Derive().Eval(9))
+
+        fmt.Printf("----------------------------------------- 7th FUNCTION --------------------------------------\n\n")
+        fmt.Println("Live demo! :D")
+        c := Func{Div{Var{}, Const{10}}}
+        fmt.Println(c.Derive().Latex())
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package main
+
+import (
+        "fmt"
+
+        . "github.com/yb981/wwi24sea-konzepte-golang/edsl/vector-edsl"
+)
+
+func main() <span class="cov0" title="0">{
+        fmt.Printf("-------------------------------------- LIVE DEMO SHOWCASE -----------------------------------\n\n")
+
+        fmt.Printf("------------------------------------- FIRST SVG SCHOWCASE -----------------------------------\n\n")
+
+        a := Svg{Width: 200, Height: 200,
+                Content: []Element{
+                        Rect{Width: 200, Height: 200, Fill: "lime"},
+                        Rect{Width: 100, Height: 100, Fill: "blue"},
+                        Circle{R: 45, Cx: 50, Cy: 50, Fill: "blue"},
+                        Line{0, 0, 200, 200, "stroke:coral;stroke-Width:14"},
+                        Text{X: 75, Y: 100, Fill: "white", Content: "Wassup!!!!", Size: 20},
+                },
+        }
+
+        a.SaveSVG("shapes")
+        fmt.Println(a.ToSVG())
+
+        fmt.Printf("------------------------------------ SECOND SVG SHOWCASE -----------------------------------\n\n")
+
+        b := Svg{200, 200, []Element{
+                Rect{Width: 200, Height: 200},
+                Circle{R: 100, Fill: "yellow"},
+                Ellipse{Rx: 20, Ry: 20, Style: "Fill:lime"},
+        }}
+
+        fmt.Println(b.ToSVG())
+        b.SaveSVG("shapes2")
+
+        fmt.Printf("------------------------------------ THIRD SVG SHOWCASE -----------------------------------\n\n")
+
+        c := Svg{1000, 1000, []Element{
+                Rect{Width: 1000, Height: 1000, Fill: "purple"},
+                Rect{Width: 900, Height: 900, X: 50, Y: 50, Fill: "teal"},
+                Circle{R: 500, Cx: 500, Cy: 500},
+                Rect{Width: 900, Height: 300, X: 50, Y: 350, Fill: "white"},
+                Text{X: 250, Y: 525, Content: "SVG is cool!", Fill: "black", Size: 100},
+        }}
+
+        fmt.Println(c.ToSVG())
+        c.SaveSVG("shapes3")
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package main
+
+import (
+        "errors"
+        "sync"
+)
+
+type ArrayList[T comparable] struct {
+        list []T
+}
+
+func (al *ArrayList[T]) Append(value T) <span class="cov8" title="1">{
+        al.list = append(al.list, value)
+}</span>
+
+func (al *ArrayList[T]) isEmpty() bool <span class="cov8" title="1">{
+        return len(al.list) == 0
+}</span>
+
+func (al *ArrayList[T]) Map(operation func(T) T) (*ArrayList[T], error) <span class="cov8" title="1">{
+        if al.isEmpty() </span><span class="cov8" title="1">{
+                var zero *ArrayList[T]
+                return zero, errors.New("empty list does not allow map function")
+        }</span>
+        <span class="cov8" title="1">output := &amp;ArrayList[T]{list: make([]T, len(al.list))}
+        for i, v := range al.list </span><span class="cov8" title="1">{
+                output.list[i] = operation(v)
+        }</span>
+        <span class="cov8" title="1">return output, nil</span>
+}
+
+func (al *ArrayList[T]) Reduce(f func(a, b T) T) (T, error) <span class="cov8" title="1">{
+        if al.isEmpty() </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("empty list does not allow reduce operation")
+        }</span>
+
+        <span class="cov8" title="1">result := al.list[0]
+
+        for i := 1; i &lt; len(al.list); i++ </span><span class="cov8" title="1">{
+                result = f(result, al.list[i])
+        }</span>
+
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+func (al *ArrayList[T]) ParallelMap(workerNum int, operation func(a T) T) (ArrayList[T], error) <span class="cov8" title="1">{
+        if workerNum == 0 </span><span class="cov8" title="1">{
+                var zero ArrayList[T]
+                return zero, errors.New("cannot start with 0 workers")
+        }</span>
+        <span class="cov8" title="1">if al.isEmpty() </span><span class="cov8" title="1">{
+                var zero ArrayList[T]
+                return zero, nil
+        }</span>
+
+        <span class="cov8" title="1">n := len(al.list)
+        if workerNum &gt; n </span><span class="cov8" title="1">{
+                workerNum = n
+        }</span>
+
+        <span class="cov8" title="1">chunk := n / workerNum
+        output := &amp;ArrayList[T]{list: make([]T, len(al.list))}
+        var wg sync.WaitGroup
+
+        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
+                wg.Add(1) // increase waitgroup counter for every iteration
+                // start a GO Routine for every CPU Core available in the system
+                go func(i int) </span><span class="cov8" title="1">{
+                        defer wg.Done()
+                        start := i * chunk
+                        end := start + chunk
+
+                        // last chunk could be smaller
+                        if i == workerNum-1 </span><span class="cov8" title="1">{
+                                end = len(al.list)
+                        }</span>
+
+                        <span class="cov8" title="1">for j := start; j &lt; end; j++ </span><span class="cov8" title="1">{
+                                output.list[j] = operation(al.list[j])
+                        }</span>
+                }(i)
+        }
+        <span class="cov8" title="1">wg.Wait()
+
+        return *output, nil</span>
+}
+
+func (al *ArrayList[T]) ParallelReduce(workerNum int, operation func(a, b T) T) (T, error) <span class="cov8" title="1">{
+        if workerNum == 0 </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("cannot start with 0 workers")
+        }</span>
+
+        <span class="cov8" title="1">if al.isEmpty() </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("Reduce not possible for empty List")
+        }</span>
+
+        <span class="cov8" title="1">n := len(al.list)
+        if workerNum &gt; n </span><span class="cov8" title="1">{
+                workerNum = n // Nicht mehr Worker als Elemente
+        }</span>
+
+        <span class="cov8" title="1">chunk := n / workerNum
+        results := make(chan T, workerNum) // Channel für Zwischenergebnisse
+
+        var wg sync.WaitGroup
+
+        // Arbeiter starten
+        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
+                wg.Add(1)
+                go func(i int) </span><span class="cov8" title="1">{
+                        defer wg.Done()
+                        start := i * chunk
+                        end := start + chunk
+                        if i == workerNum-1 </span><span class="cov8" title="1">{ // Letzter Worker bekommt den Rest
+                                end = n
+                        }</span>
+
+                        <span class="cov8" title="1">result := al.list[start]
+                        for j := start + 1; j &lt; end; j++ </span><span class="cov8" title="1">{
+                                result = operation(result, al.list[j])
+                        }</span>
+                        <span class="cov8" title="1">results &lt;- result</span>
+                }(i)
+        }
+
+        <span class="cov8" title="1">wg.Wait()
+        close(results)
+
+        // Endgültige Reduktion
+        finalResult := &lt;-results
+        for res := range results </span><span class="cov8" title="1">{
+                finalResult = operation(finalResult, res)
+        }</span>
+
+        <span class="cov8" title="1">return finalResult, nil</span>
+}
+
+func (al *ArrayList[T]) ParallelReduceJobChannel(workerNum int, operation func(a, b T) T) (T, error) <span class="cov8" title="1">{
+        if workerNum == 0 </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("cannot start with 0 workers")
+        }</span>
+
+        <span class="cov8" title="1">if al.isEmpty() </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("Reduce not possible for empty List")
+        }</span>
+
+        <span class="cov8" title="1">n := len(al.list)
+
+        // if worker num is bigger than the array then limit the workerNum to the Array Size
+        if workerNum &gt; n </span><span class="cov8" title="1">{
+                workerNum = n
+        }</span>
+
+        <span class="cov8" title="1">jobs := make(chan [2]int, workerNum) // Channel for chunk-indexes
+        results := make(chan T, workerNum)   // Channel for chunk-results
+
+        var wg sync.WaitGroup
+
+        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
+                wg.Add(1)
+                go func() </span><span class="cov8" title="1">{
+                        defer wg.Done()
+                        for job := range jobs </span><span class="cov8" title="1">{
+                                start, end := job[0], job[1]
+                                result := al.list[start]
+                                for j := start + 1; j &lt; end; j++ </span><span class="cov8" title="1">{
+                                        result = operation(result, al.list[j])
+                                }</span>
+                                <span class="cov8" title="1">results &lt;- result</span>
+                        }
+                }()
+        }
+
+        // send jobs to job channel
+        <span class="cov8" title="1">chunk := n / workerNum
+        for i := 0; i &lt; workerNum; i++ </span><span class="cov8" title="1">{
+                start := i * chunk
+                end := start + chunk
+                if i == workerNum-1 </span><span class="cov8" title="1">{ // last worker gets the remaining part
+                        end = n
+                }</span>
+                <span class="cov8" title="1">jobs &lt;- [2]int{start, end}</span>
+        }
+        <span class="cov8" title="1">close(jobs)
+
+        wg.Wait()
+        close(results)
+
+        // final reduction of the partial results
+        finalResult := &lt;-results
+        for res := range results </span><span class="cov8" title="1">{
+                finalResult = operation(finalResult, res)
+        }</span>
+
+        <span class="cov8" title="1">return finalResult, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package main
+
+import (
+        "fmt"
+        "runtime"
+)
+
+/*
+func ackermann(m, n int) int {
+        if m == 0 {
+                return n + 1
+        } else if m &gt; 0 &amp;&amp; n == 0 {
+                return ackermann(m-1, 1)
+        } else {
+                return ackermann(m-1, ackermann(m, n-1))
+        }
+}
+*/
+
+func doubleValue(input int) int <span class="cov0" title="0">{
+        return input * 2
+}</span>
+
+func add(input1 int, input2 int) int <span class="cov0" title="0">{
+        return input1 + input2
+}</span>
+
+func main() <span class="cov0" title="0">{
+        createDemoOutput()
+}</span>
+
+func createDemoOutput() <span class="cov0" title="0">{
+        // initialize list and fill with values
+        myList := &amp;ArrayList[int]{}
+        for i := range 10 </span><span class="cov0" title="0">{
+                myList.Append(i)
+        }</span>
+        <span class="cov0" title="0">fmt.Println("My List: ", *myList)
+
+        parMapList, err := myList.ParallelMap(runtime.NumCPU(), doubleValue)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return
+        }</span>
+
+        <span class="cov0" title="0">mapList, err := myList.Map(doubleValue)
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return
+        }</span>
+        <span class="cov0" title="0">fmt.Println()
+        fmt.Println("Test sequencial Map with double Value Function. Result: ", *mapList)
+        fmt.Println("Test parallel Map with double Value Function. Result:   ", parMapList)
+        fmt.Println()
+        parReduce, err := myList.ParallelReduce(runtime.NumCPU(), add)
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return
+        }</span>
+
+        <span class="cov0" title="0">reduce, err := myList.Reduce(add)
+
+        if err != nil </span><span class="cov0" title="0">{
+                fmt.Println(err)
+                return
+        }</span>
+
+        <span class="cov0" title="0">fmt.Println("Test sequencial Reduce with Add Function. Result: ", reduce)
+        fmt.Println("Test parallel Reduce with Add Function. Result:   ", parReduce)</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">// linkedlist.go
+//
+// Generische, einfach verkettete Liste mit grundlegenden Methoden.
+//
+// Author: Till Burdorf, Lukas Gröning, Daniel Brecht
+// Date: 10.03.2025
+
+package datastructures
+
+import (
+        "errors"
+        "fmt"
+)
+
+type Node[T any] struct {
+        next *Node[T]
+        data T
+}
+
+// LinkedList ist eine generische einfach verkettete Liste.
+type LinkedList[T comparable] struct {
+        head   *Node[T]
+        length int
+}
+
+// getNode gibt den Node an der angegebenen Position zurück.
+// Hilfsfunktion zum durchlaufen der Liste
+func (list *LinkedList[T]) getNode(pos int) *Node[T] <span class="cov8" title="1">{
+        current := list.head
+        currentPosition := 0
+        for currentPosition &lt; pos </span><span class="cov8" title="1">{
+                current = current.next
+                currentPosition++
+        }</span>
+        <span class="cov8" title="1">return current</span>
+}
+
+// Get gibt das Element an der angegebenen Position zurück.
+func (list *LinkedList[T]) Get(pos int) (T, error) <span class="cov8" title="1">{
+        if pos &lt; 0 || pos &gt;= list.length </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("index out of bounds")
+        }</span>
+        <span class="cov8" title="1">return list.getNode(pos).data, nil</span>
+}
+
+// Add fügt ein oder mehrere Elemente ans Ende der Liste an.
+func (list *LinkedList[T]) Add(datas ...T) <span class="cov8" title="1">{
+        for _, data := range datas </span><span class="cov8" title="1">{
+                list.Append(data)
+        }</span>
+}
+
+// Insert fügt ein Element an der angegebenen Position ein.
+func (list *LinkedList[T]) Insert(pos int, data T) error <span class="cov8" title="1">{
+        if pos &lt; 0 || pos &gt;= list.length </span><span class="cov8" title="1">{
+                return errors.New("index out of bounds")
+        }</span>
+        <span class="cov8" title="1">if pos == 0 </span><span class="cov8" title="1">{
+                list.Prepend(data)
+                return nil
+        }</span>
+        <span class="cov8" title="1">list.getNode(pos - 1).next = &amp;Node[T]{data: data, next: list.getNode(pos + 1)}
+        list.length++
+        return nil</span>
+}
+
+// Remove entfernt das erste Vorkommen des angegebenen Elements.
+func (list *LinkedList[T]) Remove(elem T) error <span class="cov8" title="1">{
+        if list.Size() == 0 </span><span class="cov8" title="1">{
+                return errors.New("list is empty")
+        }</span>
+
+        <span class="cov8" title="1">if list.head.data == elem </span><span class="cov8" title="1">{
+                list.head = list.head.next
+                list.length--
+                return nil
+        }</span>
+        <span class="cov8" title="1">current := list.head
+        for current.next != nil &amp;&amp; current.next.data != elem </span><span class="cov8" title="1">{
+                current = current.next
+        }</span>
+
+        <span class="cov8" title="1">if current.next == nil </span><span class="cov8" title="1">{
+                return errors.New("element not found")
+        }</span>
+
+        <span class="cov8" title="1">current.next = current.next.next
+        list.length--
+        return nil</span>
+}
+
+// RemoveAt entfernt das Element an der angegebenen Position.
+func (list *LinkedList[T]) RemoveAt(pos int) error <span class="cov8" title="1">{
+        if list.Size() == 0 </span><span class="cov8" title="1">{
+                return errors.New("list is empty")
+        }</span> else<span class="cov8" title="1"> if pos &lt; 0 || pos &gt; list.Size() </span><span class="cov8" title="1">{
+                return errors.New("index out of bounds")
+        }</span>
+
+        <span class="cov8" title="1">if pos == 0 </span><span class="cov8" title="1">{
+                list.head = list.head.next
+        }</span> else<span class="cov8" title="1"> {
+                list.getNode(pos - 1).next = list.getNode(pos + 1)
+        }</span>
+        <span class="cov8" title="1">list.length--
+        return nil</span>
+}
+
+// Replace ersetzt das Element an der angegebenen Position mit dem neuen Wert.
+func (list *LinkedList[T]) Replace(pos int, val T) <span class="cov8" title="1">{
+        if pos == 0 </span><span class="cov8" title="1">{
+                list.head.data = val
+                return
+        }</span>
+        <span class="cov8" title="1">list.getNode(pos).data = val</span>
+}
+
+// Prepend fügt ein neues Element am Anfang der Liste ein.
+func (list *LinkedList[T]) Prepend(data T) <span class="cov8" title="1">{
+        list.head = &amp;Node[T]{data: data, next: list.head}
+        list.length++
+}</span>
+
+// Append fügt ein neues Element am Ende der Liste ein.
+func (list *LinkedList[T]) Append(data T) <span class="cov8" title="1">{
+
+        if list.head == nil </span><span class="cov8" title="1">{
+                list.head = &amp;Node[T]{data: data, next: nil}
+                list.length++
+                return
+        }</span>
+
+        // füge eine Node hinzu setze
+        <span class="cov8" title="1">list.getNode(list.length - 1).next = &amp;Node[T]{data: data, next: nil}
+        list.length++</span>
+}
+
+// Print gibt alle Elemente der Liste in der Konsole aus (zeilenweise).
+func (list *LinkedList[T]) Print() <span class="cov8" title="1">{
+        current := list.head
+        for current != nil </span><span class="cov8" title="1">{
+                fmt.Println(current.data)
+                current = current.next
+        }</span>
+}
+
+// Size gibt die Anzahl der Elemente in der Liste zurück.
+func (list *LinkedList[T]) Size() int <span class="cov8" title="1">{
+        return list.length
+}</span>
+
+// IsEmpty gibt true zurück, wenn die Liste leer ist.
+func (list *LinkedList[T]) IsEmpty() bool <span class="cov8" title="1">{
+        return list.head == nil
+}</span>
+
+// IsFull gibt true zurück, wenn die Liste mindestens ein Element enthält.
+func (list *LinkedList[T]) IsFull() bool <span class="cov8" title="1">{
+        return list.head != nil
+}</span>
+
+// ToString gibt eine String-Repräsentation der Liste im Format [a, b, c] zurück.
+func (list *LinkedList[T]) ToString() string <span class="cov8" title="1">{
+        stringifiedList := "["
+        current := list.head
+        for current != nil </span><span class="cov8" title="1">{
+                stringifiedList += fmt.Sprintf("%v", current.data)
+                if current.next != nil </span><span class="cov8" title="1">{
+                        stringifiedList += ", "
+                }</span>
+                <span class="cov8" title="1">current = current.next</span>
+        }
+        <span class="cov8" title="1">stringifiedList += "]"
+        return stringifiedList</span>
+}
+
+// Equals prüft, ob zwei Listen inhaltlich gleich sind.
+func (list *LinkedList[T]) Equals(secondList *LinkedList[T]) bool <span class="cov8" title="1">{
+        if list == nil || secondList == nil </span><span class="cov8" title="1">{
+                return list == secondList
+        }</span>
+
+        <span class="cov8" title="1">firstNode := list.head
+        secondNode := secondList.head
+
+        for firstNode != nil &amp;&amp; secondNode != nil </span><span class="cov8" title="1">{
+                if firstNode.data != secondNode.data </span><span class="cov8" title="1">{
+                        return false
+                }</span>
+                <span class="cov8" title="1">firstNode = firstNode.next
+                secondNode = secondNode.next</span>
+        }
+        <span class="cov8" title="1">return firstNode == nil &amp;&amp; secondNode == nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">// linkedListFunctional.go
+//
+// Funktionale Erweiterungen für generische LinkedLists, Queues und Stacks.
+// Beinhaltet Implementierungen für Filter, Map und Reduce sowie Lazy Evaluation.
+//
+// Author: Till Burdorf, Lukas Gröning
+// Date: 17.03.2025
+
+package datastructures
+
+import (
+        "errors"
+)
+
+// -------------------------------------------
+// Typdefinitionen für Lazy Evaluation
+// -------------------------------------------
+
+// FilterFunc definiert eine verzögerte Filterfunktion ohne Parameter
+type FilterFunc[T any] func() bool
+
+// LazyFilterList speichert Daten und eine Liste verzögerter Filterfunktionen
+type LazyFilterList[T comparable] struct {
+        data       []T
+        Operations []FilterFunc[T]
+}
+
+// MapFunc definiert eine verzögerte Map-Funktion ohne Parameter
+type MapFunc[T any] func() T
+
+// LazyMapList speichert verzögerte Map-Funktionen
+type LazyMapList[T comparable] struct {
+        Operations []MapFunc[T]
+}
+
+// -------------------------------------------
+// Gemeinsames Collection-Interface
+// -------------------------------------------
+
+type Collection[T any] interface {
+        ToString() string
+}
+
+// Typenumwandlung für polymorphe Map/Filter-Ergebnisse
+type CollectionType int
+
+const (
+        LinkedListType CollectionType = iota
+        QueueType
+        StackType
+)
+
+// -----------------------------------------------------------------------------------------
+// For Each Methode
+// -----------------------------------------------------------------------------------------
+func (list *LinkedList[T]) ForEach(operation func(T)) <span class="cov8" title="1">{
+        current := list.head
+        for current != nil </span><span class="cov8" title="1">{
+                operation(current.data)
+                current = current.next
+        }</span>
+}
+
+func (queue *Queue[T]) ForEach(operation func(T)) <span class="cov8" title="1">{
+        queue.list.ForEach(operation)
+}</span>
+
+func (stack *Stack[T]) ForEach(operation func(T)) <span class="cov8" title="1">{
+        stack.list.ForEach(operation)
+}</span>
+
+// -------------------------------------------
+// Filter-Methoden (eager und lazy)
+// -------------------------------------------
+
+// Gibt eine neue LinkedList zurück, gefiltert nach der Bedingung
+func (list *LinkedList[T]) Filter(operation func(T) bool) *LinkedList[T] <span class="cov8" title="1">{
+        current := list.head
+        newList := &amp;LinkedList[T]{}
+        for current != nil </span><span class="cov8" title="1">{
+                if operation(current.data) </span><span class="cov8" title="1">{
+                        newList.Append(current.data)
+                }</span>
+                <span class="cov8" title="1">current = current.next</span>
+        }
+        <span class="cov8" title="1">return newList</span>
+}
+
+// Gibt je nach CollectionType eine neue gefilterte Collection zurück
+func (list *LinkedList[T]) FilterVariant(operation func(T) bool, collectionType CollectionType) Collection[any] <span class="cov8" title="1">{
+        current := list.head
+
+        switch collectionType </span>{
+        case LinkedListType:<span class="cov8" title="1">
+                newList := LinkedList[any]{}
+                for current != nil </span><span class="cov8" title="1">{
+                        if operation(current.data) </span><span class="cov8" title="1">{
+                                newList.Append(current.data)
+                        }</span>
+                        <span class="cov8" title="1">current = current.next</span>
+                }
+                <span class="cov8" title="1">return &amp;newList</span>
+
+        case QueueType:<span class="cov8" title="1">
+                newQueue := Queue[any]{}
+                for current != nil </span><span class="cov8" title="1">{
+                        if operation(current.data) </span><span class="cov8" title="1">{
+                                newQueue.Enqueue(current.data)
+                        }</span>
+                        <span class="cov8" title="1">current = current.next</span>
+                }
+                <span class="cov8" title="1">return &amp;newQueue</span>
+
+        case StackType:<span class="cov8" title="1">
+                newStack := Stack[any]{}
+                for current != nil </span><span class="cov8" title="1">{
+                        if operation(current.data) </span><span class="cov8" title="1">{
+                                newStack.Push(current.data)
+                        }</span>
+                        <span class="cov8" title="1">current = current.next</span>
+                }
+                <span class="cov8" title="1">return &amp;newStack</span>
+        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// Erzeugt eine LazyFilterList, die Operationen speichert, aber nicht sofort ausführt
+func (list *LinkedList[T]) LazyFilter(operation func(T) bool) LazyFilterList[T] <span class="cov8" title="1">{
+        current := list.head
+        lazyOps := []FilterFunc[T]{}
+        var datalist []T
+
+        for current != nil </span><span class="cov8" title="1">{
+                value := current.data
+                datalist = append(datalist, value)
+                lazyOps = append(lazyOps, func() bool </span><span class="cov8" title="1">{
+                        return operation(value)
+                }</span>)
+                <span class="cov8" title="1">current = current.next</span>
+        }
+
+        <span class="cov8" title="1">return LazyFilterList[T]{
+                Operations: lazyOps,
+                data:       datalist,
+        }</span>
+}
+
+// Führt die gespeicherten LazyFilter-Funktionen aus und gibt gefilterte LinkedList zurück
+func (l LazyFilterList[T]) Execute() *LinkedList[T] <span class="cov8" title="1">{
+        result := make([]bool, len(l.Operations))
+        for i, op := range l.Operations </span><span class="cov8" title="1">{
+                result[i] = op()
+        }</span>
+
+        <span class="cov8" title="1">outputList := &amp;LinkedList[T]{}
+
+        for i := 0; i &lt; len(result); i++ </span><span class="cov8" title="1">{
+                if result[i] </span><span class="cov8" title="1">{
+                        outputList.Append(l.data[i])
+                }</span>
+        }
+        <span class="cov8" title="1">return outputList</span>
+}
+
+// Varianten für Queue und Stack mit Filterfunktion
+func (queue *Queue[T]) Filter(operation func(T) bool) *Queue[T] <span class="cov8" title="1">{
+        return &amp;Queue[T]{list: *queue.list.Filter(operation)}
+}</span>
+
+func (stack *Stack[T]) Filter(operation func(T) bool) *Stack[T] <span class="cov8" title="1">{
+        return &amp;Stack[T]{list: *stack.list.Filter(operation)}
+}</span>
+
+// -------------------------------------------
+// Map-Methoden (eager und lazy)
+// -------------------------------------------
+
+// Führt eine Map-Operation auf jedes Element aus und gibt neue LinkedList zurück
+func (list *LinkedList[T]) Map(operation func(T) T) *LinkedList[T] <span class="cov8" title="1">{
+        current := list.head
+        newList := &amp;LinkedList[T]{}
+        for current != nil </span><span class="cov8" title="1">{
+                newList.Append(operation(current.data))
+                current = current.next
+        }</span>
+        <span class="cov8" title="1">return newList</span>
+}
+
+// Varianten für Queue und Stack mit Map-Funktion
+func (queue *Queue[T]) Map(operation func(T) T) *Queue[T] <span class="cov8" title="1">{
+        return &amp;Queue[T]{list: *queue.list.Map(operation)}
+}</span>
+
+func (stack *Stack[T]) Map(operation func(T) T) *Stack[T] <span class="cov8" title="1">{
+        return &amp;Stack[T]{list: *stack.list.Map(operation)}
+}</span>
+
+// Erzeugt eine LazyMapList, bei der Operationen erst bei Execute ausgeführt werden
+func (list *LinkedList[T]) LazyMap(operation func(T) T) LazyMapList[T] <span class="cov8" title="1">{
+        current := list.head
+        lazyOps := []MapFunc[T]{}
+
+        for current != nil </span><span class="cov8" title="1">{
+                value := current.data
+                lazyOps = append(lazyOps, func() T </span><span class="cov8" title="1">{
+                        return operation(value)
+                }</span>)
+                <span class="cov8" title="1">current = current.next</span>
+        }
+
+        <span class="cov8" title="1">return LazyMapList[T]{
+                Operations: lazyOps,
+        }</span>
+}
+
+// Führt alle LazyMap-Operationen aus und gibt eine LinkedList zurück
+func (l LazyMapList[T]) ExecuteMap() *LinkedList[T] <span class="cov8" title="1">{
+        output := &amp;LinkedList[T]{}
+        for _, op := range l.Operations </span><span class="cov8" title="1">{
+                value := op()
+                output.Append(value)
+        }</span>
+        <span class="cov8" title="1">return output</span>
+}
+
+// Gibt je nach CollectionType eine neue gemappte Collection zurück
+func (list *LinkedList[T]) MapVariant(operation func(T) any, collectionType CollectionType) Collection[any] <span class="cov8" title="1">{
+        current := list.head
+
+        switch collectionType </span>{
+        case LinkedListType:<span class="cov8" title="1">
+                newList := LinkedList[any]{}
+                for current != nil </span><span class="cov8" title="1">{
+                        newList.Append(operation(current.data))
+                        current = current.next
+                }</span>
+                <span class="cov8" title="1">return &amp;newList</span>
+
+        case QueueType:<span class="cov8" title="1">
+                newQueue := Queue[any]{}
+                for current != nil </span><span class="cov8" title="1">{
+                        newQueue.Enqueue(operation(current.data))
+                        current = current.next
+                }</span>
+                <span class="cov8" title="1">return &amp;newQueue</span>
+
+        case StackType:<span class="cov8" title="1">
+                newStack := Stack[any]{}
+                for current != nil </span><span class="cov8" title="1">{
+                        newStack.Push(operation(current.data))
+                        current = current.next
+                }</span>
+                <span class="cov8" title="1">return &amp;newStack</span>
+
+        default:<span class="cov8" title="1">
+                println("Type not found")
+                return nil</span>
+        }
+}
+
+// Generische Map-Funktion außerhalb von Methoden (für separate Nutzung)
+func Map[T comparable, U comparable](list LinkedList[T], operation func(T) U) LinkedList[U] <span class="cov8" title="1">{
+        current := list.head
+        newList := &amp;LinkedList[U]{}
+        for current != nil </span><span class="cov8" title="1">{
+                newList.Append(operation(current.data))
+                current = current.next
+        }</span>
+        <span class="cov8" title="1">return *newList</span>
+}
+
+// -------------------------------------------
+// Reduce-Methoden
+// -------------------------------------------
+
+// Reduziert die LinkedList auf einen einzelnen Wert
+func (list *LinkedList[T]) Reduce(operation func(T, T) T) (T, error) <span class="cov8" title="1">{
+        if list.head == nil </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("Reduce Function not allowed on empty List")
+        }</span>
+        <span class="cov8" title="1">current := list.head
+        result := current.data
+
+        for current.next != nil </span><span class="cov8" title="1">{
+                current = current.next
+                result = operation(result, current.data)
+        }</span>
+        <span class="cov8" title="1">return result, nil</span>
+}
+
+// Varianten für Queue und Stack mit Reduce-Funktion
+func (queue *Queue[T]) Reduce(operation func(T, T) T) (T, error) <span class="cov8" title="1">{
+        value, err := Reduce(queue.list, operation)
+        var zero T
+        if err != nil </span><span class="cov8" title="1">{
+                return zero, err
+        }</span> else<span class="cov8" title="1"> {
+                return value, nil
+        }</span>
+}
+
+func (stack *Stack[T]) Reduce(operation func(T, T) T) (T, error) <span class="cov8" title="1">{
+        value, err := Reduce(stack.list, operation)
+        var zero T
+        if err != nil </span><span class="cov8" title="1">{
+                return zero, err
+        }</span> else<span class="cov8" title="1"> {
+                return value, nil
+        }</span>
+}
+
+// Alternative Reduce-Variante mit initialem neutralem Wert vom Typ U
+func Reduce[U comparable, T comparable](list LinkedList[T], operation func(U, T) U) (U, error) <span class="cov8" title="1">{
+        if list.head == nil </span><span class="cov8" title="1">{
+                var zero U
+                return zero, errors.New("Reduce Function not allowed on empty List")
+        }</span>
+        <span class="cov8" title="1">current := list.head
+        var initial U
+        result := operation(initial, current.data)
+
+        for current.next != nil </span><span class="cov8" title="1">{
+                current = current.next
+                result = operation(result, current.data)
+        }</span>
+        <span class="cov8" title="1">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">// queue.go
+//
+// Generische Queue-Implementierung mit FIFO-Prinzip.
+//
+// Author: Till Burdorf, Lukas Gröning, Daniel Brecht
+// Date: 10.03.2025
+
+package datastructures
+
+import "errors"
+
+// Queue ist eine generische Warteschlange mit FIFO-Verhalten.
+type Queue[T comparable] struct {
+        list LinkedList[T]
+}
+
+// Enqueue fügt ein Element am Ende der Queue hinzu.
+func (queue *Queue[T]) Enqueue(data T) <span class="cov8" title="1">{
+        queue.list.Append(data)
+}</span>
+
+// Dequeue entfernt und gibt das erste Element (vorderstes) zurück.
+// Gibt einen Fehler zurück, wenn die Queue leer ist.
+func (queue *Queue[T]) Dequeue() (T, error) <span class="cov8" title="1">{
+        if queue.list.IsEmpty() </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("queue is empty")
+        }</span>
+        <span class="cov8" title="1">output, _ := queue.list.Get(0)
+        queue.list.RemoveAt(0)
+        return output, nil</span>
+}
+
+// Peek gibt das vorderste Element zurück, ohne es zu entfernen.
+func (queue *Queue[T]) Peek() (T, error) <span class="cov8" title="1">{
+        if queue.list.IsEmpty() </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("queue is empty")
+        }</span>
+        <span class="cov8" title="1">output, _ := queue.list.Get(0)
+        return output, nil</span>
+}
+
+// Size gibt die Anzahl der Elemente in der Queue zurück.
+func (queue *Queue[T]) Size() int <span class="cov8" title="1">{
+        return queue.list.Size()
+}</span>
+
+// IsEmpty gibt true zurück, wenn die Queue leer ist.
+func (queue *Queue[T]) IsEmpty() bool <span class="cov8" title="1">{
+        return queue.list.IsEmpty()
+}</span>
+
+// IsFull gibt true zurück, wenn die Queue Elemente enthält.
+func (queue *Queue[T]) IsFull() bool <span class="cov8" title="1">{
+        return queue.list.IsFull()
+}</span>
+
+// ToString gibt eine String-Darstellung der Queue zurück.
+func (queue *Queue[T]) ToString() string <span class="cov8" title="1">{
+        return queue.list.ToString()
+}</span>
+
+// Equals prüft, ob zwei Queues denselben Inhalt haben.
+func (queue *Queue[T]) Equals(compare *Queue[T]) bool <span class="cov8" title="1">{
+        return queue.list.Equals(&amp;compare.list)
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">// stack.go
+//
+// Generischer Stack (LIFO-Datenstruktur) basierend auf einer verketteten Liste.
+//
+// Author: Till Burdorf, Lukas Gröning, Daniel Brecht
+// Date: 10.03.2025
+
+package datastructures
+
+import (
+        "errors"
+)
+
+// Stack ist eine generische Stack-Implementierung nach dem LIFO-Prinzip.
+type Stack[T comparable] struct {
+        list LinkedList[T]
+}
+
+// Push fügt ein Element oben auf den Stack.
+func (stack *Stack[T]) Push(data T) <span class="cov8" title="1">{
+        stack.list.Prepend(data)
+}</span>
+
+// PushAll fügt mehrere Elemente in umgekehrter Reihenfolge auf den Stack.
+func (stack *Stack[T]) PushAll(datas ...T) <span class="cov8" title="1">{
+        for _, data := range datas </span><span class="cov8" title="1">{
+                stack.list.Prepend(data)
+        }</span>
+}
+
+// Pop entfernt und gibt das oberste Element des Stacks zurück.
+// Gibt einen Fehler zurück, wenn der Stack leer ist.
+func (stack *Stack[T]) Pop() (T, error) <span class="cov8" title="1">{
+        if stack.list.Size() == 0 </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("stack is empty")
+        }</span>
+        <span class="cov8" title="1">output, _ := stack.list.Get(0)
+        stack.list.RemoveAt(0)
+        return output, nil</span>
+}
+
+// Peek gibt das oberste Element zurück, ohne es zu entfernen.
+func (stack *Stack[T]) Peek() (T, error) <span class="cov8" title="1">{
+        if stack.list.Size() == 0 </span><span class="cov8" title="1">{
+                var zero T
+                return zero, errors.New("stack is empty")
+        }</span>
+        <span class="cov8" title="1">output, _ := stack.list.Get(0)
+        return output, nil</span>
+}
+
+// IsEmpty gibt true zurück, wenn der Stack leer ist.
+func (stack *Stack[T]) IsEmpty() bool <span class="cov8" title="1">{
+        return stack.list.IsEmpty()
+}</span>
+
+// IsFull gibt true zurück, wenn der Stack mindestens ein Element enthält.
+func (stack *Stack[T]) IsFull() bool <span class="cov8" title="1">{
+        return stack.list.IsFull()
+}</span>
+
+// Size gibt die Anzahl der Elemente im Stack zurück.
+func (stack *Stack[T]) Size() int <span class="cov8" title="1">{
+        return stack.list.Size()
+}</span>
+
+// ToString gibt eine String-Repräsentation des Stacks zurück.
+func (stack *Stack[T]) ToString() string <span class="cov8" title="1">{
+        return stack.list.ToString()
+}</span>
+
+// Equals prüft, ob zwei Stacks denselben Inhalt und dieselbe Reihenfolge haben.
+func (stack *Stack[T]) Equals(compare *Stack[T]) bool <span class="cov8" title="1">{
+        return stack.list.Equals(&amp;compare.list)
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package maths
+
+import (
+        "fmt"
+        "math"
+)
+
+// Interface, which all Expression types implement
+
+type Expression interface {
+        Eval(num float64) float64
+        Derive() Expression
+        Latex() string
+}
+
+// Mathematical Function value: Starting Point for eDSL
+
+type Func struct {
+        Fn Expression
+}
+
+func (f Func) String() string <span class="cov8" title="1">{
+        return fmt.Sprintf(f.Latex()[3 : len(f.Latex())-3])
+}</span>
+
+func (f Func) Eval(num float64) float64 <span class="cov8" title="1">{
+        return f.Fn.Eval(num)
+}</span>
+
+func (f Func) Derive() Expression <span class="cov8" title="1">{
+        return Func{Fn: f.Fn.Derive()}
+}</span>
+
+func (f Func) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("\\( f(x) = %s \\)", f.Fn.Latex())
+}</span>
+
+// Used for Variable x
+
+type Var struct{}
+
+func (v Var) Eval(num float64) float64 <span class="cov8" title="1">{
+        return num
+}</span>
+
+func (v Var) Derive() Expression <span class="cov8" title="1">{
+        return Const{Val: 1}
+}</span>
+
+func (v Var) Latex() string <span class="cov8" title="1">{
+        return "x"
+}</span>
+
+// Used for Constant Value c
+
+type Const struct {
+        Val float64
+}
+
+func (c Const) Eval(num float64) float64 <span class="cov8" title="1">{
+        return c.Val
+}</span>
+
+func (c Const) Derive() Expression <span class="cov8" title="1">{
+        return Const{Val: 0}
+}</span>
+
+func (c Const) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("%g", c.Val)
+}</span>
+
+/*
+* Begin of Operator List
+ */
+
+// Addition
+
+type Add struct {
+        Left, Right Expression
+}
+
+func (a Add) Eval(num float64) float64 <span class="cov8" title="1">{
+        return a.Left.Eval(num) + a.Right.Eval(num)
+}</span>
+
+func (a Add) Derive() Expression <span class="cov8" title="1">{
+        if a.Left.Derive().Latex() == "0" </span><span class="cov8" title="1">{
+                return a.Right.Derive()
+        }</span>
+        <span class="cov8" title="1">if a.Right.Derive().Latex() == "0" </span><span class="cov8" title="1">{
+                return a.Left.Derive()
+        }</span>
+        <span class="cov8" title="1">return Add{Left: a.Left.Derive(), Right: a.Right.Derive()}</span>
+}
+
+func (a Add) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("%s + %s", a.Left.Latex(), a.Right.Latex())
+}</span>
+
+// Subtraction
+
+type Sub struct {
+        Left, Right Expression
+}
+
+func (s Sub) Eval(num float64) float64 <span class="cov8" title="1">{
+        return s.Left.Eval(num) - s.Right.Eval(num)
+}</span>
+
+func (s Sub) Derive() Expression <span class="cov8" title="1">{
+        if s.Right.Derive().Latex() == "0" </span><span class="cov8" title="1">{
+                return s.Left.Derive()
+        }</span>
+        <span class="cov8" title="1">return Sub{Left: s.Left.Derive(), Right: s.Right.Derive()}</span>
+}
+
+func (s Sub) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("%s - %s", s.Left.Latex(), s.Right.Latex())
+}</span>
+
+// Multiplication
+
+type Mult struct {
+        Left, Right Expression
+}
+
+func (m Mult) Eval(num float64) float64 <span class="cov8" title="1">{
+        return m.Left.Eval(num) * m.Right.Eval(num)
+}</span>
+
+func (m Mult) Derive() Expression <span class="cov8" title="1">{
+        if m.Left.Derive().Eval(1) &gt; 0 &amp;&amp; m.Right.Derive().Eval(1) &gt; 0 </span><span class="cov8" title="1">{
+                return Add{
+                        Left:  checkRedundancyMult(Mult{Left: m.Left.Derive(), Right: m.Right}),
+                        Right: checkRedundancyMult(Mult{Left: m.Left, Right: m.Right.Derive()}),
+                }
+        }</span> else<span class="cov8" title="1"> if m.Left.Derive().Eval(1) &gt; 0 </span><span class="cov8" title="1">{
+                return checkRedundancyMult(Mult{Left: m.Left.Derive(), Right: m.Right})
+        }</span> else<span class="cov8" title="1"> if m.Right.Derive().Eval(1) &gt; 0 </span><span class="cov8" title="1">{
+                return checkRedundancyMult(Mult{Left: m.Left, Right: m.Right.Derive()})
+        }</span> else<span class="cov8" title="1"> {
+                return Const{Val: 0}
+        }</span>
+}
+
+func checkRedundancyMult(m Mult) Expression <span class="cov8" title="1">{
+        if m.Left.Latex() == "1" </span><span class="cov8" title="1">{
+                return m.Right
+        }</span> else<span class="cov8" title="1"> if m.Right.Latex() == "1" </span><span class="cov8" title="1">{
+                return m.Left
+        }</span>
+        <span class="cov8" title="1">return m</span>
+}
+
+func (m Mult) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("%s \\cdot %s", m.Left.Latex(), m.Right.Latex())
+}</span>
+
+// Division
+
+type Div struct {
+        Left, Right Expression
+}
+
+func (d Div) Eval(num float64) float64 <span class="cov8" title="1">{
+        return d.Left.Eval(num) / d.Right.Eval(num)
+}</span>
+
+func (d Div) Derive() Expression <span class="cov8" title="1">{
+        if d.Left.Derive().Eval(0) != 0 &amp;&amp; d.Right.Derive().Eval(0) != 0 </span><span class="cov8" title="1">{
+                return Div{Left: Sub{Left: Mult{Left: d.Left.Derive(), Right: d.Right}, Right: Mult{Left: d.Left.Derive(), Right: d.Right}}, Right: Pow{Val: d.Right, Exp: Const{Val: 2}}}
+        }</span> else<span class="cov8" title="1"> if d.Left.Derive().Eval(0) != 0 </span><span class="cov8" title="1">{
+                return Div{Left: d.Left.Derive(), Right: d.Right}
+        }</span> else<span class="cov8" title="1"> if d.Right.Derive().Eval(0) != 0 </span><span class="cov8" title="1">{
+                return Sub{Left: Const{Val: 0}, Right: Div{Left: d.Left, Right: Pow{Val: Var{}, Exp: Const{Val: 2}}}}
+        }</span>
+        <span class="cov8" title="1">return Const{Val: 0}</span>
+}
+
+func (d Div) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("\\frac{%s}{%s}", d.Left.Latex(), d.Right.Latex())
+}</span>
+
+// Power
+
+type Pow struct {
+        Val Expression
+        Exp Const
+}
+
+func (p Pow) Eval(num float64) float64 <span class="cov8" title="1">{
+        return math.Pow(p.Val.Eval(num), p.Exp.Eval(num))
+}</span>
+
+func (p Pow) Derive() Expression <span class="cov8" title="1">{
+        if p.Val.Latex() == "x" </span><span class="cov8" title="1">{
+                return Mult{Left: p.Exp, Right: Pow{Val: p.Val, Exp: Const{Val: p.Exp.Val - 1}}}
+        }</span> else<span class="cov8" title="1"> {
+                return Const{Val: 0}
+        }</span>
+}
+
+func (p Pow) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("%s ^ %s", p.Val.Latex(), p.Exp.Latex())
+}</span>
+
+// Root
+
+type Sqrt struct {
+        Val Expression
+}
+
+func (s Sqrt) Eval(num float64) float64 <span class="cov8" title="1">{
+        return math.Sqrt(s.Val.Eval(num))
+}</span>
+
+func (s Sqrt) Derive() Expression <span class="cov8" title="1">{
+        if s.Val.Eval(0) == 0 </span><span class="cov8" title="1">{
+                return Div{Left: Const{Val: 1}, Right: Mult{Left: Const{Val: 2}, Right: s}}
+        }</span>
+        <span class="cov8" title="1">return Const{Val: 0}</span>
+}
+
+func (s Sqrt) Latex() string <span class="cov8" title="1">{
+        return fmt.Sprintf("\\sqrt{%s}", string(s.Val.Latex()[0]))
+}</span>
+
+/*
+* End of Operator List
+ */
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">// svg.go
+//
+// SVG-Generierungspaket zur Erzeugung von SVG-Dateien mit verschiedenen SVG-Elemen
+//
+// Author: Kevin Becker, Lukas Grönning
+
+package svg
+
+import (
+        "fmt"
+        "os"
+)
+
+// Interface which all SVG Elements implement
+type Element interface {
+        ToSVG() string
+}
+
+// Entry Point for SVG-Generation: SVG Struct
+type Svg struct {
+        Width, Height int
+        Content       []Element
+}
+
+func (s Svg) SaveSVG(name string) <span class="cov8" title="1">{
+        fileName := fmt.Sprintf("%v.svg", name)
+        os.WriteFile(fileName, []byte(s.ToSVG()), 0644)
+}</span>
+
+func (s Svg) ToSVG() string <span class="cov8" title="1">{
+        res := ""
+        for _, v := range s.Content </span><span class="cov8" title="1">{
+                res += v.ToSVG() + "\n"
+        }</span>
+        <span class="cov8" title="1">return fmt.Sprintf(`&lt;svg width="%v" height="%v" xmlns="http://www.w3.org/2000/svg"&gt;
+%s&lt;/svg&gt;`, s.Width, s.Height, res)</span>
+}
+
+// Rectangle Element
+type Rect struct {
+        Width, Height, X, Y, Rx, Ry int
+        Fill                        string
+}
+
+func (r Rect) ToSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;rect width="%v" height="%v" x="%v" y="%v" rx="%v" ry="%v" fill="%v" /&gt;`,
+                r.Width, r.Height, r.X, r.Y, r.Rx, r.Ry, r.Fill)
+}</span>
+
+// Circle Element
+type Circle struct {
+        R, Cx, Cy int
+        Fill      string
+}
+
+func (c Circle) ToSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;circle r="%v" cx="%v" cy="%v" fill="%v" /&gt;`,
+                c.R, c.Cx, c.Cy, c.Fill)
+}</span>
+
+// Line Element
+type Line struct {
+        X1, Y1, X2, Y2 int
+        Style          string
+}
+
+func (l Line) ToSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;line x1="%v" y1="%v" x2="%v" y2="%v" style="%s" /&gt;`,
+                l.X1, l.Y1, l.X2, l.Y2, l.Style)
+}</span>
+
+// Text Element
+type Text struct {
+        X, Y, Size    int
+        Fill, Content string
+}
+
+func (t Text) ToSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;text x="%v" y="%v" fill="%v" font-size="%v"&gt;%s&lt;/text&gt;`,
+                t.X, t.Y, t.Fill, t.Size, t.Content)
+}</span>
+
+// Ellipse Element
+type Ellipse struct {
+        Rx, Ry, Cx, Cy int
+        Style          string
+}
+
+func (e Ellipse) ToSVG() string <span class="cov8" title="1">{
+        return fmt.Sprintf(`        &lt;ellipse rx="%v" ry="%v" cx="%v" cy="%v" style="%v" /&gt;`,
+                e.Rx, e.Ry, e.Cx, e.Cy, e.Style)
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">// main.go
+// Startet das Password Recovery Programm.
+// Davor muss die Datei "rockyou.txt" im gleichen Verzeichnis liegen.
+//
+// Author: Ajun Anpalakan
+// Date: 03.04.2025
+
+package main
+
+import (
+        "fmt"
+        "os"
+        "runtime"
+        "sync"
+        "time"
+)
+
+func main() <span class="cov0" title="0">{
+        start := time.Now()
+
+        //Datei einlesen
+        data, err := os.ReadFile("rockyou.txt")
+        if err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+
+        <span class="cov0" title="0">numWorkers := runtime.NumCPU() * 8
+
+        //aufteilen in Chunks
+        chunks := splitChunks(data, numWorkers)
+
+        var wg sync.WaitGroup
+
+        //Jeder Chunk in einer Goroutine verarbeiten
+        for _, chunk := range chunks </span><span class="cov0" title="0">{
+                wg.Add(1)
+                go func(chunk []byte) </span><span class="cov0" title="0">{
+                        defer wg.Done()
+                        process(chunk, start)
+                }</span>(chunk)
+        }
+
+        <span class="cov0" title="0">wg.Wait()
+
+        fmt.Println("Ergebnisse:")
+        for i, res := range results </span><span class="cov0" title="0">{
+                if res != "" </span><span class="cov0" title="0">{
+                        fmt.Printf("Hash %x =&gt; Passwort: %q (in %v)\n", targetHashes[i], res, resultTimes[i])
+                }</span>
+        }
+        <span class="cov0" title="0">fmt.Printf("Gesamtdauer: %v\n", time.Since(start))
+
+        //Speicherverbrauch
+        var m runtime.MemStats
+        runtime.ReadMemStats(&amp;m)
+        fmt.Printf("Verbrauchter Speicher: %.4f MB\n", float64(m.Alloc)/1024/1024)</span>
+
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">// passwordRecov.go
+// Passwortwiederherstellung in Go
+//
+// Dieses Programm durchsucht die Passwortliste (rockyou.txt) nach Einträgen, 
+// deren MD5-Hash mit vorgegebenen Ziel-Hashes übereinstimmt – inklusive Varianten mit Affixes.
+// Diese Verarbeitung erfolgt parallel durch Goroutinen.
+//
+// Author: Ajun Anpalakan
+// Date: 03.04.2025
+
+package main
+
+import (
+        "crypto/md5"
+        "encoding/hex"
+        "fmt"
+        "sync/atomic"
+        "time"
+)
+
+const maxLen = 255
+
+const affixes = "!#+0123456789"
+
+var targetHashes = [][16]byte{
+        parseHash("32c5c26e20908ebd80269d32f51cb5bb"),
+        parseHash("648d5d9cc7cafe536fdbc6331f00c6a0"),
+        parseHash("d31daf6579548a2a1bf5a9bd57b5bb89"),
+}
+
+var results = [3]string{}
+
+var resultTimes = [3]time.Duration{}
+
+// Bitmaske fuer gefundene Hashes
+var resultMask uint32
+
+// Hex String zu byte-Array für MD5-Hash
+func parseHash(hexStr string) [16]byte <span class="cov8" title="1">{
+        b, _ := hex.DecodeString(hexStr)
+        var h [16]byte
+        copy(h[:], b)
+        return h
+}</span>
+
+func hash(b []byte) [16]byte <span class="cov8" title="1">{
+        return md5.Sum(b)
+}</span>
+
+// teilt die Daten in Chunks auf, um sie parallel zu verarbeiten
+func splitChunks(data []byte, parts int) [][]byte <span class="cov8" title="1">{
+        total := len(data)
+        chunks := make([][]byte, 0, parts)
+
+        start := 0
+        for i := 0; i &lt; parts; i++ </span><span class="cov8" title="1">{
+                end := start + (total-start)/(parts-i) //Chunkgröße
+                if i &lt; parts-1 </span><span class="cov8" title="1">{
+                        // Bis zum nächsten zeilenumbruch
+                        for end &lt; total &amp;&amp; data[end] != '\n' </span><span class="cov8" title="1">{
+                                end++
+                        }</span>
+                        <span class="cov8" title="1">if end &lt; total </span><span class="cov8" title="1">{
+                                end++ // zeilenumbruch mitnehmen
+                        }</span>
+                } else<span class="cov8" title="1"> {
+                        end = total // letzter Chunk bekommt den Rest
+                }</span>
+                <span class="cov8" title="1">chunks = append(chunks, data[start:end])
+                start = end</span>
+        }
+        <span class="cov8" title="1">return chunks</span>
+}
+
+// Verarbeitet einen Chunk und prüft alle Passwortvarianten
+func process(chunk []byte, startT time.Time) <span class="cov8" title="1">{
+        // puffer fuer Varianten mit affix
+        buf := make([]byte, maxLen+10)
+
+        // läuft weiter wenn nicht alle Hashes gefunden wurden und noch Daten im Chunk sind
+        for atomic.LoadUint32(&amp;resultMask) != 0b111 &amp;&amp; len(chunk) &gt; 0 </span><span class="cov8" title="1">{
+                idx := 0
+                for idx &lt; len(chunk) &amp;&amp; chunk[idx] != '\n' </span><span class="cov8" title="1">{
+                        idx++
+                }</span>
+                <span class="cov8" title="1">line := chunk[:idx]
+                if idx &lt; len(chunk) </span><span class="cov8" title="1">{
+                        chunk = chunk[idx+1:] // Rest des Chunks fuer naechste Durchlauf
+                }</span> else<span class="cov8" title="1"> {
+                        chunk = nil
+                }</span>
+
+                <span class="cov8" title="1">if len(line) == 0 || len(line) &gt; maxLen </span><span class="cov8" title="1">{
+                        continue</span>
+                }
+
+                //original
+                <span class="cov8" title="1">check(line, startT)
+
+                //zeichen vorne
+                copy(buf[1:], line)
+                for i := 0; i &lt; len(affixes); i++ </span><span class="cov8" title="1">{
+                        buf[0] = affixes[i]
+                        check(buf[:len(line)+1], startT)
+                }</span>
+
+                //zeichen hinten
+                <span class="cov8" title="1">copy(buf, line)
+                for i := 0; i &lt; len(affixes); i++ </span><span class="cov8" title="1">{
+                        buf[len(line)] = affixes[i]
+                        check(buf[:len(line)+1], startT)
+                }</span>
+        }
+}
+
+// prüft, ob ein Passwort mit einem Ziel-Hash übereinstimmt
+func check(word []byte, startT time.Time) <span class="cov8" title="1">{
+        h := hash(word)
+
+        for i, target := range targetHashes </span><span class="cov8" title="1">{
+                mask := uint32(1 &lt;&lt; i)
+
+                //wenn hash schon gefunden dann skip
+                if atomic.LoadUint32(&amp;resultMask)&amp;mask != 0 </span><span class="cov8" title="1">{
+                        continue</span>
+                }
+
+                <span class="cov8" title="1">if h == target </span><span class="cov8" title="1">{
+                        // bitmaske setzen (addr, old, new)
+                        if atomic.CompareAndSwapUint32(&amp;resultMask, resultMask, resultMask|mask) </span><span class="cov8" title="1">{ 
+                                results[i] = string(word)
+                                resultTimes[i] = time.Since(startT)
+                                fmt.Printf("MATCH: %q =&gt; Hash %x\n", word, h)
+                        }</span>
+                }
+        }
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
