@@ -1,3 +1,13 @@
+// passwordRecov.go
+// Passwortwiederherstellung in Go
+//
+// Dieses Programm durchsucht die Passwortliste (rockyou.txt) nach Einträgen, 
+// deren MD5-Hash mit vorgegebenen Ziel-Hashes übereinstimmt – inklusive Varianten mit Affixes.
+// Diese Verarbeitung erfolgt parallel durch Goroutinen.
+//
+// Author: Ajun Anpalakan
+// Date: 03.04.2025
+
 package main
 
 import (
@@ -22,7 +32,7 @@ var results = [3]string{}
 
 var resultTimes = [3]time.Duration{}
 
-// Bitmaske fuer gefund Hashes
+// Bitmaske fuer gefundene Hashes
 var resultMask uint32
 
 // Hex String zu byte-Array für MD5-Hash
@@ -37,6 +47,7 @@ func hash(b []byte) [16]byte {
 	return md5.Sum(b)
 }
 
+// teilt die Daten in Chunks auf, um sie parallel zu verarbeiten
 func splitChunks(data []byte, parts int) [][]byte {
 	total := len(data)
 	chunks := make([][]byte, 0, parts)
@@ -61,6 +72,7 @@ func splitChunks(data []byte, parts int) [][]byte {
 	return chunks
 }
 
+// Verarbeitet einen Chunk und prüft alle Passwortvarianten
 func process(chunk []byte, startT time.Time) {
 	// puffer fuer Varianten mit affix
 	buf := make([]byte, maxLen+10)
@@ -71,7 +83,7 @@ func process(chunk []byte, startT time.Time) {
 		for idx < len(chunk) && chunk[idx] != '\n' {
 			idx++
 		}
-		line := chunk[:idx] // Zeile
+		line := chunk[:idx]
 		if idx < len(chunk) {
 			chunk = chunk[idx+1:] // Rest des Chunks fuer naechste Durchlauf
 		} else {
@@ -101,6 +113,7 @@ func process(chunk []byte, startT time.Time) {
 	}
 }
 
+// prüft, ob ein Passwort mit einem Ziel-Hash übereinstimmt
 func check(word []byte, startT time.Time) {
 	h := hash(word)
 
