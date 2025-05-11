@@ -21,4 +21,4 @@ coverage-report:
 	go tool cover -func=coverage.out
 
 clean:
-	rm -rf $(BIN_DIR) coverage.out coverage.html
+	rm coverage.out coverage.html
