@@ -1,3 +1,9 @@
+// calculator_test.go
+// test for RPN Calculator
+//
+// Author: Lukas Gröning, Ajun Anpalakan
+// Date: 22.02.2025
+
 package main
 
 import (

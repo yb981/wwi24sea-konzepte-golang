@@ -1,3 +1,11 @@
+// main.go
+//
+// Test zum starten das RPN Calculator Programm.
+//
+// test-coverage:
+//
+// Author: Ajun Anpalakan
+// Date: 22.02.2025
 package main
 
 import (

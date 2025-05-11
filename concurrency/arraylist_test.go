@@ -1,3 +1,8 @@
+// arraylist_test.go
+// test für die generische arraylist
+//
+// Author: Till Burdorf
+// Date: 24.03.2025
 package main
 
 import (

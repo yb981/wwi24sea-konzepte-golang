@@ -1,3 +1,8 @@
+// benchmark_test.go
+// Test für Benchmark
+//
+// Author: Till Burdorf
+// Date: 24.03.2025
 package main
 
 import (

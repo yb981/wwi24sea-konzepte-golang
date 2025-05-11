@@ -2,7 +2,10 @@
 //
 // Testdatei für funktionale Operationen auf generischen Datenstrukturen, inklusive LinkedList, Queue und Stack
 //
-//Test-Coverage:
+// Test-Coverage:
+//
+// Author: Lukas Gröning
+// Date: 10.03.2025
 
 /*
 Commands für Test

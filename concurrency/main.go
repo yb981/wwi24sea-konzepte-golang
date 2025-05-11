@@ -1,3 +1,9 @@
+// main.go
+// Startet sequentielle und parallele Map- und Reduce-Operationen auf einer ArrayList von Ganzzahlen.
+//
+// Author: Till Burdorf
+// Date: 24.03.2025
+
 package main
 
 import (

@@ -1,3 +1,9 @@
+// main.go
+// Startet die eDSL Demo.
+//
+// Author: Kevin Becker
+// Date: 01.04.2025
+
 package main
 
 import (

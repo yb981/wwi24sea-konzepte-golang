@@ -1,3 +1,10 @@
+// main.go
+//
+// Startet die Demo der Datenstrukturen
+//
+// Author: Till Burdorf, Lukas Gröning
+// Date: 30.02.2025
+
 package main
 
 import (
