@@ -1,3 +1,8 @@
+// passwordRecov_test.go
+// Test für Passwortwiederherstellung in Go
+//
+// Author: Ajun Anpalakan
+// Date: 03.04.2025
 package main
 
 import (
@@ -88,9 +93,9 @@ func TestProcess(t *testing.T) {
 
 func TestProcess_IgnoreInvalidLines(t *testing.T) {
 	input := bytes.Join([][]byte{
-		[]byte(""),                             // leer
-		bytes.Repeat([]byte("a"), maxLen+1),    // zu lang
-		[]byte("meinpasswort\r"),               // mit CR
+		[]byte(""),                          // leer
+		bytes.Repeat([]byte("a"), maxLen+1), // zu lang
+		[]byte("meinpasswort\r"),            // mit CR
 	}, []byte("\n"))
 
 	results = [3]string{}
