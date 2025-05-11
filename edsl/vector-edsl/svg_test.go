@@ -1,3 +1,9 @@
+// svg_test.go
+//
+// # Test zum SVG-Generierungspaket zur Erzeugung von SVG-Dateien mit verschiedenen SVG-Elemen
+//
+// Author: Kevin Becker
+// Date: 01.04.2025
 package svg
 
 import (

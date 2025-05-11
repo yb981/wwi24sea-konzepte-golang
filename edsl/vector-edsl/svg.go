@@ -3,6 +3,7 @@
 // SVG-Generierungspaket zur Erzeugung von SVG-Dateien mit verschiedenen SVG-Elemen
 //
 // Author: Kevin Becker, Lukas Grönning
+// Date: 01.04.2025
 
 package svg
 
