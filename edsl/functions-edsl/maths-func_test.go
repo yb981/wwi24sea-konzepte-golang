@@ -1,3 +1,9 @@
+// maths-func_test.go
+//
+// Test für Framework für mathematische Ausdrücke, das die Evaluation, Ableitung und LaTeX-Darstellung verschiedener algebraischer Operationen ermöglicht.
+//
+// Author: Kevin Becker
+// Date: 01.04.2025
 package maths
 
 import (
