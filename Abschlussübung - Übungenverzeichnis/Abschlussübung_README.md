@@ -1,5 +1,6 @@
 Wilkommen zu den Go Übungen!  
 ----
+[**Link** zu VM Codespaces by GitHub](URhttps://github.com/codespaces/new/wannas234/GoUebungenL)
 
 **Einleitung:**
 
