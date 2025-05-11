@@ -17,6 +17,6 @@ ausgegeben und das Programm beendet.
 
 Tipp: Benutzt die Pakete "fmt", "time" und "math/rand"
 */
-func boring(msg string, c chan string) {
-
+func main() {
+	return;
 }
